@@ -136,8 +136,8 @@
       <FileName>ValueObjects\UlceraCaracteristicas.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.UlceraSinaisInflamatorios" Collapsed="true">
-    <Position X="15.25" Y="3" Width="2" />
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.UlceraSinaisInflamatorios">
+    <Position X="14.25" Y="1" Width="2" />
     <TypeIdentifier>
       <HashCode>AACAAAAAAAAAAgBAIAAAAAAACAAAAAIAAAAAAAAACAA=</HashCode>
       <FileName>ValueObjects\UlceraSinaisInflamatorios.cs</FileName>

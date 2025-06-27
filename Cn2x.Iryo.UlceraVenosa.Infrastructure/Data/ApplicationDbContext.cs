@@ -2,32 +2,89 @@ using Microsoft.EntityFrameworkCore;
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
+using Cn2x.Iryo.UlceraVenosa.Infrastructure.Extensions;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 
 /// <summary>
 /// Contexto principal do Entity Framework
 /// </summary>
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext, IUnitOfWork
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
+    public bool IsDesign { get; set; }
 
     // DbSets
-    public DbSet<Ulcera> Ulceras { get; set; }
-    public DbSet<Paciente> Pacientes { get; set; }
-    public DbSet<Avaliacao> Avaliacoes { get; set; }
-    public DbSet<ClassificacaoCeap> ClassificacoesCeap { get; set; }
-    public DbSet<ClasseClinica> ClassesClinicas { get; set; }
-    public DbSet<ClasseEtiologica> ClassesEtiologicas { get; set; }
-    public DbSet<ClasseAnatomica> ClassesAnatomicas { get; set; }
-    public DbSet<ClassePatofisiologica> ClassesPatofisiologicas { get; set; }
-    public DbSet<Topografia> Topografias { get; set; }
-    public DbSet<Segmento> Segmentos { get; set; }
-    public DbSet<RegiaoAnatomica> RegioesAnatomicas { get; set; }
-    public DbSet<Exsudato> Exsudatos { get; set; }
-    public DbSet<ExsudatoTipo> ExsudatoTipos { get; set; }
+    public virtual DbSet<Ulcera> Ulceras { get; set; }
+    public virtual DbSet<Paciente> Pacientes { get; set; }
+    public virtual DbSet<Avaliacao> Avaliacoes { get; set; }
+    public virtual DbSet<ClassificacaoCeap> ClassificacoesCeap { get; set; }
+    public virtual DbSet<ClasseClinica> ClassesClinicas { get; set; }
+    public virtual DbSet<ClasseEtiologica> ClassesEtiologicas { get; set; }
+    public virtual DbSet<ClasseAnatomica> ClassesAnatomicas { get; set; }
+    public virtual DbSet<ClassePatofisiologica> ClassesPatofisiologicas { get; set; }
+    public virtual DbSet<Topografia> Topografias { get; set; }
+    public virtual DbSet<Segmento> Segmentos { get; set; }
+    public virtual DbSet<RegiaoAnatomica> RegioesAnatomicas { get; set; }
+    public virtual DbSet<Exsudato> Exsudatos { get; set; }
+    public virtual DbSet<ExsudatoTipo> ExsudatoTipos { get; set; }
+
+    private readonly IMediator _mediator;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    /// <summary>
+    /// Construtor default
+    /// </summary>
+    /// <param name="options">Informações da conexão com o banco</param>
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, 
+        IMediator mediator, 
+        IHttpContextAccessor httpContextAccessor) : base(options)
+    {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+        System.Diagnostics.Debug.WriteLine("ApplicationDbContext::ctor ->" + this.GetHashCode());
+    }
+
+    public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await _mediator.DispatchDomainEventsAsync(this);
+            var result = await SaveChangesAsync(cancellationToken);
+            return result >= 1;
+        }
+        catch (Exception ex)
+        {
+            // Aqui você pode adicionar tratamento específico para PostgreSQL se necessário
+            throw;
+        }
+    }
+
+    public override int SaveChanges()
+    {
+        Atualizar();
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        Atualizar();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void Atualizar()
+    {
+        var modifiedEntries = ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Modified && e.Entity is ISeed);
+
+        foreach (var entry in modifiedEntries)
+        {
+            entry.Property(nameof(ISeed.AtualizadoEm)).CurrentValue = DateTime.UtcNow;
+            entry.Property(nameof(ISeed.AtualizadoEm)).IsModified = true;
+            entry.State = EntityState.Modified;
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -302,44 +359,5 @@ public class ApplicationDbContext : DbContext
     {
         // Filtro global para pacientes ativos
         modelBuilder.Entity<Paciente>().HasQueryFilter(e => e.Ativo);
-    }
-
-    /// <summary>
-    /// Sobrescreve SaveChanges para atualizar automaticamente UpdatedAt
-    /// </summary>
-    public override int SaveChanges()
-    {
-        UpdateTimestamps();
-        return base.SaveChanges();
-    }
-
-    /// <summary>
-    /// Sobrescreve SaveChangesAsync para atualizar automaticamente UpdatedAt
-    /// </summary>
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        UpdateTimestamps();
-        return base.SaveChangesAsync(cancellationToken);
-    }
-
-    /// <summary>
-    /// Atualiza automaticamente os timestamps das entidades
-    /// </summary>
-    private void UpdateTimestamps()
-    {
-        var entries = ChangeTracker.Entries()
-            .Where(e => e.Entity is Entity<Guid> && (e.State == EntityState.Added || e.State == EntityState.Modified));
-
-        foreach (var entry in entries)
-        {
-            var entity = entry.Entity as Entity<Guid>;
-            if (entity == null) continue;
-
-            if (entry.State == EntityState.Added)
-            {
-                entity.CriadoEm = DateTime.UtcNow;
-            }
-            entity.AtualizadoEm = DateTime.UtcNow;
-        }
     }
 } 

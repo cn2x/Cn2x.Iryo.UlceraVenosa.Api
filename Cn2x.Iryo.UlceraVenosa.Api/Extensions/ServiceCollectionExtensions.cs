@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Cors;
 using System.Runtime;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Extensions;
 using Cn2x.Iryo.UlceraVenosa.Application.Extensions;
+using MediatR;
+using Cn2x.Iryo.UlceraVenosa.Infrastructure;
 
 namespace Cn2x.Iryo.UlceraVenosa.Api.Extensions;
 
@@ -32,6 +34,12 @@ public static class ServiceCollectionExtensions
         
         // Configurações de logging
         services.AddLoggingConfiguration();
+        
+        // Configurações de HTTP Context Accessor
+        services.AddHttpContextAccessor();
+        
+        // Configurações de MediatR
+        services.AddMediatR();
         
         // Configurações de infraestrutura
         services.AddInfrastructureServices();
@@ -125,6 +133,17 @@ public static class ServiceCollectionExtensions
             builder.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
         });
 
+        return services;
+    }
+
+    /// <summary>
+    /// Configura MediatR para domain events
+    /// </summary>
+    private static IServiceCollection AddMediatR(this IServiceCollection services)
+    {
+        // Registra MediatR com NoMediator como implementação padrão
+        services.AddScoped<IMediator, NoMediator>();
+        
         return services;
     }
 } 
