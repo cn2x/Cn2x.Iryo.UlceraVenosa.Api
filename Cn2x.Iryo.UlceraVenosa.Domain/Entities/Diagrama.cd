@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Avaliacao">
+    <Position X="13.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAASAAUAAAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Avaliacao.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ClasseAnatomica">
+    <Position X="16.75" Y="0.75" Width="1.5" />
+    <AssociationLine Name="ClassificacoesCeap" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ClassificacaoCeap" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.125" Y="2.175" />
+        <Point X="18.125" Y="5.689" />
+        <Point X="17" Y="5.689" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAARABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ClasseAnatomica.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="ClassificacoesCeap" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ClasseClinica" Collapsed="true">
+    <Position X="16.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAARABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ClasseClinica.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ClasseEtiologica" Collapsed="true">
+    <Position X="19" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAARABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ClasseEtiologica.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ClassePatofisiologica" Collapsed="true">
+    <Position X="18.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAARABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ClassePatofisiologica.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ClassificacaoCeap">
+    <Position X="15.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAEAAAAAAAAAAAgAAABAAAAAIAgAAQAAAEAAA=</HashCode>
+      <FileName>Entities\ClassificacaoCeap.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ClasseClinica" />
+      <Property Name="Anatomia" />
+      <Property Name="Etiologia" />
+      <Property Name="Patofisiologia" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Exsudato">
+    <Position X="10.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAABCAAAAAAAAAAAAAAAAAAUAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Exsudato.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Ulcera" />
+      <Property Name="ExsudatoTipo" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ExsudatoTipo">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ExsudatoTipo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Paciente" Collapsed="true">
+    <Position X="12.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgiEAAAAAAAIAAAAAAAAAAAGAAAA=</HashCode>
+      <FileName>Entities\Paciente.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica">
+    <Position X="7.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Entities\RegiaoAnatomica.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Segmento" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmento">
+    <Position X="4.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Entities\Segmento.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia">
+    <Position X="10.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAEAAAAAAAAAAAAAAAA0AAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Topografia.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Regiao" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAQAACCAABAACAAgAQIAAADAAIAAQAAAEAAAAIAAAAA=</HashCode>
+      <FileName>Entities\Ulcera.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Caracteristicas" />
+      <Property Name="SinaisInflamatorios" />
+      <Property Name="Avaliacao" />
+      <Property Name="Paciente" />
+      <Property Name="ClassificacaoCeap" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Topografias" />
+      <Property Name="Exsudatos" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.UlceraCaracteristicas" Collapsed="true">
+    <Position X="16.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAIAAIAAAAAAAAAAAgACAAAAAAAAAAAA=</HashCode>
+      <FileName>ValueObjects\UlceraCaracteristicas.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.UlceraSinaisInflamatorios" Collapsed="true">
+    <Position X="15.25" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAgBAIAAAAAAACAAAAAIAAAAAAAAACAA=</HashCode>
+      <FileName>ValueObjects\UlceraSinaisInflamatorios.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

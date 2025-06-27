@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cn2x.Iryo.UlceraVenosa.Domain\Cn2x.Iryo.UlceraVenosa.Domain.csproj" />
+    <ProjectReference Include="..\Cn2x.Iryo.UlceraVenosa.Infrastructure\Cn2x.Iryo.UlceraVenosa.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HotChocolate.AspNetCore" Version="15.0.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

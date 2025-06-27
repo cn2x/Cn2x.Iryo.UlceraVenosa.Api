@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cn2x.Iryo.UlceraVenosa.Api", "Cn2x.Iryo.UlceraVenosa.Api\Cn2x.Iryo.UlceraVenosa.Api.csproj", "{254BCF41-E947-4DD8-A3BE-2420B67FC7E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cn2x.Iryo.UlceraVenosa.Application", "Cn2x.Iryo.UlceraVenosa.Application\Cn2x.Iryo.UlceraVenosa.Application.csproj", "{0F1E0B07-F482-4F63-B174-13A17236DC4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cn2x.Iryo.UlceraVenosa.Domain", "Cn2x.Iryo.UlceraVenosa.Domain\Cn2x.Iryo.UlceraVenosa.Domain.csproj", "{94893A9E-F131-4E35-A9DD-400A93E3DDA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cn2x.Iryo.UlceraVenosa.Infrastructure", "Cn2x.Iryo.UlceraVenosa.Infrastructure\Cn2x.Iryo.UlceraVenosa.Infrastructure.csproj", "{C8E2A818-F672-4A80-8213-04124EC8FD6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cn2x.Iryo.UlceraVenosa.Tests", "Cn2x.Iryo.UlceraVenosa.Tests\Cn2x.Iryo.UlceraVenosa.Tests.csproj", "{7FE91D06-A81C-4662-B477-F60EA1C56502}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cn2x.Iryo.UlceraVenosa.Domain.Core", "Cn2x.Iryo.UlceraVenosa.Domain.Core\Cn2x.Iryo.UlceraVenosa.Domain.Core.csproj", "{AEAA466F-D11A-436C-8472-ECABC1522854}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{254BCF41-E947-4DD8-A3BE-2420B67FC7E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{254BCF41-E947-4DD8-A3BE-2420B67FC7E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{254BCF41-E947-4DD8-A3BE-2420B67FC7E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{254BCF41-E947-4DD8-A3BE-2420B67FC7E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F1E0B07-F482-4F63-B174-13A17236DC4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F1E0B07-F482-4F63-B174-13A17236DC4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F1E0B07-F482-4F63-B174-13A17236DC4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F1E0B07-F482-4F63-B174-13A17236DC4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94893A9E-F131-4E35-A9DD-400A93E3DDA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94893A9E-F131-4E35-A9DD-400A93E3DDA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94893A9E-F131-4E35-A9DD-400A93E3DDA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94893A9E-F131-4E35-A9DD-400A93E3DDA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8E2A818-F672-4A80-8213-04124EC8FD6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8E2A818-F672-4A80-8213-04124EC8FD6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8E2A818-F672-4A80-8213-04124EC8FD6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8E2A818-F672-4A80-8213-04124EC8FD6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FE91D06-A81C-4662-B477-F60EA1C56502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FE91D06-A81C-4662-B477-F60EA1C56502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FE91D06-A81C-4662-B477-F60EA1C56502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FE91D06-A81C-4662-B477-F60EA1C56502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEAA466F-D11A-436C-8472-ECABC1522854}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEAA466F-D11A-436C-8472-ECABC1522854}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEAA466F-D11A-436C-8472-ECABC1522854}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEAA466F-D11A-436C-8472-ECABC1522854}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

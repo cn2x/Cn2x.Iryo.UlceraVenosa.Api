@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Beyond.IPO.Domain.Core.Specification.AndSpecification&lt;T&gt;" Collapsed="true">
+    <Position X="3" Y="4.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAgAABAAAAAAAAAAAAAAAAAAAAAAAIAgA=</HashCode>
+      <FileName>Seed\Specification\AndSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Beyond.IPO.Domain.Core.Specification.CompositeSpecification&lt;TEntity&gt;" Collapsed="true">
+    <Position X="4.5" Y="3.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Seed\Specification\CompositeSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Beyond.IPO.Domain.Core.Specification.DirectSpecification&lt;TEntity&gt;" Collapsed="true">
+    <Position X="7" Y="3.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Seed\Specification\DirectSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Beyond.IPO.Domain.Core.Specification.TrueSpecification&lt;TEntity&gt;" Collapsed="true">
+    <Position X="9.75" Y="3.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Seed\Specification\TrueSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Beyond.IPO.Domain.Core.Specification.Specification&lt;TEntity&gt;" Collapsed="true">
+    <Position X="7.75" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABACAAAAAAAAAJAAAABAAAAIAAA=</HashCode>
+      <FileName>Seed\Specification\Specification.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Beyond.IPO.Domain.Core.Specification.ParameterRebinder" Collapsed="true">
+    <Position X="16.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAEAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Seed\Specification\ParametersRebinder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Beyond.IPO.Domain.Core.Specification.OrSpecification&lt;T&gt;" Collapsed="true">
+    <Position X="5.5" Y="4.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAgAABAAAAAAAAAAAAAAAAAAAAAAAIAgA=</HashCode>
+      <FileName>Seed\Specification\OrSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Beyond.IPO.Domain.Core.Specification.NotSpecification&lt;TEntity&gt;" Collapsed="true">
+    <Position X="12.25" Y="3.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Seed\Specification\NotSpecification.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Beyond.IPO.Domain.Core.Specification.ExpressionBuilder" Collapsed="true">
+    <Position X="14.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Seed\Specification\ExpressionBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Beyond.IPO.Domain.Core.Specification.ISpecification&lt;TEntity&gt;" Collapsed="true">
+    <Position X="14.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>Seed\Specification\ISpecification.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
