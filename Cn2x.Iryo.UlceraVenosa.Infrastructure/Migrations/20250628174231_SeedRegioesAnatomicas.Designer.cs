@@ -3,6 +3,7 @@ using System;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250628174231_SeedRegioesAnatomicas")]
+    partial class SeedRegioesAnatomicas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,40 +53,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Anatomicas");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Codigo = "As",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Sistema superficial"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Codigo = "Ad",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Sistema profundo"
-                        },
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            Codigo = "Ap",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Sistema perfurante"
-                        },
-                        new
-                        {
-                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            Codigo = "An",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Sem localização anatômica identificada"
-                        });
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Avaliacao", b =>
@@ -203,72 +172,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Clinicas");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Codigo = "C0",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Sem sinais visíveis ou palpáveis de doença venosa"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Codigo = "C1",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Telangiectasias ou veias reticulares"
-                        },
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            Codigo = "C2",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Veias varicosas"
-                        },
-                        new
-                        {
-                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            Codigo = "C3",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Edema"
-                        },
-                        new
-                        {
-                            Id = new Guid("55555555-5555-5555-5555-555555555555"),
-                            Codigo = "C4a",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Pigmentação ou eczema"
-                        },
-                        new
-                        {
-                            Id = new Guid("66666666-6666-6666-6666-666666666666"),
-                            Codigo = "C4b",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Lipodermatoesclerose ou atrofia branca"
-                        },
-                        new
-                        {
-                            Id = new Guid("77777777-7777-7777-7777-777777777777"),
-                            Codigo = "C5",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Úlcera venosa cicatrizada"
-                        },
-                        new
-                        {
-                            Id = new Guid("88888888-8888-8888-8888-888888888888"),
-                            Codigo = "C6",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Úlcera venosa ativa"
-                        });
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Etiologica", b =>
@@ -299,40 +202,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Etiologicas");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Codigo = "Ec",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Congênita"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Codigo = "Ep",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Primária"
-                        },
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            Codigo = "Es",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Secundária (pós-trombótica)"
-                        },
-                        new
-                        {
-                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            Codigo = "En",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Não identificada"
-                        });
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Exsudato", b =>
@@ -586,40 +455,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Fisiologicas");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Codigo = "Pr",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Refluxo"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Codigo = "Po",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Obstrução"
-                        },
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            Codigo = "Pro",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Refluxo e obstrução"
-                        },
-                        new
-                        {
-                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            Codigo = "Pn",
-                            CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Sem alteração identificada"
-                        });
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica", b =>

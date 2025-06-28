@@ -95,7 +95,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmento">
-    <Position X="4.5" Y="7.5" Width="1.5" />
+    <Position X="4.5" Y="7.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Entities\Segmento.cs</FileName>
