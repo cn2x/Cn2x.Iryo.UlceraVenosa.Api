@@ -3,13 +3,13 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 
 /// <summary>
-/// Classe anatômica da classificação CEAP
+/// Classe clínica da classificação CEAP
 /// </summary>
-public class ClasseAnatomica : Entity<Guid>
+public class Clinica : Entity<Guid>
 {
     public string Codigo { get; set; } = string.Empty;
     public string Descricao { get; set; } = string.Empty;
     
     // Navegação
-    public virtual ICollection<ClassificacaoCeap> ClassificacoesCeap { get; set; } = new List<ClassificacaoCeap>();
+    public virtual ICollection<Ceap> ClassificacoesCeap { get; set; } = new List<Ceap>();
 } 

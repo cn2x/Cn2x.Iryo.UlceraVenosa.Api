@@ -5,7 +5,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 /// <summary>
 /// Value Object para características da úlcera
 /// </summary>
-public class UlceraCaracteristicas : ValueObject
+public class Caracteristicas : ValueObject
 {
     public bool BordasDefinidas { get; set; }
     public bool TecidoGranulacao { get; set; }

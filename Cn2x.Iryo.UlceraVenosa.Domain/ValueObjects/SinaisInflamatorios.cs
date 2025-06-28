@@ -5,7 +5,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 /// <summary>
 /// Value Object para sinais inflamatórios da úlcera
 /// </summary>
-public class UlceraSinaisInflamatorios : ValueObject
+public class SinaisInflamatorios : ValueObject
 {
     public bool Eritema { get; set; }
     public bool Calor { get; set; }

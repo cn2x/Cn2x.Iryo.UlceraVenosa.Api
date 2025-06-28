@@ -1,4 +1,5 @@
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
+using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 
@@ -9,7 +10,7 @@ public class Topografia : Entity<Guid>
 {
     public Guid UlceraId { get; set; }
     public Guid RegiaoId { get; set; }
-    public string Lado { get; set; } = string.Empty; // Ex: direito, esquerdo, bilateral
+    public Lateralidade Lado { get; set; } = Lateralidade.Direto; // Ex: direito, esquerdo, bilateral
     
     // Navegação
     public virtual Ulcera? Ulcera { get; set; }

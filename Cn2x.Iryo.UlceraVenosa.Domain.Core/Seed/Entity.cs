@@ -34,12 +34,8 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Core {
             return Id!.Equals(default(TIdentity));
         }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; }
-
-        // Implementação explícita para compatibilidade com ISeed
-        public DateTime CriadoEm { get => CreatedAt; set => CreatedAt = value; }
-        public DateTime? AtualizadoEm { get => UpdatedAt; set => UpdatedAt = value; }
+        public DateTime CriadoEm { get; set; } = DateTime.UtcNow;
+        public DateTime? AtualizadoEm { get; set; }
 
         public override bool Equals(object obj)
         {

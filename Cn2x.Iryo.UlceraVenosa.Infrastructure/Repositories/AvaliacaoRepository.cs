@@ -30,9 +30,11 @@ public class AvaliacaoRepository : BaseRepository<Avaliacao>, IAvaliacaoReposito
             .Include(a => a.Ulceras)
                 .ThenInclude(u => u.ClassificacaoCeap)
             .Include(a => a.Ulceras)
-                .ThenInclude(u => u.TopografiasNavigation)
+                .ThenInclude(u => u.Topografias)
             .Include(a => a.Ulceras)
-                .ThenInclude(u => u.ExsudatosNavigation)
+                .ThenInclude(u => u.Exsudatos)
+            .Include(a => a.Ulceras)
+                .ThenInclude(u => u.Imagens)
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
