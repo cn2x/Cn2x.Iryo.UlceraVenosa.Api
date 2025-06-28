@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Cn2x.Iryo.UlceraVenosa.Domain\Cn2x.Iryo.UlceraVenosa.Domain.csproj" />
-    <ProjectReference Include="..\Cn2x.Iryo.UlceraVenosa.Domain.Core\Cn2x.Iryo.UlceraVenosa.Domain.Core.csproj" />
+    <ProjectReference Include="..\..\1-Domain\Cn2x.Iryo.UlceraVenosa.Domain\Cn2x.Iryo.UlceraVenosa.Domain.csproj" />
+    <ProjectReference Include="..\..\1-Domain\Cn2x.Iryo.UlceraVenosa.Domain.Core\Cn2x.Iryo.UlceraVenosa.Domain.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

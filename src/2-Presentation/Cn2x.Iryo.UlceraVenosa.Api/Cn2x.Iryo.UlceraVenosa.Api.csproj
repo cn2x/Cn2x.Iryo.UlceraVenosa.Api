@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cn2x.Iryo.UlceraVenosa.Application\Cn2x.Iryo.UlceraVenosa.Application.csproj" />
+    <ProjectReference Include="..\..\3-Application\Cn2x.Iryo.UlceraVenosa.Application\Cn2x.Iryo.UlceraVenosa.Application.csproj" />
   </ItemGroup>
 
 </Project>
