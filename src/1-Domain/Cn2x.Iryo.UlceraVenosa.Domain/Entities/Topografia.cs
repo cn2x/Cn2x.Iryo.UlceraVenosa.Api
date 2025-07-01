@@ -6,7 +6,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 /// <summary>
 /// Topografia da úlcera
 /// </summary>
-public class Topografia : Entity<Guid>
+public class Topografia : Entity<Guid>, IAggregateRoot
 {
     public Guid UlceraId { get; set; }
     public Guid RegiaoId { get; set; }

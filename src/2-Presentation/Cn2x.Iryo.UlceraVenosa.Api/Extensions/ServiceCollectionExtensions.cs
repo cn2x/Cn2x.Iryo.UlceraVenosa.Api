@@ -45,7 +45,7 @@ public static class ServiceCollectionExtensions
         services.AddInfrastructureServices();
         
         // Configurações de GraphQL
-        services.AddGraphQLServices();
+        // services.AddGraphQLServices();
         
         return services;
     }
@@ -141,9 +141,8 @@ public static class ServiceCollectionExtensions
     /// </summary>
     private static IServiceCollection AddMediatR(this IServiceCollection services)
     {
-        // Registra MediatR com NoMediator como implementação padrão
-        services.AddScoped<IMediator, NoMediator>();
-        
+        // Registra MediatR real para a aplicação
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Cn2x.Iryo.UlceraVenosa.Application.Features.Paciente.SearchPacienteQueryHandler).Assembly));
         return services;
     }
 } 

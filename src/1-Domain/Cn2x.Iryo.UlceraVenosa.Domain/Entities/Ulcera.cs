@@ -1,5 +1,6 @@
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
+using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 
@@ -21,9 +22,9 @@ public class Ulcera : Entity<Guid>, IAggregateRoot
     public SinaisInflamatorios SinaisInflamatorios { get; set; } = new();
 
     // Relacionamentos
-    public Ceap ClassificacaoCeap { get; set; } = new();
+    public Ceap ClassificacaoCeap { get; set; } = null!;
     public ICollection<Topografia> Topografias { get; set; } = new List<Topografia>();
-    public ICollection<Exsudato> Exsudatos { get; set; } = new List<Exsudato>();
+    public ICollection<ExsudatoDaUlcera> Exsudatos { get; set; } = new List<ExsudatoDaUlcera>();
     public ICollection<ImagemUlcera> Imagens { get; set; } = new List<ImagemUlcera>();
 
     // Navegação

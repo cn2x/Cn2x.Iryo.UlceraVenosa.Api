@@ -3,6 +3,9 @@ using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.Execution.Configuration;
 using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Filters;
+using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Queries;
+using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Mutations;
+using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Types;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Extensions;
 
@@ -18,9 +21,26 @@ public static class GraphQLExtensions
     {
         services
             .AddGraphQLServer()
-            .AddQueryType()
-            .AddMutationType()
-            .AddSubscriptionType()
+            .AddQueryType(d => d.Name("Query"))
+            .AddTypeExtension<UlceraQueries>()
+            .AddTypeExtension<PacienteQueries>()
+            .AddTypeExtension<EnumeracoesQueries>()
+            .AddMutationType(d => d.Name("Mutation"))
+            .AddTypeExtension<UlceraMutations>()
+            .AddType<UlceraType>()
+            .AddType<CaracteristicasType>()
+            .AddType<SinaisInflamatoriosType>()
+            .AddType<CeapType>()
+            .AddType<ClinicaType>()
+            .AddType<EtiologicaType>()
+            .AddType<AnatomicaType>()
+            .AddType<PatofisiologicaType>()
+            .AddType<TopografiaType>()
+            .AddType<ExsudatoDaUlceraType>()
+            .AddType<ImagemUlceraType>()
+            .AddType<AvaliacaoType>()
+            .AddType<PacienteType>()
+            .AddType<PagedResultUlceraType>()
             .AddErrorFilter<GraphQLErrorFilter>()
             .ModifyRequestOptions(opt =>
             {
@@ -38,9 +58,26 @@ public static class GraphQLExtensions
     {
         services
             .AddGraphQLServer()
-            .AddQueryType()
-            .AddMutationType()
-            .AddSubscriptionType()
+            .AddQueryType(d => d.Name("Query"))
+            .AddTypeExtension<UlceraQueries>()
+            .AddTypeExtension<PacienteQueries>()
+            .AddTypeExtension<EnumeracoesQueries>()
+            .AddMutationType(d => d.Name("Mutation"))
+            .AddTypeExtension<UlceraMutations>()
+            .AddType<UlceraType>()
+            .AddType<CaracteristicasType>()
+            .AddType<SinaisInflamatoriosType>()
+            .AddType<CeapType>()
+            .AddType<ClinicaType>()
+            .AddType<EtiologicaType>()
+            .AddType<AnatomicaType>()
+            .AddType<PatofisiologicaType>()
+            .AddType<TopografiaType>()
+            .AddType<ExsudatoDaUlceraType>()
+            .AddType<ImagemUlceraType>()
+            .AddType<AvaliacaoType>()
+            .AddType<PacienteType>()
+            .AddType<PagedResultUlceraType>()
             .AddErrorFilter<GraphQLErrorFilter>()
             .ModifyRequestOptions(opt =>
             {

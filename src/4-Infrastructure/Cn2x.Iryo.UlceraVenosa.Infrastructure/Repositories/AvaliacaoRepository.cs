@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
+using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Repositories;
 

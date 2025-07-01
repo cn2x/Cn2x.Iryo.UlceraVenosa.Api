@@ -5,7 +5,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 /// <summary>
 /// Imagem da úlcera para acompanhamento da evolução do tratamento
 /// </summary>
-public class ImagemUlcera : Entity<Guid>
+public class ImagemUlcera : Entity<Guid>, IAggregateRoot
 {
     public Guid UlceraId { get; set; }
     public string NomeArquivo { get; set; } = string.Empty;

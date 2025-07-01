@@ -1,5 +1,6 @@
 using HotChocolate;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
+using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Mutations;
 
@@ -13,7 +14,7 @@ public abstract class BaseMutations
     /// </summary>
     protected async Task<T> CreateAsync<T>(
         T entity,
-        IBaseRepository<T> repository) where T : class
+        IRepository<T> repository) where T : class, IAggregateRoot
     {
         return await repository.AddAsync(entity);
     }
@@ -23,7 +24,7 @@ public abstract class BaseMutations
     /// </summary>
     protected async Task<T> UpdateAsync<T>(
         T entity,
-        IBaseRepository<T> repository) where T : class
+        IRepository<T> repository) where T : class, IAggregateRoot
     {
         return await repository.UpdateAsync(entity);
     }
@@ -33,7 +34,7 @@ public abstract class BaseMutations
     /// </summary>
     protected async Task<bool> DeleteAsync<T>(
         Guid id,
-        IBaseRepository<T> repository) where T : class
+        IRepository<T> repository) where T : class, IAggregateRoot
     {
         return await repository.DeleteAsync(id);
     }

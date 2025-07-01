@@ -12,16 +12,10 @@ public class PacienteRepository : BaseRepository<Paciente>, IPacienteRepository
     {
     }
 
-    public async Task<Paciente?> GetByCpfAsync(string cpf)
-    {
-        return await _context.Pacientes
-            .FirstOrDefaultAsync(p => p.Cpf == cpf);
-    }
-
     public async Task<IEnumerable<Paciente>> GetAtivosAsync()
     {
         return await _context.Pacientes
-            .Where(p => p.Ativo)
+            .Where(p => !p.Desativada)
             .OrderBy(p => p.Nome)
             .ToListAsync();
     }

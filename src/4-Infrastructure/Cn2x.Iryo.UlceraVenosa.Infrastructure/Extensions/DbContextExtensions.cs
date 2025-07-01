@@ -71,4 +71,67 @@ public static class DbContextExtensions
 
         return services;
     }
+
+    /// <summary>
+    /// Aplica snake_case em nomes de tabelas e colunas
+    /// </summary>
+    public static void UseSnakeCaseNamingConvention(this ModelBuilder modelBuilder)
+    {
+        foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        {
+            // Tabela
+            entity.SetTableName(ToSnakeCase(entity.GetTableName()));
+            // Colunas
+            foreach (var property in entity.GetProperties())
+            {
+                property.SetColumnName(ToSnakeCase(property.GetColumnName()));
+            }
+            // Chaves
+            foreach (var key in entity.GetKeys())
+            {
+                key.SetName(ToSnakeCase(key.GetName()));
+            }
+            // Índices
+            foreach (var index in entity.GetIndexes())
+            {
+                index.SetDatabaseName(ToSnakeCase(index.GetDatabaseName()));
+            }
+        }
+    }
+
+    private static string ToSnakeCase(string input)
+    {
+        if (string.IsNullOrEmpty(input)) return input;
+        var stringBuilder = new System.Text.StringBuilder();
+        var previousCategory = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(input[0]);
+        stringBuilder.Append(char.ToLowerInvariant(input[0]));
+        for (int i = 1; i < input.Length; i++)
+        {
+            var currentChar = input[i];
+            var currentCategory = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(currentChar);
+            if (currentCategory == System.Globalization.UnicodeCategory.UppercaseLetter &&
+                previousCategory != System.Globalization.UnicodeCategory.SpaceSeparator &&
+                previousCategory != System.Globalization.UnicodeCategory.UppercaseLetter)
+            {
+                stringBuilder.Append('_');
+                stringBuilder.Append(char.ToLowerInvariant(currentChar));
+            }
+            else
+            {
+                stringBuilder.Append(char.ToLowerInvariant(currentChar));
+            }
+            previousCategory = currentCategory;
+        }
+        return stringBuilder.ToString();
+    }
+
+    public static IServiceCollection AddDbContextConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.ApplicationDbContext>(options =>
+        {
+            options.UseNpgsql(connectionString);
+        });
+        return services;
+    }
 } 

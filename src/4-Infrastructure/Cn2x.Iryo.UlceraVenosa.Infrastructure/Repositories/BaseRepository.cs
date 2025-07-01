@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
+using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Repositories;
 
@@ -8,7 +9,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Repositories;
 /// Implementação base do repositório genérico
 /// </summary>
 /// <typeparam name="T">Tipo da entidade</typeparam>
-public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
+public abstract class BaseRepository<T> : IRepository<T> where T : class, IAggregateRoot
 {
     protected readonly ApplicationDbContext _context;
     protected readonly DbSet<T> _dbSet;
@@ -19,14 +20,16 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
         _dbSet = context.Set<T>();
     }
 
+    public IUnitOfWork UnitOfWork => _context;
+
     public virtual async Task<IEnumerable<T>> GetAllAsync()
     {
-        return await _dbSet.ToListAsync();
+        return await _dbSet.AsNoTracking().ToListAsync();
     }
 
     public virtual async Task<T?> GetByIdAsync(Guid id)
     {
-        return await _dbSet.FindAsync(id);
+        return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => EF.Property<Guid>(e, "Id") == id);
     }
 
     public virtual async Task<T> AddAsync(T entity)
@@ -56,6 +59,12 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
 
     public virtual async Task<bool> ExistsAsync(Guid id)
     {
-        return await _dbSet.FindAsync(id) != null;
+        return await _dbSet.AsNoTracking().AnyAsync(e => EF.Property<Guid>(e, "Id") == id);
+    }
+
+    public Task<IQueryable<M?>> FindFilterByExpression<M>(System.Linq.Expressions.Expression<System.Func<M, bool>> expression) where M : class, IEntity<System.Guid>
+    {
+        // Implementação básica para evitar erro de compilação
+        return Task.FromResult(_context.Set<M>().Where(expression).AsNoTracking().AsQueryable() as IQueryable<M?>);
     }
 } 

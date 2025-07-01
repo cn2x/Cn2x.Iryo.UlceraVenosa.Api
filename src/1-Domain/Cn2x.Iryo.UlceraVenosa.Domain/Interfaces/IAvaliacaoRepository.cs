@@ -3,7 +3,7 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 
-public interface IAvaliacaoRepository : IBaseRepository<Avaliacao>
+public interface IAvaliacaoRepository : IRepository<Avaliacao>
 {
     Task<IEnumerable<Avaliacao>> GetByPacienteIdAsync(Guid pacienteId);
     Task<Avaliacao?> GetWithUlcerasAsync(Guid id);

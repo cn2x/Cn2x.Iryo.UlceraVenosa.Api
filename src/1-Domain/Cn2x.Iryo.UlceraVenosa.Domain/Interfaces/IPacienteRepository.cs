@@ -1,10 +1,10 @@
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
+using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 
-public interface IPacienteRepository : IBaseRepository<Paciente>
+public interface IPacienteRepository : IRepository<Paciente>
 {
-    Task<Paciente?> GetByCpfAsync(string cpf);
     Task<IEnumerable<Paciente>> GetAtivosAsync();
     Task<Paciente?> GetWithAvaliacoesAsync(Guid id);
 } 

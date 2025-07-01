@@ -5,7 +5,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 /// <summary>
 /// Avaliação do paciente
 /// </summary>
-public class Avaliacao : Entity<Guid>
+public class Avaliacao : Entity<Guid>, IAggregateRoot
 {
     public Guid PacienteId { get; set; }
     public DateTime DataAvaliacao { get; set; }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
+using Cn2x.Iryo.UlceraVenosa.Domain.Core;
+using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Extensions;
 using MediatR;
@@ -20,16 +21,12 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     public virtual DbSet<Ulcera> Ulceras { get; set; }
     public virtual DbSet<Paciente> Pacientes { get; set; }
     public virtual DbSet<Avaliacao> Avaliacoes { get; set; }
-    public virtual DbSet<Ceap> Ceaps { get; set; }
-    public virtual DbSet<Clinica> Clinicas { get; set; }
-    public virtual DbSet<Etiologica> Etiologicas { get; set; }
-    public virtual DbSet<Anatomica> Anatomicas { get; set; }
-    public virtual DbSet<Patofisiologica> Fisiologicas { get; set; }
+
     public virtual DbSet<Topografia> Topografias { get; set; }
     public virtual DbSet<Segmento> Segmentos { get; set; }
     public virtual DbSet<RegiaoAnatomica> RegioesAnatomicas { get; set; }
-    public virtual DbSet<Exsudato> Exsudatos { get; set; }
-    public virtual DbSet<ExsudatoTipo> ExsudatoTipos { get; set; }
+    public virtual DbSet<ExsudatoDaUlcera> Exsudatos { get; set; }
+    public virtual DbSet<Exsudato> ExsudatoTipos { get; set; }
 
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -91,6 +88,9 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     {
         base.OnModelCreating(modelBuilder);
         
+        // Aplica snake_case em tabelas e colunas
+        modelBuilder.UseSnakeCaseNamingConvention();
+        
         // Configurações das entidades
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         
@@ -101,16 +101,12 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         ConfigureUlcera(modelBuilder);
         ConfigurePaciente(modelBuilder);
         ConfigureAvaliacao(modelBuilder);
-        ConfigureClassificacaoCeap(modelBuilder);
-        ConfigureClasseClinica(modelBuilder);
-        ConfigureClasseEtiologica(modelBuilder);
-        ConfigureClasseAnatomica(modelBuilder);
-        ConfigureClassePatofisiologica(modelBuilder);
+
         ConfigureTopografia(modelBuilder);
         ConfigureSegmento(modelBuilder);
         ConfigureRegiaoAnatomica(modelBuilder);
+        ConfigureExsudatoDaUlcera(modelBuilder);
         ConfigureExsudato(modelBuilder);
-        ConfigureExsudatoTipo(modelBuilder);
     }
 
     private void ConfigureUlcera(ModelBuilder modelBuilder)
@@ -149,10 +145,28 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
                   .HasForeignKey(e => e.AvaliacaoId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(e => e.ClassificacaoCeap)
-                  .WithOne()
-                  .HasForeignKey<Ceap>("UlceraId")
-                  .OnDelete(DeleteBehavior.Cascade);
+            entity.OwnsOne(e => e.ClassificacaoCeap, ceap =>
+            {
+                ceap.Property(c => c.ClasseClinica).HasConversion(
+                    v => v.Id,
+                    v => Clinica.FromValue<Clinica>(v)
+                ).IsRequired();
+
+                ceap.Property(c => c.Etiologia).HasConversion(
+                    v => v.Id,
+                    v => Etiologica.FromValue<Etiologica>(v)
+                ).IsRequired();
+
+                ceap.Property(c => c.Anatomia).HasConversion(
+                    v => v.Id,
+                    v => Anatomica.FromValue<Anatomica>(v)
+                ).IsRequired();
+
+                ceap.Property(c => c.Patofisiologia).HasConversion(
+                    v => v.Id,
+                    v => Patofisiologica.FromValue<Patofisiologica>(v)
+                ).IsRequired();
+            });
 
             entity.HasMany(e => e.Topografias)
                   .WithOne(t => t.Ulcera)
@@ -178,7 +192,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Nome).IsRequired().HasMaxLength(200);
             entity.Property(e => e.Cpf).IsRequired().HasMaxLength(14);            
-            entity.Property(e => e.Ativo).IsRequired();
 
             // Índices
             entity.HasIndex(e => e.Cpf).IsUnique();
@@ -204,232 +217,31 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         });
     }
 
-    private void ConfigureClassificacaoCeap(ModelBuilder modelBuilder)
+    private void ConfigureTopografia(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Ceap>(entity =>
+        modelBuilder.Entity<Topografia>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.ClasseClinicaId).IsRequired();
-            entity.Property(e => e.EtiologiaId).IsRequired();
-            entity.Property(e => e.AnatomiaId).IsRequired();
-            entity.Property(e => e.PatofisiologiaId).IsRequired();
+            entity.Property(e => e.UlceraId).IsRequired();
+            entity.Property(e => e.RegiaoId).IsRequired();
+
+            entity.Property(x => x.Lado)
+                .HasConversion(new LateralidadeValueConvert())
+                .IsRequired();
 
             // Relacionamentos
-            entity.HasOne(e => e.ClasseClinica)
-                  .WithMany(c => c.ClassificacoesCeap)
-                  .HasForeignKey(e => e.ClasseClinicaId)
+            entity.HasOne(e => e.Ulcera)
+                  .WithMany(u => u.Topografias)
+                  .HasForeignKey(e => e.UlceraId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Regiao)
+                  .WithMany(r => r.Topografias)
+                  .HasForeignKey(e => e.RegiaoId)
                   .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(e => e.Etiologia)
-                  .WithMany(c => c.ClassificacoesCeap)
-                  .HasForeignKey(e => e.EtiologiaId)
-                  .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne(e => e.Anatomia)
-                  .WithMany(c => c.ClassificacoesCeap)
-                  .HasForeignKey(e => e.AnatomiaId)
-                  .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne(e => e.Patofisiologia)
-                  .WithMany(c => c.ClassificacoesCeap)
-                  .HasForeignKey(e => e.PatofisiologiaId)
-                  .OnDelete(DeleteBehavior.Restrict);
-        });
-    }
-
-    private void ConfigureClasseClinica(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Clinica>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Codigo).IsRequired().HasMaxLength(10);
-            entity.Property(e => e.Descricao).IsRequired().HasMaxLength(200);
-
-            // Seed para classificação clínica CEAP
-            entity.HasData(
-                new Clinica
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Codigo = "C0",
-                    Descricao = "Sem sinais visíveis ou palpáveis de doença venosa",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Clinica
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Codigo = "C1",
-                    Descricao = "Telangiectasias ou veias reticulares",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Clinica
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Codigo = "C2",
-                    Descricao = "Veias varicosas",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Clinica
-                {
-                    Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                    Codigo = "C3",
-                    Descricao = "Edema",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Clinica
-                {
-                    Id = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                    Codigo = "C4a",
-                    Descricao = "Pigmentação ou eczema",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Clinica
-                {
-                    Id = Guid.Parse("66666666-6666-6666-6666-666666666666"),
-                    Codigo = "C4b",
-                    Descricao = "Lipodermatoesclerose ou atrofia branca",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Clinica
-                {
-                    Id = Guid.Parse("77777777-7777-7777-7777-777777777777"),
-                    Codigo = "C5",
-                    Descricao = "Úlcera venosa cicatrizada",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Clinica
-                {
-                    Id = Guid.Parse("88888888-8888-8888-8888-888888888888"),
-                    Codigo = "C6",
-                    Descricao = "Úlcera venosa ativa",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                }
-            );
-        });
-    }
-
-    private void ConfigureClasseEtiologica(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Etiologica>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Codigo).IsRequired().HasMaxLength(10);
-            entity.Property(e => e.Descricao).IsRequired().HasMaxLength(200);
-
-            // Seed para classificação etiológica CEAP
-            entity.HasData(
-                new Etiologica
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Codigo = "Ec",
-                    Descricao = "Congênita",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Etiologica
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Codigo = "Ep",
-                    Descricao = "Primária",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Etiologica
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Codigo = "Es",
-                    Descricao = "Secundária (pós-trombótica)",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Etiologica
-                {
-                    Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                    Codigo = "En",
-                    Descricao = "Não identificada",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                }
-            );
-        });
-    }
-
-    private void ConfigureClasseAnatomica(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Anatomica>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Codigo).IsRequired().HasMaxLength(10);
-            entity.Property(e => e.Descricao).IsRequired().HasMaxLength(200);
-
-            // Seed para classificação anatômica CEAP
-            entity.HasData(
-                new Anatomica
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Codigo = "As",
-                    Descricao = "Sistema superficial",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Anatomica
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Codigo = "Ad",
-                    Descricao = "Sistema profundo",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Anatomica
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Codigo = "Ap",
-                    Descricao = "Sistema perfurante",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Anatomica
-                {
-                    Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                    Codigo = "An",
-                    Descricao = "Sem localização anatômica identificada",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                }
-            );
-        });
-    }
-
-    private void ConfigureClassePatofisiologica(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Patofisiologica>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Codigo).IsRequired().HasMaxLength(10);
-            entity.Property(e => e.Descricao).IsRequired().HasMaxLength(200);
-
-            // Seed para classificação patofisiológica CEAP
-            entity.HasData(
-                new Patofisiologica
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Codigo = "Pr",
-                    Descricao = "Refluxo",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Patofisiologica
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Codigo = "Po",
-                    Descricao = "Obstrução",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Patofisiologica
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Codigo = "Pro",
-                    Descricao = "Refluxo e obstrução",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                },
-                new Patofisiologica
-                {
-                    Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                    Codigo = "Pn",
-                    Descricao = "Sem alteração identificada",
-                    CriadoEm = new DateTime(2025, 6, 28, 19, 0, 0, DateTimeKind.Utc)
-                }
-            );
+            // Índice único para UlceraId, RegiaoId e Lado
+            entity.HasIndex(e => new { e.UlceraId, e.RegiaoId, e.Lado }).IsUnique();
         });
     }
 
@@ -523,27 +335,24 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         });
     }
 
-    private void ConfigureTopografia(ModelBuilder modelBuilder)
+    private void ConfigureExsudatoDaUlcera(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Topografia>(entity =>
+        modelBuilder.Entity<ExsudatoDaUlcera>(entity =>
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.UlceraId).IsRequired();
-            entity.Property(e => e.RegiaoId).IsRequired();
-
-            entity.Property(x => x.Lado)
-                .HasConversion(new LateralidadeValueConvert())
-                .IsRequired();
+            entity.Property(e => e.ExsudatoId).IsRequired();
+            entity.Property(e => e.Descricao).HasMaxLength(500);
 
             // Relacionamentos
             entity.HasOne(e => e.Ulcera)
-                  .WithMany(u => u.Topografias)
+                  .WithMany(u => u.Exsudatos)
                   .HasForeignKey(e => e.UlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(e => e.Regiao)
-                  .WithMany(r => r.Topografias)
-                  .HasForeignKey(e => e.RegiaoId)
+            entity.HasOne(e => e.Exsudato)
+                  .WithMany(et => et.ExsudatosDaUlcera)
+                  .HasForeignKey(e => e.ExsudatoId)
                   .OnDelete(DeleteBehavior.Restrict);
         });
     }
@@ -553,87 +362,65 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         modelBuilder.Entity<Exsudato>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.UlceraId).IsRequired();
-            entity.Property(e => e.ExsudatoTipoId).IsRequired();
-            entity.Property(e => e.Descricao).HasMaxLength(500);
-
-            // Relacionamentos
-            entity.HasOne(e => e.Ulcera)
-                  .WithMany(u => u.Exsudatos)
-                  .HasForeignKey(e => e.UlceraId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(e => e.ExsudatoTipo)
-                  .WithMany(et => et.Exsudatos)
-                  .HasForeignKey(e => e.ExsudatoTipoId)
-                  .OnDelete(DeleteBehavior.Restrict);
-        });
-    }
-
-    private void ConfigureExsudatoTipo(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<ExsudatoTipo>(entity =>
-        {
-            entity.HasKey(e => e.Id);
             entity.Property(e => e.Descricao).IsRequired().HasMaxLength(200);
             
             // Seed data para tipos de exsudato
             entity.HasData(
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
                     Descricao = "Seroso - Transparente ou levemente amarelo, aquoso, fluido. Indicação: Fase inflamatória leve ou cicatrização. Conduta: Monitorar, manter hidratação da ferida.",
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 },
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
                     Descricao = "Serossanguinolento - Rosa claro, diluído com sangue, levemente viscoso. Indicação: Trauma leve ou início de granulação. Conduta: Avaliar trauma, proteger bordas.",
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 },
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
                     Descricao = "Sanguinolento - Vermelho vivo, líquido a viscoso. Indicação: Sangramento ativo ou lesão capilar. Conduta: Estancar, avaliar necessidade de sutura.",
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 },
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
                     Descricao = "Hemorrágico - Vermelho escuro ou vivo, espesso, com coágulos. Indicação: Hemorragia arterial ou venosa local. Conduta: Urgência médica, hemostasia.",
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 },
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("55555555-5555-5555-5555-555555555555"),
                     Descricao = "Purulento - Amarelo, esverdeado ou acastanhado, espesso, fétido. Indicação: Infecção bacteriana ativa. Conduta: Cultura, antibioticoterapia, limpeza.",
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 },
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("66666666-6666-6666-6666-666666666666"),
                     Descricao = "Fibrinoso - Esbranquiçado ou amarelado, gelatinoso, filamentoso. Indicação: Presença de fibrina, biofilme. Conduta: Desbridamento, controle da umidade.",
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 },
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("77777777-7777-7777-7777-777777777777"),
                     Descricao = "Catarral - Esbranquiçado e mucoide, viscoso. Indicação: Presente em áreas mucosas ou com inflamação leve. Conduta: Raro em úlceras venosas, observar.",
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 },
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("88888888-8888-8888-8888-888888888888"),
                     Descricao = "Necrótico - Marrom, cinza ou preto, espesso, seco ou úmido. Indicação: Presença de necrose tecidual. Conduta: Desbridamento enzimático ou cirúrgico.",
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 },
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("99999999-9999-9999-9999-999999999999"),
                     Descricao = "Putrilaginoso - Cinza-esverdeado, muito espesso, pegajoso, fétido. Indicação: Infecção crítica, tecido desvitalizado. Conduta: Ação rápida: desbridamento + antibiótico.",
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 },
-                new ExsudatoTipo
+                new Exsudato
                 {
                     Id = Guid.Parse("AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA"),
                     Descricao = "Hiperexsudativo - Variável, muito abundante. Indicação: Descompensação venosa, linforreia, infecção. Conduta: Curativos superabsorventes, compressão.",
@@ -649,6 +436,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     private void ConfigureGlobalFilters(ModelBuilder modelBuilder)
     {
         // Filtro global para pacientes ativos
-        modelBuilder.Entity<Paciente>().HasQueryFilter(e => e.Ativo);
+        modelBuilder.Entity<Paciente>().HasQueryFilter(e => !e.Desativada);
     }
 } 

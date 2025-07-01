@@ -5,7 +5,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 /// <summary>
 /// Região anatômica
 /// </summary>
-public class RegiaoAnatomica : Entity<Guid>
+public class RegiaoAnatomica : Entity<Guid>, IAggregateRoot
 {
     public Guid SegmentoId { get; set; }
     public string Limites { get; set; } = string.Empty;

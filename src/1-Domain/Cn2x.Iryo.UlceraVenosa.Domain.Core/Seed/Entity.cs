@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using HotChocolate;
+using MediatR;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Core {
@@ -11,6 +12,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Core {
 
         private List<INotification>? _domainEvents;
 
+        [GraphQLIgnore]
         public IReadOnlyCollection<INotification>? DomainEvents => _domainEvents?.AsReadOnly();
 
         public void AddDomainEvent(INotification eventItem)
