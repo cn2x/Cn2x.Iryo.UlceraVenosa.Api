@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250707155023_AddAvaliacaoUlceraAndExsudatoDaAvaliacao")]
-    partial class AddAvaliacaoUlceraAndExsudatoDaAvaliacao
+    [Migration("20250707155701_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
