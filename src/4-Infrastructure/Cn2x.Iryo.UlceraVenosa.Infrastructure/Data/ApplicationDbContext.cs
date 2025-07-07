@@ -28,6 +28,9 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
 
     public virtual DbSet<Medida> Medidas { get; set; }
 
+    public virtual DbSet<AvaliacaoUlcera> AvaliacoesUlcera { get; set; }
+    public virtual DbSet<ExsudatoDaAvaliacao> ExsudatosAvaliacao { get; set; }
+
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -108,6 +111,8 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         ConfigureExsudato(modelBuilder);
 
         ConfigureMedida(modelBuilder);
+        ConfigureAvaliacaoUlcera(modelBuilder);
+        ConfigureExsudatoDaAvaliacao(modelBuilder);
     }
 
     private void ConfigureUlcera(ModelBuilder modelBuilder)
@@ -116,64 +121,15 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         {
             entity.ToTable("ulceras");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Duracao).HasColumnName("duracao").IsRequired().HasMaxLength(100);
-            entity.Property(e => e.DataExame).HasColumnName("data_exame").IsRequired();
-
-            // Value Objects
-            entity.OwnsOne(e => e.Caracteristicas, caracteristicas =>
-            {
-                caracteristicas.Property(c => c.BordasDefinidas).HasColumnName("bordas_definidas").IsRequired();
-                caracteristicas.Property(c => c.TecidoGranulacao).HasColumnName("tecido_granulacao").IsRequired();
-                caracteristicas.Property(c => c.Necrose).HasColumnName("necrose").IsRequired();
-                caracteristicas.Property(c => c.OdorFetido).HasColumnName("odor_fetido").IsRequired();
-            });
-
-            entity.OwnsOne(e => e.SinaisInflamatorios, sinais =>
-            {
-                sinais.Property(s => s.Eritema).HasColumnName("eritema");
-                sinais.Property(s => s.Calor).HasColumnName("calor");
-                sinais.Property(s => s.Rubor).HasColumnName("rubor");
-                sinais.Property(s => s.Edema).HasColumnName("edema");
-                sinais.Property(s => s.Dor).HasColumnName("dor");
-                sinais.Property(s => s.PerdadeFuncao).HasColumnName("perda_de_funcao");
-            });
-
-            entity.OwnsOne(e => e.ClassificacaoCeap, ceap =>
-            {
-                ceap.Property(c => c.ClasseClinica).HasColumnName("classe_clinica").HasConversion(
-                    v => v.Id,
-                    v => Clinica.FromValue<Clinica>(v)
-                ).IsRequired();
-
-                ceap.Property(c => c.Etiologia).HasColumnName("etiologia").HasConversion(
-                    v => v.Id,
-                    v => Etiologica.FromValue<Etiologica>(v)
-                ).IsRequired();
-
-                ceap.Property(c => c.Anatomia).HasColumnName("anatomia").HasConversion(
-                    v => v.Id,
-                    v => Anatomica.FromValue<Anatomica>(v)
-                ).IsRequired();
-
-                ceap.Property(c => c.Patofisiologia).HasColumnName("patofisiologia").HasConversion(
-                    v => v.Id,
-                    v => Patofisiologica.FromValue<Patofisiologica>(v)
-                ).IsRequired();
-            });
 
             entity.HasMany(e => e.Topografias)
                   .WithOne(t => t.Ulcera)
                   .HasForeignKey(t => t.UlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasMany(e => e.Exsudatos)
-                  .WithOne(ex => ex.Ulcera)
-                  .HasForeignKey(ex => ex.UlceraId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasMany(e => e.Imagens)
-                  .WithOne(i => i.Ulcera)
-                  .HasForeignKey(i => i.UlceraId)
+            entity.HasMany(e => e.Avaliacoes)
+                  .WithOne(a => a.Ulcera)
+                  .HasForeignKey(a => a.UlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
     }
@@ -325,7 +281,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
 
             // Relacionamentos
             entity.HasOne(e => e.Ulcera)
-                  .WithMany(u => u.Exsudatos)
+                  .WithMany()
                   .HasForeignKey(e => e.UlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
 
@@ -421,8 +377,94 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
             entity.Property(m => m.Largura).HasColumnName("largura").HasColumnType("decimal(10,2)");
             entity.Property(m => m.Profundidade).HasColumnName("profundidade").HasColumnType("decimal(10,2)");
             entity.HasOne(m => m.Ulcera)
-                  .WithOne(u => u.Medida)
+                  .WithOne()
                   .HasForeignKey<Medida>(m => m.UlceraId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
+
+    private void ConfigureAvaliacaoUlcera(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<AvaliacaoUlcera>(entity =>
+        {
+            entity.ToTable("avaliacoes_ulcera");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.DataAvaliacao).HasColumnName("data_avaliacao").IsRequired();
+            entity.Property(e => e.Duracao).HasColumnName("duracao").HasMaxLength(100);
+
+            entity.OwnsOne(e => e.Caracteristicas, caracteristicas =>
+            {
+                caracteristicas.Property(c => c.BordasDefinidas).HasColumnName("bordas_definidas").IsRequired();
+                caracteristicas.Property(c => c.TecidoGranulacao).HasColumnName("tecido_granulacao").IsRequired();
+                caracteristicas.Property(c => c.Necrose).HasColumnName("necrose").IsRequired();
+                caracteristicas.Property(c => c.OdorFetido).HasColumnName("odor_fetido").IsRequired();
+            });
+
+            entity.OwnsOne(e => e.SinaisInflamatorios, sinais =>
+            {
+                sinais.Property(s => s.Eritema).HasColumnName("eritema");
+                sinais.Property(s => s.Calor).HasColumnName("calor");
+                sinais.Property(s => s.Rubor).HasColumnName("rubor");
+                sinais.Property(s => s.Edema).HasColumnName("edema");
+                sinais.Property(s => s.Dor).HasColumnName("dor");
+                sinais.Property(s => s.PerdadeFuncao).HasColumnName("perda_de_funcao");
+            });
+
+            entity.OwnsOne(e => e.ClassificacaoCeap, ceap =>
+            {
+                ceap.Property(c => c.ClasseClinica).HasColumnName("classe_clinica").HasConversion(
+                    v => v.Id,
+                    v => Clinica.FromValue<Clinica>(v)
+                ).IsRequired();
+                ceap.Property(c => c.Etiologia).HasColumnName("etiologia").HasConversion(
+                    v => v.Id,
+                    v => Etiologica.FromValue<Etiologica>(v)
+                ).IsRequired();
+                ceap.Property(c => c.Anatomia).HasColumnName("anatomia").HasConversion(
+                    v => v.Id,
+                    v => Anatomica.FromValue<Anatomica>(v)
+                ).IsRequired();
+                ceap.Property(c => c.Patofisiologia).HasColumnName("patofisiologia").HasConversion(
+                    v => v.Id,
+                    v => Patofisiologica.FromValue<Patofisiologica>(v)
+                ).IsRequired();
+            });
+
+            entity.HasOne(e => e.Ulcera)
+                  .WithMany(u => u.Avaliacoes)
+                  .HasForeignKey(e => e.UlceraId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Medida)
+                  .WithOne()
+                  .HasForeignKey<Medida>(m => m.UlceraId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.Imagens)
+                  .WithOne()
+                  .HasForeignKey(i => i.UlceraId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.Exsudatos)
+                  .WithOne(ex => ex.AvaliacaoUlcera)
+                  .HasForeignKey(ex => ex.AvaliacaoUlceraId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
+
+    private void ConfigureExsudatoDaAvaliacao(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ExsudatoDaAvaliacao>(entity =>
+        {
+            entity.ToTable("exsudatos_avaliacao");
+            entity.HasKey(e => new { e.AvaliacaoUlceraId, e.ExsudatoId });
+            entity.HasOne(e => e.AvaliacaoUlcera)
+                  .WithMany(a => a.Exsudatos)
+                  .HasForeignKey(e => e.AvaliacaoUlceraId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Exsudato)
+                  .WithMany()
+                  .HasForeignKey(e => e.ExsudatoId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
     }

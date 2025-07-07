@@ -22,19 +22,7 @@ public class UlceraMutations
         {
             Id = input.Id,
             PacienteId = input.PacienteId,
-            Duracao = input.Duracao,
-            DataExame = input.DataExame,
-            ClasseClinica = Clinica.FromValue<Clinica>(input.ClasseClinica),
-            Etiologia = Etiologica.FromValue<Etiologica>(input.Etiologia),
-            Anatomia = Anatomica.FromValue<Anatomica>(input.Anatomia),
-            Patofisiologia = Patofisiologica.FromValue<Patofisiologica>(input.Patofisiologia),
-            Caracteristicas = input.Caracteristicas != null ? new Caracteristicas
-            {
-                BordasDefinidas = input.Caracteristicas.BordasDefinidas,
-                TecidoGranulacao = input.Caracteristicas.TecidoGranulacao,
-                Necrose = input.Caracteristicas.Necrose,
-                OdorFetido = input.Caracteristicas.OdorFetido
-            } : new Caracteristicas()
+            Topografias = input.Topografias
         };
 
         var ulceraId = await mediator.Send(command);
@@ -129,11 +117,5 @@ public class UpsertUlceraInput
 {
     public Guid? Id { get; set; }
     public Guid PacienteId { get; set; }
-    public string Duracao { get; set; } = string.Empty;
-    public DateTime DataExame { get; set; }
-    public ClinicaEnum ClasseClinica { get; set; }
-    public EtiologicaEnum Etiologia { get; set; }
-    public AnatomicaEnum Anatomia { get; set; }
-    public PatofisiologicaEnum Patofisiologia { get; set; }
-    public CaracteristicasInput? Caracteristicas { get; set; }
+    public List<Guid> Topografias { get; set; } = new();
 } 

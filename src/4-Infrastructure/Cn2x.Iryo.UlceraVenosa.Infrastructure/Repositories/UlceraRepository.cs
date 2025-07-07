@@ -20,47 +20,30 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
             .ToListAsync();
     }
 
-    public async Task<Ulcera?> GetWithClassificacaoAsync(Guid id)
-    {
-        return await _context.Ulceras
-            .Include(u => u.ClassificacaoCeap)
-            .FirstOrDefaultAsync(u => u.Id == id);
-    }
-
     public async Task<IEnumerable<Ulcera>> GetWithDetailsAsync()
     {
         return await _context.Ulceras
-            .Include(u => u.Caracteristicas)
-            .Include(u => u.SinaisInflamatorios)
-            .Include(u => u.ClassificacaoCeap)
             .Include(u => u.Topografias)
-            .Include(u => u.Exsudatos)
-            .Include(u => u.Imagens)
+            .Include(u => u.Paciente)
+            .Include(u => u.Avaliacoes)
             .ToListAsync();
     }
 
     public async Task<Ulcera?> GetWithDetailsByIdAsync(Guid id)
     {
         return await _context.Ulceras
-            .Include(u => u.Caracteristicas)
-            .Include(u => u.SinaisInflamatorios)
-            .Include(u => u.ClassificacaoCeap)
             .Include(u => u.Topografias)
-            .Include(u => u.Exsudatos)
-            .Include(u => u.Imagens)
+            .Include(u => u.Paciente)
+            .Include(u => u.Avaliacoes)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 
     public async Task<PagedResult<Ulcera>> GetPagedAsync(int page, int pageSize, string? searchTerm = null)
     {
         var query = _context.Ulceras
-            .Include(u => u.Caracteristicas)
-            .Include(u => u.SinaisInflamatorios)
-            .Include(u => u.ClassificacaoCeap)
             .Include(u => u.Topografias)
-            .Include(u => u.Exsudatos)
-            .Include(u => u.Imagens)
             .Include(u => u.Paciente)
+            .Include(u => u.Avaliacoes)
             .Where(u => !u.Desativada);
 
         // Aplicar filtro de busca se fornecido
@@ -68,14 +51,13 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
         {
             query = query.Where(u => 
                 u.Paciente.Nome.Contains(searchTerm) ||
-                u.Paciente.Cpf.Contains(searchTerm) ||
-                u.Duracao.Contains(searchTerm)
+                u.Paciente.Cpf.Contains(searchTerm)
             );
         }
 
         var totalCount = await query.CountAsync();
         var items = await query
-            .OrderByDescending(u => u.DataExame)
+            .OrderByDescending(u => u.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -92,15 +74,11 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
     public async Task<IEnumerable<Ulcera>> SearchByPacienteNomeAsync(string nome)
     {
         return await _context.Ulceras
-            .Include(u => u.Caracteristicas)
-            .Include(u => u.SinaisInflamatorios)
-            .Include(u => u.ClassificacaoCeap)
             .Include(u => u.Topografias)
-            .Include(u => u.Exsudatos)
-            .Include(u => u.Imagens)
             .Include(u => u.Paciente)
+            .Include(u => u.Avaliacoes)
             .Where(u => !u.Desativada && u.Paciente.Nome.Contains(nome))
-            .OrderByDescending(u => u.DataExame)
+            .OrderByDescending(u => u.Id)
             .ToListAsync();
     }
 } 

@@ -16,24 +16,10 @@ public class UlceraType : ObjectType<Ulcera>
 
         descriptor.Field(x => x.Id).Type<IdType>().Description("ID único da úlcera");
         descriptor.Field(x => x.PacienteId).Type<StringType>().Description("ID do paciente");
-        descriptor.Field(x => x.Duracao).Description("Duração da úlcera");
-        descriptor.Field(x => x.DataExame).Description("Data do exame");
         descriptor.Field(x => x.Desativada).Description("Indica se a úlcera está desativada");
-        descriptor.Field(x => x.Medida).Type<MedidaType>().Description("Medida associada à úlcera");
-
-        // Value Objects
-        descriptor.Field(x => x.Caracteristicas).Type<CaracteristicasType>().Description("Características da úlcera");
-        descriptor.Field(x => x.SinaisInflamatorios).Type<SinaisInflamatoriosType>().Description("Sinais inflamatórios");
-        descriptor.Field(x => x.ClassificacaoCeap).Type<CeapType>().Description("Classificação CEAP");
-
-        // Relacionamentos
         descriptor.Field(x => x.Topografias).Type<ListType<TopografiaType>>().Description("Topografias da úlcera");
-        descriptor.Field(x => x.Exsudatos).Type<ListType<ExsudatoDaUlceraType>>().Description("Exsudatos da úlcera");
-        descriptor.Field(x => x.Imagens).Type<ListType<ImagemUlceraType>>().Description("Imagens da úlcera");
-
-        // Navegação
         descriptor.Field(x => x.Paciente).Type<PacienteType>().Description("Paciente relacionado");
-
+        descriptor.Field(x => x.Avaliacoes).Type<ListType<AvaliacaoUlceraType>>().Description("Avaliações da úlcera");
         descriptor.Ignore(x => x.DomainEvents);
     }
 }

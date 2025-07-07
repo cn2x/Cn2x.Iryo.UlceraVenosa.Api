@@ -27,17 +27,8 @@ public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, G
         if (ulcera == null)
         {
             // Criação
-            var novaUlcera = UlceraFactory.Create(
-                request.PacienteId,
-                request.Duracao,
-                request.DataExame,
-                request.ClasseClinica,
-                request.Etiologia,
-                request.Anatomia,
-                request.Patofisiologia,
-                request.Caracteristicas,
-                request.SinaisInflamatorios
-            );
+            var novaUlcera = UlceraFactory.Create(request.PacienteId);
+            novaUlcera.Topografias = request.Topografias.Select(id => new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia { Id = id }).ToList();
             await _ulceraRepository.AddAsync(novaUlcera);
             await _ulceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
             return novaUlcera.Id;
@@ -47,21 +38,9 @@ public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, G
             // Atualização
             var ulceraAtualizada = UlceraFactory.CreateForUpdate(
                 ulcera.Id,
-                request.PacienteId,
-                request.Duracao,
-                request.DataExame,
-                request.ClasseClinica,
-                request.Etiologia,
-                request.Anatomia,
-                request.Patofisiologia,
-                request.Caracteristicas,
-                request.SinaisInflamatorios
+                request.PacienteId
             );
-            // Manter coleções existentes
-            ulceraAtualizada.Topografias = ulcera.Topografias ?? new List<Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia>();
-            ulceraAtualizada.Exsudatos = ulcera.Exsudatos ?? new List<Cn2x.Iryo.UlceraVenosa.Domain.Entities.ExsudatoDaUlcera>();
-            ulceraAtualizada.Imagens = ulcera.Imagens ?? new List<Cn2x.Iryo.UlceraVenosa.Domain.Entities.ImagemUlcera>();
-
+            ulceraAtualizada.Topografias = request.Topografias.Select(id => new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia { Id = id }).ToList();
             await _ulceraRepository.UpdateAsync(ulceraAtualizada);
             await _ulceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
             return ulceraAtualizada.Id;
