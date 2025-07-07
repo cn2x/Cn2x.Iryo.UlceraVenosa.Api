@@ -1,21 +1,18 @@
 using HotChocolate.Types;
+using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 
-namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Types;
-
-public class TopografiaType : ObjectType<Topografia>
+public class LateralidadeType : ObjectType<Lateralidade>
 {
-    protected override void Configure(IObjectTypeDescriptor<Topografia> descriptor)
+    protected override void Configure(IObjectTypeDescriptor<Lateralidade> descriptor)
     {
-        descriptor.Name("Topografia");
-        descriptor.Description("Topografia da úlcera");
+        descriptor.Name("Lateralidade");
+        descriptor.Description("Lateralidade da topografia");
 
-        descriptor.Field(x => x.Id).Type<IdType>().Description("ID único da topografia");
-        descriptor.Field(x => x.UlceraId).Type<StringType>().Description("ID da úlcera");
-        descriptor.Field(x => x.RegiaoId).Type<StringType>().Description("ID da região anatômica");
-        descriptor.Field(x => x.Lado).Description("Lado da topografia");
-        descriptor.Field(x => x.Desativada).Description("Indica se a topografia está desativada");
-        descriptor.Ignore(x => x.DomainEvents);
+        descriptor.Field("id")
+            .Type<EnumType<LateralidadeEnum>>()
+            .Resolve(ctx => ctx.Parent<Lateralidade>().Id);
+        descriptor.Field(x => x.Name).Description("Nome amigável da lateralidade");
     }
 }
 
@@ -24,14 +21,10 @@ public class ExsudatoDaUlceraType : ObjectType<ExsudatoDaUlcera>
     protected override void Configure(IObjectTypeDescriptor<ExsudatoDaUlcera> descriptor)
     {
         descriptor.Name("ExsudatoDaUlcera");
-        descriptor.Description("Exsudato da úlcera");
-
-        descriptor.Field(x => x.Id).Type<IdType>().Description("ID único do exsudato");
-        descriptor.Field(x => x.UlceraId).Type<StringType>().Description("ID da úlcera");
-        descriptor.Field(x => x.ExsudatoId).Type<StringType>().Description("ID do tipo de exsudato");
-        descriptor.Field(x => x.Descricao).Description("Descrição do exsudato");
-        descriptor.Field(x => x.Desativada).Description("Indica se o exsudato está desativado");
-        descriptor.Ignore(x => x.DomainEvents);
+        descriptor.Description("Exsudato associado à úlcera (tabela de vínculo)");
+        descriptor.Field(x => x.UlceraId).Description("Id da úlcera");
+        descriptor.Field(x => x.ExsudatoId).Description("Id do exsudato");
+        // Adicione outros campos relevantes conforme necessário
     }
 }
 
@@ -40,36 +33,9 @@ public class ImagemUlceraType : ObjectType<ImagemUlcera>
     protected override void Configure(IObjectTypeDescriptor<ImagemUlcera> descriptor)
     {
         descriptor.Name("ImagemUlcera");
-        descriptor.Description("Imagem da úlcera");
-
-        descriptor.Field(x => x.Id).Type<IdType>().Description("ID único da imagem");
-        descriptor.Field(x => x.UlceraId).Type<StringType>().Description("ID da úlcera");
-        descriptor.Field(x => x.NomeArquivo).Description("Nome do arquivo");
-        descriptor.Field(x => x.CaminhoArquivo).Description("Caminho do arquivo");
-        descriptor.Field(x => x.ContentType).Description("Tipo de conteúdo");
-        descriptor.Field(x => x.TamanhoBytes).Description("Tamanho do arquivo em bytes");
-        descriptor.Field(x => x.DataCaptura).Description("Data de captura da imagem");
-        descriptor.Field(x => x.Descricao).Description("Descrição da imagem");
-        descriptor.Field(x => x.Observacoes).Description("Observações da imagem");
-        descriptor.Field(x => x.EhImagemPrincipal).Description("Indica se é a imagem principal");
-        descriptor.Field(x => x.OrdemExibicao).Description("Ordem de exibição");
-        descriptor.Ignore(x => x.DomainEvents);
-    }
-}
-
-public class AvaliacaoType : ObjectType<Avaliacao>
-{
-    protected override void Configure(IObjectTypeDescriptor<Avaliacao> descriptor)
-    {
-        descriptor.Name("Avaliacao");
-        descriptor.Description("Avaliação médica");
-
-        descriptor.Field(x => x.Id).Type<IdType>().Description("ID único da avaliação");
-        descriptor.Field(x => x.DataAvaliacao).Description("Data da avaliação");
-        descriptor.Field(x => x.Observacoes).Description("Observações da avaliação");
-        descriptor.Field(x => x.Diagnostico).Description("Diagnóstico");
-        descriptor.Field(x => x.Conduta).Description("Conduta médica");
-        descriptor.Ignore(x => x.DomainEvents);
+        descriptor.Description("Imagem associada à úlcera");
+        descriptor.Field(x => x.Id).Description("Id da imagem da úlcera");
+        // Adicione outros campos relevantes conforme necessário
     }
 }
 
@@ -79,11 +45,21 @@ public class PacienteType : ObjectType<Paciente>
     {
         descriptor.Name("Paciente");
         descriptor.Description("Paciente do sistema");
-
-        descriptor.Field(x => x.Id).Type<IdType>().Description("ID único do paciente");
-        descriptor.Field(x => x.Nome).Description("Nome do paciente");
-        descriptor.Field(x => x.Cpf).Description("CPF do paciente");
-        descriptor.Field(x => x.Desativada).Description("Indica se o paciente está desativado");
-        descriptor.Ignore(x => x.DomainEvents);
+        descriptor.Field(x => x.Id).Description("Id do paciente");
+        // Adicione outros campos relevantes conforme necessário
     }
 }
+
+public class MedidaType : ObjectType<Medida>
+{
+    protected override void Configure(IObjectTypeDescriptor<Medida> descriptor)
+    {
+        descriptor.Name("Medida");
+        descriptor.Description("Medidas da úlcera (relacionamento 1:1)");
+        descriptor.Field(x => x.Id).Description("Id da Medida (igual ao UlceraId)");
+        descriptor.Field(x => x.UlceraId).Description("Id da úlcera associada");
+        descriptor.Field(x => x.Comprimento).Description("Comprimento em cm");
+        descriptor.Field(x => x.Largura).Description("Largura em cm");
+        descriptor.Field(x => x.Profundidade).Description("Profundidade em cm");
+    }
+} 

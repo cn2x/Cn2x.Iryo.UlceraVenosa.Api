@@ -2,26 +2,23 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 
-public enum EtiologicaEnum : int
-{
-    Ec = 1,
-    Ep = 2,
-    Es = 3,
-    En = 4
+public enum EtiologicaEnum : int {
+    Congenita = 1,
+    Primaria = 2,
+    Secundaria = 3,
+    NaoIdentificada = 4
 }
 
-public class Etiologica : Enumeration<EtiologicaEnum>
-{
-    public static Etiologica Ec = new Etiologica(EtiologicaEnum.Ec, "Ec", "Congênita");
-    public static Etiologica Ep = new Etiologica(EtiologicaEnum.Ep, "Ep", "Primária");
-    public static Etiologica Es = new Etiologica(EtiologicaEnum.Es, "Es", "Secundária (pós-trombótica)");
-    public static Etiologica En = new Etiologica(EtiologicaEnum.En, "En", "Não identificada");
+public class Etiologica : Enumeration<EtiologicaEnum> {
+    public static Etiologica Congenita = new(EtiologicaEnum.Congenita, "Ec", "Congênita");
+    public static Etiologica Primaria = new(EtiologicaEnum.Primaria, "Ep", "Primária");
+    public static Etiologica Secundaria = new(EtiologicaEnum.Secundaria, "Es", "Secundária (pós-trombótica)");
+    public static Etiologica NaoIdentificada = new(EtiologicaEnum.NaoIdentificada, "En", "Não identificada");
 
     public string Descricao { get; private set; }
 
-    private Etiologica(EtiologicaEnum value, string displayName, string descricao)
-        : base(value, displayName)
-    {
+    private Etiologica(EtiologicaEnum value, string sigla, string descricao)
+        : base(value, sigla) {
         Descricao = descricao;
     }
-} 
+}

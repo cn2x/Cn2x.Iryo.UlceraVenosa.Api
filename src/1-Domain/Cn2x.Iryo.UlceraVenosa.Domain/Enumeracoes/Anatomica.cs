@@ -2,26 +2,24 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 
-public enum AnatomicaEnum : int
-{
-    As = 1,
-    Ad = 2,
-    Ap = 3,
-    An = 4
+public enum AnatomicaEnum : int {
+    Superficial = 1,
+    Profundo = 2,
+    Perfurante = 3,
+    NaoIdentificada = 4
 }
 
-public class Anatomica : Enumeration<AnatomicaEnum>
-{
-    public static Anatomica As = new Anatomica(AnatomicaEnum.As, "As", "Sistema superficial");
-    public static Anatomica Ad = new Anatomica(AnatomicaEnum.Ad, "Ad", "Sistema profundo");
-    public static Anatomica Ap = new Anatomica(AnatomicaEnum.Ap, "Ap", "Sistema perfurante");
-    public static Anatomica An = new Anatomica(AnatomicaEnum.An, "An", "Não identificada");
+
+public class Anatomica : Enumeration<AnatomicaEnum> {
+    public static Anatomica Superficial = new(AnatomicaEnum.Superficial, "As", "Sistema superficial");
+    public static Anatomica Profundo = new(AnatomicaEnum.Profundo, "Ad", "Sistema profundo");
+    public static Anatomica Perfurante = new(AnatomicaEnum.Perfurante, "Ap", "Sistema perfurante");
+    public static Anatomica NaoIdentificada = new(AnatomicaEnum.NaoIdentificada, "An", "Não identificada");
 
     public string Descricao { get; private set; }
 
-    private Anatomica(AnatomicaEnum value, string displayName, string descricao)
-        : base(value, displayName)
-    {
+    private Anatomica(AnatomicaEnum value, string sigla, string descricao)
+        : base(value, sigla) {
         Descricao = descricao;
     }
-} 
+}

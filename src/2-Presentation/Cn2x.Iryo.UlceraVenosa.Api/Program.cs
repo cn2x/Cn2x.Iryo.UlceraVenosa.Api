@@ -32,25 +32,10 @@ else
     builder.Services.AddGraphQLServices();
 }
 
-// Configurações de Swagger
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-}
-
 // Configurações de controllers
-builder.Services.AddControllers();
+// builder.Services.AddControllers();
 
 var app = builder.Build();
-
-// Configuração do pipeline HTTP
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseDeveloperExceptionPage();
-}
 
 // Middleware de tratamento de erros
 app.UseMiddleware<ErrorHandlingMiddleware>();
@@ -66,9 +51,6 @@ app.UseRouting();
 
 // Configurações de GraphQL
 app.MapGraphQL();
-
-// Configurações de controllers
-app.MapControllers();
 
 // Health checks
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));

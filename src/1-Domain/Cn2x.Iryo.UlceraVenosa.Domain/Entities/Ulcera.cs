@@ -10,12 +10,8 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 public class Ulcera : Entity<Guid>, IAggregateRoot
 {
     public Guid PacienteId { get; set; }
-    public Guid AvaliacaoId { get; set; }
     public string Duracao { get; set; } = string.Empty;
     public DateTime DataExame { get; set; }
-    public decimal ComprimentoCm { get; set; }
-    public decimal Largura { get; set; }
-    public decimal Profundidade { get; set; }
 
     // Value Objects
     public Caracteristicas Caracteristicas { get; set; } = new();
@@ -28,6 +24,6 @@ public class Ulcera : Entity<Guid>, IAggregateRoot
     public ICollection<ImagemUlcera> Imagens { get; set; } = new List<ImagemUlcera>();
 
     // Navegação
-    public virtual Avaliacao? Avaliacao { get; set; }
     public virtual Paciente? Paciente { get; set; }
+    public virtual Medida? Medida { get; set; }
 } 

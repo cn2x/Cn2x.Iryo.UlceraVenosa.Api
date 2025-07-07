@@ -3,7 +3,7 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Models;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 
-namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera;
+namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Queries;
 
 public class ListUlceraQueryHandler : IRequestHandler<ListUlceraQuery, PagedResult<Domain.Entities.Ulcera>>
 {

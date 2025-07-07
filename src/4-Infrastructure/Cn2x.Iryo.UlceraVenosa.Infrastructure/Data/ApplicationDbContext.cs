@@ -20,13 +20,13 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     // DbSets
     public virtual DbSet<Ulcera> Ulceras { get; set; }
     public virtual DbSet<Paciente> Pacientes { get; set; }
-    public virtual DbSet<Avaliacao> Avaliacoes { get; set; }
-
     public virtual DbSet<Topografia> Topografias { get; set; }
     public virtual DbSet<Segmento> Segmentos { get; set; }
     public virtual DbSet<RegiaoAnatomica> RegioesAnatomicas { get; set; }
     public virtual DbSet<ExsudatoDaUlcera> Exsudatos { get; set; }
     public virtual DbSet<Exsudato> ExsudatoTipos { get; set; }
+
+    public virtual DbSet<Medida> Medidas { get; set; }
 
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -100,69 +100,62 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         // Configurações específicas
         ConfigureUlcera(modelBuilder);
         ConfigurePaciente(modelBuilder);
-        ConfigureAvaliacao(modelBuilder);
 
         ConfigureTopografia(modelBuilder);
         ConfigureSegmento(modelBuilder);
         ConfigureRegiaoAnatomica(modelBuilder);
         ConfigureExsudatoDaUlcera(modelBuilder);
         ConfigureExsudato(modelBuilder);
+
+        ConfigureMedida(modelBuilder);
     }
 
     private void ConfigureUlcera(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Ulcera>(entity =>
         {
+            entity.ToTable("ulceras");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Duracao).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.DataExame).IsRequired();
-            entity.Property(e => e.ComprimentoCm).HasPrecision(5, 2);
-            entity.Property(e => e.Largura).HasPrecision(5, 2);
-            entity.Property(e => e.Profundidade).HasPrecision(5, 2);
+            entity.Property(e => e.Duracao).HasColumnName("duracao").IsRequired().HasMaxLength(100);
+            entity.Property(e => e.DataExame).HasColumnName("data_exame").IsRequired();
 
             // Value Objects
             entity.OwnsOne(e => e.Caracteristicas, caracteristicas =>
             {
-                caracteristicas.Property(c => c.BordasDefinidas).HasColumnName("BordasDefinidas").IsRequired();
-                caracteristicas.Property(c => c.TecidoGranulacao).HasColumnName("TecidoGranulacao").IsRequired();
-                caracteristicas.Property(c => c.Necrose).HasColumnName("Necrose").IsRequired();
-                caracteristicas.Property(c => c.OdorFetido).HasColumnName("OdorFetido").IsRequired();
+                caracteristicas.Property(c => c.BordasDefinidas).HasColumnName("bordas_definidas").IsRequired();
+                caracteristicas.Property(c => c.TecidoGranulacao).HasColumnName("tecido_granulacao").IsRequired();
+                caracteristicas.Property(c => c.Necrose).HasColumnName("necrose").IsRequired();
+                caracteristicas.Property(c => c.OdorFetido).HasColumnName("odor_fetido").IsRequired();
             });
 
             entity.OwnsOne(e => e.SinaisInflamatorios, sinais =>
             {
-                sinais.Property(s => s.Eritema).HasColumnName("Eritema");
-                sinais.Property(s => s.Calor).HasColumnName("Calor");
-                sinais.Property(s => s.Rubor).HasColumnName("Rubor");
-                sinais.Property(s => s.Edema).HasColumnName("Edema");
-                sinais.Property(s => s.Dor).HasColumnName("Dor");
-                sinais.Property(s => s.PerdadeFuncao).HasColumnName("PerdadeFuncao");
+                sinais.Property(s => s.Eritema).HasColumnName("eritema");
+                sinais.Property(s => s.Calor).HasColumnName("calor");
+                sinais.Property(s => s.Rubor).HasColumnName("rubor");
+                sinais.Property(s => s.Edema).HasColumnName("edema");
+                sinais.Property(s => s.Dor).HasColumnName("dor");
+                sinais.Property(s => s.PerdadeFuncao).HasColumnName("perda_de_funcao");
             });
-
-            // Relacionamentos
-            entity.HasOne(e => e.Avaliacao)
-                  .WithMany(a => a.Ulceras)
-                  .HasForeignKey(e => e.AvaliacaoId)
-                  .OnDelete(DeleteBehavior.Cascade);
 
             entity.OwnsOne(e => e.ClassificacaoCeap, ceap =>
             {
-                ceap.Property(c => c.ClasseClinica).HasConversion(
+                ceap.Property(c => c.ClasseClinica).HasColumnName("classe_clinica").HasConversion(
                     v => v.Id,
                     v => Clinica.FromValue<Clinica>(v)
                 ).IsRequired();
 
-                ceap.Property(c => c.Etiologia).HasConversion(
+                ceap.Property(c => c.Etiologia).HasColumnName("etiologia").HasConversion(
                     v => v.Id,
                     v => Etiologica.FromValue<Etiologica>(v)
                 ).IsRequired();
 
-                ceap.Property(c => c.Anatomia).HasConversion(
+                ceap.Property(c => c.Anatomia).HasColumnName("anatomia").HasConversion(
                     v => v.Id,
                     v => Anatomica.FromValue<Anatomica>(v)
                 ).IsRequired();
 
-                ceap.Property(c => c.Patofisiologia).HasConversion(
+                ceap.Property(c => c.Patofisiologia).HasColumnName("patofisiologia").HasConversion(
                     v => v.Id,
                     v => Patofisiologica.FromValue<Patofisiologica>(v)
                 ).IsRequired();
@@ -189,31 +182,13 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     {
         modelBuilder.Entity<Paciente>(entity =>
         {
+            entity.ToTable("pacientes");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Nome).IsRequired().HasMaxLength(200);
-            entity.Property(e => e.Cpf).IsRequired().HasMaxLength(14);            
+            entity.Property(e => e.Nome).HasColumnName("nome").IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Cpf).HasColumnName("cpf").IsRequired().HasMaxLength(14);            
 
             // Índices
             entity.HasIndex(e => e.Cpf).IsUnique();
-        });
-    }
-
-    private void ConfigureAvaliacao(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Avaliacao>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.PacienteId).IsRequired();
-            entity.Property(e => e.DataAvaliacao).IsRequired();
-            entity.Property(e => e.Observacoes).HasMaxLength(2000);
-            entity.Property(e => e.Diagnostico).HasMaxLength(500);
-            entity.Property(e => e.Conduta).HasMaxLength(1000);
-
-            // Relacionamento
-            entity.HasOne(e => e.Paciente)
-                  .WithMany(p => p.Avaliacoes)
-                  .HasForeignKey(e => e.PacienteId)
-                  .OnDelete(DeleteBehavior.Cascade);
         });
     }
 
@@ -221,11 +196,13 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     {
         modelBuilder.Entity<Topografia>(entity =>
         {
+            entity.ToTable("topografias");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.UlceraId).IsRequired();
-            entity.Property(e => e.RegiaoId).IsRequired();
+            entity.Property(e => e.UlceraId).HasColumnName("ulcera_id").IsRequired();
+            entity.Property(e => e.RegiaoId).HasColumnName("regiao_id").IsRequired();
 
             entity.Property(x => x.Lado)
+                .HasColumnName("lado")
                 .HasConversion(new LateralidadeValueConvert())
                 .IsRequired();
 
@@ -249,9 +226,10 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     {
         modelBuilder.Entity<Segmento>(entity =>
         {
+            entity.ToTable("segmentos");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Descricao).IsRequired().HasMaxLength(200);
-            entity.Property(e => e.Nome).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Descricao).HasColumnName("descricao").IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Nome).HasColumnName("nome").IsRequired().HasMaxLength(100);
 
             // Seed para zonas anatômicas
             entity.HasData(
@@ -284,9 +262,10 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     {
         modelBuilder.Entity<RegiaoAnatomica>(entity =>
         {
+            entity.ToTable("regioes_anatomicas");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.SegmentoId).IsRequired();
-            entity.Property(e => e.Limites).HasMaxLength(500);
+            entity.Property(e => e.SegmentoId).HasColumnName("segmento_id").IsRequired();
+            entity.Property(e => e.Limites).HasColumnName("limites").HasMaxLength(500);
 
             // Relacionamento
             entity.HasOne(e => e.Segmento)
@@ -339,10 +318,10 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     {
         modelBuilder.Entity<ExsudatoDaUlcera>(entity =>
         {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.UlceraId).IsRequired();
-            entity.Property(e => e.ExsudatoId).IsRequired();
-            entity.Property(e => e.Descricao).HasMaxLength(500);
+            entity.ToTable("exsudatos_da_ulcera");
+            entity.HasKey(e => new { e.UlceraId, e.ExsudatoId });
+            entity.Property(e => e.UlceraId).HasColumnName("ulcera_id").IsRequired();
+            entity.Property(e => e.ExsudatoId).HasColumnName("exsudato_id").IsRequired();
 
             // Relacionamentos
             entity.HasOne(e => e.Ulcera)
@@ -361,8 +340,9 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     {
         modelBuilder.Entity<Exsudato>(entity =>
         {
+            entity.ToTable("exsudatos");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Descricao).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Descricao).HasColumnName("descricao").IsRequired().HasMaxLength(200);
             
             // Seed data para tipos de exsudato
             entity.HasData(
@@ -427,6 +407,23 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
                     CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, DateTimeKind.Utc)
                 }
             );
+        });
+    }
+
+    private void ConfigureMedida(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Medida>(entity =>
+        {
+            entity.ToTable("medidas");
+            entity.HasKey(m => m.Id);
+            entity.Property(m => m.UlceraId).HasColumnName("ulcera_id");
+            entity.Property(m => m.Comprimento).HasColumnName("comprimento").HasColumnType("decimal(10,2)");
+            entity.Property(m => m.Largura).HasColumnName("largura").HasColumnType("decimal(10,2)");
+            entity.Property(m => m.Profundidade).HasColumnName("profundidade").HasColumnType("decimal(10,2)");
+            entity.HasOne(m => m.Ulcera)
+                  .WithOne(u => u.Medida)
+                  .HasForeignKey<Medida>(m => m.UlceraId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
     }
 

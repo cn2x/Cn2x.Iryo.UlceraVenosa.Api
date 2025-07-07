@@ -1,6 +1,6 @@
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
-using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
+using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Factories;
 
@@ -14,12 +14,8 @@ public static class UlceraFactory
     /// </summary>
     public static Ulcera Create(
         Guid pacienteId,
-        Guid avaliacaoId,
         string duracao,
         DateTime dataExame,
-        decimal comprimentoCm,
-        decimal largura,
-        decimal profundidade,
         Clinica classeClinica,
         Etiologica etiologia,
         Anatomica anatomia,
@@ -31,23 +27,11 @@ public static class UlceraFactory
         if (pacienteId == Guid.Empty)
             throw new ArgumentException("PacienteId é obrigatório", nameof(pacienteId));
         
-        if (avaliacaoId == Guid.Empty)
-            throw new ArgumentException("AvaliacaoId é obrigatório", nameof(avaliacaoId));
-        
         if (string.IsNullOrWhiteSpace(duracao))
             throw new ArgumentException("Duração é obrigatória", nameof(duracao));
         
         if (dataExame == default)
             throw new ArgumentException("Data do exame é obrigatória", nameof(dataExame));
-        
-        if (comprimentoCm <= 0)
-            throw new ArgumentException("Comprimento deve ser maior que zero", nameof(comprimentoCm));
-        
-        if (largura <= 0)
-            throw new ArgumentException("Largura deve ser maior que zero", nameof(largura));
-        
-        if (profundidade < 0)
-            throw new ArgumentException("Profundidade não pode ser negativa", nameof(profundidade));
 
         // Criar o value object CEAP
         var ceap = new Ceap(classeClinica, etiologia, anatomia, patofisiologia);
@@ -59,12 +43,8 @@ public static class UlceraFactory
         return new Ulcera
         {
             PacienteId = pacienteId,
-            AvaliacaoId = avaliacaoId,
             Duracao = duracao,
             DataExame = dataExame,
-            ComprimentoCm = comprimentoCm,
-            Largura = largura,
-            Profundidade = profundidade,
             ClassificacaoCeap = ceap,
             Caracteristicas = caracteristicasValue,
             SinaisInflamatorios = sinaisInflamatoriosValue,
@@ -80,12 +60,8 @@ public static class UlceraFactory
     public static Ulcera CreateForUpdate(
         Guid id,
         Guid pacienteId,
-        Guid avaliacaoId,
         string duracao,
         DateTime dataExame,
-        decimal comprimentoCm,
-        decimal largura,
-        decimal profundidade,
         Clinica classeClinica,
         Etiologica etiologia,
         Anatomica anatomia,
@@ -93,9 +69,7 @@ public static class UlceraFactory
         Caracteristicas? caracteristicas = null,
         SinaisInflamatorios? sinaisInflamatorios = null)
     {
-        var ulcera = Create(pacienteId, avaliacaoId, duracao, dataExame, comprimentoCm, largura, profundidade, 
-                           classeClinica, etiologia, anatomia, patofisiologia, caracteristicas, sinaisInflamatorios);
-        
+        var ulcera = Create(pacienteId, duracao, dataExame, classeClinica, etiologia, anatomia, patofisiologia, caracteristicas, sinaisInflamatorios);
         ulcera.Id = id;
         return ulcera;
     }

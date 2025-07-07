@@ -1,7 +1,7 @@
 using MediatR;
 using Cn2x.Iryo.UlceraVenosa.Domain.Models;
 
-namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera;
+namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Queries;
 
 public class ListUlceraQuery : IRequest<PagedResult<Domain.Entities.Ulcera>>
 {

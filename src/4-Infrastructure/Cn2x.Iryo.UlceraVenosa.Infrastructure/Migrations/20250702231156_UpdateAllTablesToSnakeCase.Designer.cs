@@ -3,6 +3,7 @@ using System;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250702231156_UpdateAllTablesToSnakeCase")]
+    partial class UpdateAllTablesToSnakeCase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,60 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Avaliacao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("AtualizadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("atualizado_em");
+
+                    b.Property<string>("Conduta")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("conduta");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("criado_em");
+
+                    b.Property<DateTime>("DataAvaliacao")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("data_avaliacao");
+
+                    b.Property<bool>("Desativada")
+                        .HasColumnType("boolean")
+                        .HasColumnName("desativada");
+
+                    b.Property<string>("Diagnostico")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("diagnostico");
+
+                    b.Property<string>("Observacoes")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("observacoes");
+
+                    b.Property<Guid>("PacienteId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("paciente_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_avaliacoes");
+
+                    b.HasIndex("PacienteId")
+                        .HasDatabaseName("ix_avaliacoes_paciente_id");
+
+                    b.ToTable("avaliacoes", (string)null);
+                });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Exsudato", b =>
                 {
@@ -127,18 +184,45 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.ExsudatoDaUlcera", b =>
                 {
-                    b.Property<Guid>("UlceraId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("ulcera_id");
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("AtualizadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("atualizado_em");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("criado_em");
+
+                    b.Property<bool>("Desativada")
+                        .HasColumnType("boolean")
+                        .HasColumnName("desativada");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("descricao");
 
                     b.Property<Guid>("ExsudatoId")
                         .HasColumnType("uuid")
                         .HasColumnName("exsudato_id");
 
-                    b.HasKey("UlceraId", "ExsudatoId");
+                    b.Property<Guid>("UlceraId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("ulcera_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_exsudatos");
 
                     b.HasIndex("ExsudatoId")
                         .HasDatabaseName("ix_exsudatos_exsudato_id");
+
+                    b.HasIndex("UlceraId")
+                        .HasDatabaseName("ix_exsudatos_ulcera_id");
 
                     b.ToTable("exsudatos_da_ulcera", (string)null);
                 });
@@ -484,6 +568,10 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("atualizado_em");
 
+                    b.Property<Guid>("AvaliacaoId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("avaliacao_id");
+
                     b.Property<DateTime>("CriadoEm")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("criado_em");
@@ -509,10 +597,24 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_ulceras");
 
+                    b.HasIndex("AvaliacaoId")
+                        .HasDatabaseName("ix_ulceras_avaliacao_id");
+
                     b.HasIndex("PacienteId")
                         .HasDatabaseName("ix_ulceras_paciente_id");
 
                     b.ToTable("ulceras", (string)null);
+                });
+
+            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Avaliacao", b =>
+                {
+                    b.HasOne("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Paciente", "Paciente")
+                        .WithMany("Avaliacoes")
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Paciente");
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.ExsudatoDaUlcera", b =>
@@ -588,6 +690,12 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera", b =>
                 {
+                    b.HasOne("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Avaliacao", "Avaliacao")
+                        .WithMany("Ulceras")
+                        .HasForeignKey("AvaliacaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Paciente", "Paciente")
                         .WithMany("Ulceras")
                         .HasForeignKey("PacienteId")
@@ -689,6 +797,8 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                                 .HasForeignKey("UlceraId");
                         });
 
+                    b.Navigation("Avaliacao");
+
                     b.Navigation("Caracteristicas")
                         .IsRequired();
 
@@ -701,6 +811,11 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Avaliacao", b =>
+                {
+                    b.Navigation("Ulceras");
+                });
+
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Exsudato", b =>
                 {
                     b.Navigation("ExsudatosDaUlcera");
@@ -708,6 +823,8 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Paciente", b =>
                 {
+                    b.Navigation("Avaliacoes");
+
                     b.Navigation("Ulceras");
                 });
 

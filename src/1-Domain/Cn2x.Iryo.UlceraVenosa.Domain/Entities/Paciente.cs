@@ -11,6 +11,5 @@ public class Paciente : Entity<Guid>, IAggregateRoot
     public string Cpf { get; set; } = string.Empty;
 
     // Navegação
-    public virtual ICollection<Avaliacao> Avaliacoes { get; set; } = new List<Avaliacao>();
     public virtual ICollection<Ulcera> Ulceras { get; set; } = new List<Ulcera>();
 } 

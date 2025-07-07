@@ -27,19 +27,6 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    public async Task<IEnumerable<Ulcera>> GetByAvaliacaoIdAsync(Guid avaliacaoId)
-    {
-        return await _context.Ulceras
-            .Include(u => u.Caracteristicas)
-            .Include(u => u.SinaisInflamatorios)
-            .Include(u => u.ClassificacaoCeap)
-            .Include(u => u.Topografias)
-            .Include(u => u.Exsudatos)
-            .Include(u => u.Imagens)
-            .Where(u => u.AvaliacaoId == avaliacaoId)
-            .ToListAsync();
-    }
-
     public async Task<IEnumerable<Ulcera>> GetWithDetailsAsync()
     {
         return await _context.Ulceras
@@ -49,7 +36,6 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
             .Include(u => u.Topografias)
             .Include(u => u.Exsudatos)
             .Include(u => u.Imagens)
-            .Include(u => u.Avaliacao)
             .ToListAsync();
     }
 
@@ -62,7 +48,6 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
             .Include(u => u.Topografias)
             .Include(u => u.Exsudatos)
             .Include(u => u.Imagens)
-            .Include(u => u.Avaliacao)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 
@@ -75,7 +60,6 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
             .Include(u => u.Topografias)
             .Include(u => u.Exsudatos)
             .Include(u => u.Imagens)
-            .Include(u => u.Avaliacao)
             .Include(u => u.Paciente)
             .Where(u => !u.Desativada);
 
@@ -114,7 +98,6 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
             .Include(u => u.Topografias)
             .Include(u => u.Exsudatos)
             .Include(u => u.Imagens)
-            .Include(u => u.Avaliacao)
             .Include(u => u.Paciente)
             .Where(u => !u.Desativada && u.Paciente.Nome.Contains(nome))
             .OrderByDescending(u => u.DataExame)

@@ -1,11 +1,8 @@
-using HotChocolate;
-using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 using Cn2x.Iryo.UlceraVenosa.Domain.Models;
 using MediatR;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Paciente;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 using Cn2x.Iryo.UlceraVenosa.Domain.Specifications;
 using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
@@ -52,7 +49,8 @@ public abstract class BaseQueries
 [ExtendObjectType("Query")]
 public class PacienteQueries
 {
-    public async Task<List<Paciente>> pacientes(
+    [GraphQLName("pacientes")]
+    public async Task<List<Paciente>> Pacientes(
         string term,
         [Service] IMediator mediator, [Service] ApplicationDbContext ctx)
     {
@@ -64,7 +62,8 @@ public class PacienteQueries
         return (result ?? Enumerable.Empty<Paciente>()).Take(100).ToList();
     }
 
-    public async Task<List<Paciente>> paciente(
+    [GraphQLName("paciente")]
+    public async Task<List<Paciente>> Paciente(
         Guid? id,
         string? cpf,
         string? nome,
@@ -79,7 +78,8 @@ public class PacienteQueries
 [ExtendObjectType("Query")]
 public class ExsudatoQueries
 {
-    public async Task<List<Exsudato>> exsudatos([
+    [GraphQLName("exsudatos")]
+    public async Task<List<Exsudato>> Exsudatos([
         Service] IRepository<Exsudato> repository)
     {
         var result = await repository.GetAllAsync();
@@ -90,26 +90,27 @@ public class ExsudatoQueries
 [ExtendObjectType("Query")]
 public class EnumeracoesQueries
 {
-    public IEnumerable<Clinica> clinicas() =>
-        new[] { Clinica.C0, Clinica.C1, Clinica.C2, Clinica.C3, Clinica.C4a, Clinica.C4b, Clinica.C5, Clinica.C6 };
+    [GraphQLName("clinicas")]
+    public IEnumerable<Clinica> Clinicas() => Enumeration<ClinicaEnum>.GetAll<Clinica>();
 
-    public IEnumerable<Etiologica> etiologias() =>
-        new[] { Etiologica.Ec, Etiologica.Ep, Etiologica.Es, Etiologica.En };
+    [GraphQLName("etiologias")]
+    public IEnumerable<Etiologica> Etiologias() => Enumeration<EtiologicaEnum>.GetAll<Etiologica>();
 
-    public IEnumerable<Anatomica> anatomicas() =>
-        new[] { Anatomica.As, Anatomica.Ad, Anatomica.Ap, Anatomica.An };
+    [GraphQLName("anatomicas")]
+    public IEnumerable<Anatomica> Anatomicas() => Enumeration<AnatomicaEnum>.GetAll<Anatomica>();
 
-    public IEnumerable<Patofisiologica> patofisiologicas() =>
-        new[] { Patofisiologica.Pr, Patofisiologica.Po, Patofisiologica.Pn };
+    [GraphQLName("patofisiologicas")]
+    public IEnumerable<Patofisiologica> Patofisiologicas() => Enumeration<PatofisiologicaEnum>.GetAll<Patofisiologica>();
 
-    public IEnumerable<Lateralidade> lateralidades() =>
-        new[] { Lateralidade.Direto, Lateralidade.Esquerdo };
+    [GraphQLName("lateralidades")]
+    public IEnumerable<Lateralidade> Lateralidades() => Enumeration<LateralidadeEnum>.GetAll<Lateralidade>();
 }
 
 [ExtendObjectType("Query")]
 public class SegmentoQueries
 {
-    public async Task<List<Segmento>> segmentos([
+    [GraphQLName("segmentos")]
+    public async Task<List<Segmento>> Segmentos([
         Service] IRepository<Segmento> repository)
     {
         var result = await repository.GetAllAsync();
@@ -120,12 +121,13 @@ public class SegmentoQueries
 [ExtendObjectType("Query")]
 public class RegiaoAnatomicaQueries
 {
-    public async Task<List<RegiaoAnatomica>> regioesAnatomicasPorSegmento(
+    [GraphQLName("regioesAnatomicasPorSegmento")]
+    public async Task<List<RegiaoAnatomica>> RegioesAnatomicasPorSegmento(
         Guid segmentoId,
         [Service] IRepository<RegiaoAnatomica> repository)
     {
         var spec = new RegiaoAnatomicaBySegmentoSpecification(segmentoId);
-        var queryable = await repository.FindFilterByExpression<RegiaoAnatomica>(spec.SatisfiedBy());
+        var queryable = await repository.FindFilterByExpression(spec.SatisfiedBy());
         return queryable.ToList();
     }
 } 

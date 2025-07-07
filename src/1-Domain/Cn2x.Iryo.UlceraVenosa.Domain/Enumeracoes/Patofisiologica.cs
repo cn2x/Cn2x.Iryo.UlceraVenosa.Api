@@ -2,24 +2,20 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 
-public enum PatofisiologicaEnum : int
-{
-    Pr = 1,
-    Po = 2,
-    Pn = 3
+public enum PatofisiologicaEnum : int {
+    Refluxo = 1,
+    Obstrucao = 2,
+    NaoIdentificada = 3
 }
-
-public class Patofisiologica : Enumeration<PatofisiologicaEnum>
-{
-    public static Patofisiologica Pr = new Patofisiologica(PatofisiologicaEnum.Pr, "Pr", "Refluxo");
-    public static Patofisiologica Po = new Patofisiologica(PatofisiologicaEnum.Po, "Po", "Obstrução");
-    public static Patofisiologica Pn = new Patofisiologica(PatofisiologicaEnum.Pn, "Pn", "Não identificada");
+public class Patofisiologica : Enumeration<PatofisiologicaEnum> {
+    public static Patofisiologica Refluxo = new(PatofisiologicaEnum.Refluxo, "PR", "Refluxo venoso");
+    public static Patofisiologica Obstrucao = new(PatofisiologicaEnum.Obstrucao, "PO", "Obstrução venosa");
+    public static Patofisiologica NaoIdentificada = new(PatofisiologicaEnum.NaoIdentificada, "PN", "Patofisiologia não identificada");
 
     public string Descricao { get; private set; }
 
-    private Patofisiologica(PatofisiologicaEnum value, string displayName, string descricao)
-        : base(value, displayName)
-    {
+    private Patofisiologica(PatofisiologicaEnum value, string sigla, string descricao)
+        : base(value, sigla) {
         Descricao = descricao;
     }
-} 
+}

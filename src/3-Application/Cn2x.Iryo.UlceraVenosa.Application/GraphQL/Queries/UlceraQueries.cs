@@ -1,7 +1,7 @@
 using HotChocolate;
 using HotChocolate.Types;
 using MediatR;
-using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Queries;
 using Cn2x.Iryo.UlceraVenosa.Domain.Models;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 
@@ -10,6 +10,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Queries;
 [ExtendObjectType("Query")]
 public class UlceraQueries
 {
+    [GraphQLName("ulcera")]
     public async Task<Ulcera?> GetUlceraAsync(
         Guid id,
         [Service] IMediator mediator)
@@ -18,6 +19,7 @@ public class UlceraQueries
         return await mediator.Send(query);
     }
 
+    [GraphQLName("ulceras")]
     public async Task<PagedResult<Ulcera>> GetUlcerasAsync(
         int page = 1,
         int pageSize = 10,

@@ -6,7 +6,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 
 public interface IUlceraRepository : IRepository<Ulcera>
 {
-    Task<IEnumerable<Ulcera>> GetByAvaliacaoIdAsync(Guid avaliacaoId);
     Task<IEnumerable<Ulcera>> GetWithDetailsAsync();
     Task<Ulcera?> GetWithDetailsByIdAsync(Guid id);
     

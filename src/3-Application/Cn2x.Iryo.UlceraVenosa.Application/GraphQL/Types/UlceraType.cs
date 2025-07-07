@@ -3,6 +3,7 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 using Cn2x.Iryo.UlceraVenosa.Domain.Models;
+using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Types;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Types;
 
@@ -15,13 +16,10 @@ public class UlceraType : ObjectType<Ulcera>
 
         descriptor.Field(x => x.Id).Type<IdType>().Description("ID único da úlcera");
         descriptor.Field(x => x.PacienteId).Type<StringType>().Description("ID do paciente");
-        descriptor.Field(x => x.AvaliacaoId).Type<StringType>().Description("ID da avaliação");
         descriptor.Field(x => x.Duracao).Description("Duração da úlcera");
         descriptor.Field(x => x.DataExame).Description("Data do exame");
-        descriptor.Field(x => x.ComprimentoCm).Description("Comprimento em centímetros");
-        descriptor.Field(x => x.Largura).Description("Largura em centímetros");
-        descriptor.Field(x => x.Profundidade).Description("Profundidade em centímetros");
         descriptor.Field(x => x.Desativada).Description("Indica se a úlcera está desativada");
+        descriptor.Field(x => x.Medida).Type<MedidaType>().Description("Medida associada à úlcera");
 
         // Value Objects
         descriptor.Field(x => x.Caracteristicas).Type<CaracteristicasType>().Description("Características da úlcera");
@@ -34,7 +32,6 @@ public class UlceraType : ObjectType<Ulcera>
         descriptor.Field(x => x.Imagens).Type<ListType<ImagemUlceraType>>().Description("Imagens da úlcera");
 
         // Navegação
-        descriptor.Field(x => x.Avaliacao).Type<AvaliacaoType>().Description("Avaliação relacionada");
         descriptor.Field(x => x.Paciente).Type<PacienteType>().Description("Paciente relacionado");
 
         descriptor.Ignore(x => x.DomainEvents);
@@ -90,7 +87,9 @@ public class ClinicaType : ObjectType<Clinica>
         descriptor.Name("Clinica");
         descriptor.Description("Classificação clínica da úlcera");
 
-        descriptor.Field(x => x.Id).Description("ID da classificação clínica");
+        descriptor.Field("id")
+            .Type<EnumType<ClinicaEnum>>()
+            .Resolve(ctx => ctx.Parent<Clinica>().Id);
         descriptor.Field(x => x.Name).Description("Nome da classificação clínica");
     }
 }
@@ -102,7 +101,9 @@ public class EtiologicaType : ObjectType<Etiologica>
         descriptor.Name("Etiologica");
         descriptor.Description("Classificação etiológica da úlcera");
 
-        descriptor.Field(x => x.Id).Description("ID da classificação etiológica");
+        descriptor.Field("id")
+            .Type<EnumType<EtiologicaEnum>>()
+            .Resolve(ctx => ctx.Parent<Etiologica>().Id);
         descriptor.Field(x => x.Name).Description("Nome da classificação etiológica");
     }
 }
@@ -114,8 +115,11 @@ public class AnatomicaType : ObjectType<Anatomica>
         descriptor.Name("Anatomica");
         descriptor.Description("Classificação anatômica da úlcera");
 
-        descriptor.Field(x => x.Id).Description("ID da classificação anatômica");
+        descriptor.Field("id")
+            .Type<EnumType<AnatomicaEnum>>()
+            .Resolve(ctx => ctx.Parent<Anatomica>().Id);
         descriptor.Field(x => x.Name).Description("Nome da classificação anatômica");
+        descriptor.Field(x => x.Descricao).Description("Descrição da classificação anatômica");
     }
 }
 
@@ -126,7 +130,9 @@ public class PatofisiologicaType : ObjectType<Patofisiologica>
         descriptor.Name("Patofisiologica");
         descriptor.Description("Classificação patofisiológica da úlcera");
 
-        descriptor.Field(x => x.Id).Description("ID da classificação patofisiológica");
+        descriptor.Field("id")
+            .Type<EnumType<PatofisiologicaEnum>>()
+            .Resolve(ctx => ctx.Parent<Patofisiologica>().Id);
         descriptor.Field(x => x.Name).Description("Nome da classificação patofisiológica");
     }
 }

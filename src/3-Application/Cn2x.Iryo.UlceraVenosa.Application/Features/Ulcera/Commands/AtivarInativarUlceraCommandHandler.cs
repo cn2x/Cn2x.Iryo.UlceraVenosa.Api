@@ -2,7 +2,7 @@ using MediatR;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 
-namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera;
+namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands;
 
 public class AtivarInativarUlceraCommandHandler : IRequestHandler<AtivarInativarUlceraCommand, bool>
 {

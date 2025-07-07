@@ -2,7 +2,7 @@ using MediatR;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 
-namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera;
+namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Queries;
 
 public class GetUlceraByIdQueryHandler : IRequestHandler<GetUlceraByIdQuery, Domain.Entities.Ulcera?>
 {

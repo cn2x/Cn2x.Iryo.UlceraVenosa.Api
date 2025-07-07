@@ -23,7 +23,6 @@ public class PacienteRepository : BaseRepository<Paciente>, IPacienteRepository
     public async Task<Paciente?> GetWithAvaliacoesAsync(Guid id)
     {
         return await _context.Pacientes
-            .Include(p => p.Avaliacoes)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 } 

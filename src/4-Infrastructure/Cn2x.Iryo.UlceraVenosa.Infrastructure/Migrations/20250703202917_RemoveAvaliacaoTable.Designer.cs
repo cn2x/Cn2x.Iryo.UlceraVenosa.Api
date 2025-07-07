@@ -3,6 +3,7 @@ using System;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250703202917_RemoveAvaliacaoTable")]
+    partial class RemoveAvaliacaoTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,18 +130,45 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.ExsudatoDaUlcera", b =>
                 {
-                    b.Property<Guid>("UlceraId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("ulcera_id");
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("AtualizadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("atualizado_em");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("criado_em");
+
+                    b.Property<bool>("Desativada")
+                        .HasColumnType("boolean")
+                        .HasColumnName("desativada");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("descricao");
 
                     b.Property<Guid>("ExsudatoId")
                         .HasColumnType("uuid")
                         .HasColumnName("exsudato_id");
 
-                    b.HasKey("UlceraId", "ExsudatoId");
+                    b.Property<Guid>("UlceraId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("ulcera_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_exsudatos");
 
                     b.HasIndex("ExsudatoId")
                         .HasDatabaseName("ix_exsudatos_exsudato_id");
+
+                    b.HasIndex("UlceraId")
+                        .HasDatabaseName("ix_exsudatos_ulcera_id");
 
                     b.ToTable("exsudatos_da_ulcera", (string)null);
                 });
