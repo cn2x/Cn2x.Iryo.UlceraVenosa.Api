@@ -8,7 +8,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes {
     }
 
     public class Lateralidade : Enumeration<LateralidadeEnum> {
-        public static Lateralidade Direto = new Lateralidade(LateralidadeEnum.Direita, "Direta");
+        public static Lateralidade Direito = new Lateralidade(LateralidadeEnum.Direita, "Direta");
         public static Lateralidade Esquerdo = new Lateralidade(LateralidadeEnum.Esquerda, "Esquerda");
 
         private Lateralidade(LateralidadeEnum value, string displayName)

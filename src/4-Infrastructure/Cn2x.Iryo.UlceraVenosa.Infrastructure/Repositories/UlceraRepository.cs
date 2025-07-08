@@ -23,7 +23,7 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
     public async Task<IEnumerable<Ulcera>> GetWithDetailsAsync()
     {
         return await _context.Ulceras
-            .Include(u => u.Topografias)
+            .Include(u => u.Segmentos)
             .Include(u => u.Paciente)
             .Include(u => u.Avaliacoes)
             .ToListAsync();
@@ -32,7 +32,7 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
     public async Task<Ulcera?> GetWithDetailsByIdAsync(Guid id)
     {
         return await _context.Ulceras
-            .Include(u => u.Topografias)
+            .Include(u => u.Segmentos)
             .Include(u => u.Paciente)
             .Include(u => u.Avaliacoes)
             .FirstOrDefaultAsync(u => u.Id == id);
@@ -41,7 +41,7 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
     public async Task<PagedResult<Ulcera>> GetPagedAsync(int page, int pageSize, string? searchTerm = null)
     {
         var query = _context.Ulceras
-            .Include(u => u.Topografias)
+            .Include(u => u.Segmentos)
             .Include(u => u.Paciente)
             .Include(u => u.Avaliacoes)
             .Where(u => !u.Desativada);
@@ -74,11 +74,11 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
     public async Task<IEnumerable<Ulcera>> SearchByPacienteNomeAsync(string nome)
     {
         return await _context.Ulceras
-            .Include(u => u.Topografias)
+            .Include(u => u.Segmentos)
             .Include(u => u.Paciente)
             .Include(u => u.Avaliacoes)
             .Where(u => !u.Desativada && u.Paciente.Nome.Contains(nome))
             .OrderByDescending(u => u.Id)
             .ToListAsync();
     }
-} 
+}

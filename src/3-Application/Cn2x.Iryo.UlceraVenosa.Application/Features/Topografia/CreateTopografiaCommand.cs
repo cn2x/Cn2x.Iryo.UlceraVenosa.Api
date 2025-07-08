@@ -7,5 +7,5 @@ public class CreateTopografiaCommand : IRequest<Guid>
 {
     public Guid UlceraId { get; set; }
     public Guid RegiaoId { get; set; }
-    public Lateralidade Lado { get; set; } = Lateralidade.Direto;
+    public Lateralidade Lado { get; set; } = Lateralidade.Direito;
 } 

@@ -14,7 +14,8 @@ public static class UlceraFactory
     /// </summary>
     public static Ulcera Create(
         Guid pacienteId,
-        Ceap? classificacaoCeap = null)
+        Ceap? classificacaoCeap = null,
+        IEnumerable<SegmentoEnum>? segmentos = null)
     {
         if (pacienteId == Guid.Empty)
             throw new ArgumentException("PacienteId é obrigatório", nameof(pacienteId));
@@ -22,10 +23,10 @@ public static class UlceraFactory
         var ulcera = new Ulcera
         {
             PacienteId = pacienteId,
-            Topografias = new List<Topografia>()
+            Segmentos = segmentos != null ? segmentos.Select(s => new Segmento { Tipo = s }).ToList() : new List<Segmento>()
         };
         if (classificacaoCeap != null)
-            ulcera.ClassificacaoCeap = classificacaoCeap;
+            ulcera.Ceap = classificacaoCeap;
         return ulcera;
     }
 
@@ -35,9 +36,10 @@ public static class UlceraFactory
     public static Ulcera CreateForUpdate(
         Guid id,
         Guid pacienteId,
-        Ceap? classificacaoCeap = null)
+        Ceap? classificacaoCeap = null,
+        IEnumerable<SegmentoEnum>? segmentos = null)
     {
-        var ulcera = Create(pacienteId, classificacaoCeap);
+        var ulcera = Create(pacienteId, classificacaoCeap, segmentos);
         ulcera.Id = id;
         return ulcera;
     }

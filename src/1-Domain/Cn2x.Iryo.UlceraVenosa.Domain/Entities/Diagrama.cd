@@ -8,46 +8,15 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica">
-    <Position X="18.75" Y="10.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAQAgAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
-      <FileName>Entities\RegiaoAnatomica.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Segmento" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmento">
-    <Position X="21.75" Y="10.5" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
-      <FileName>Entities\Segmento.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia">
-    <Position X="16" Y="10.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAgAAAAAEAAAAAAAAAAAAAAAA0AAAAAAAAAAA=</HashCode>
-      <FileName>Entities\Topografia.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Lado" />
-      <Property Name="Regiao" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" />
-  </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera" BaseTypeListCollapsed="true">
     <Position X="11.25" Y="5.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAABAACAAAAwAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAABAAAAAAAwQAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
       <FileName>Entities\Ulcera.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Paciente" />
-      <Property Name="ClassificacaoCeap" />
+      <Property Name="Membro" />
     </ShowAsAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
@@ -68,7 +37,7 @@
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes.Lateralidade">
     <Position X="18" Y="13.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
       <FileName>Enumeracoes\TipoDeConta.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -148,6 +117,55 @@
     <TypeIdentifier>
       <HashCode>EAAAABAAAAAAAAAAIAAAAAAAAAAAAAAAAAAQAAAQAAA=</HashCode>
       <FileName>ValueObjects\Imagem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Membro">
+    <Position X="18.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Membro.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Perna">
+    <Position X="20.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Perna.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Segmentos" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes.RegiaoAnatomica">
+    <Position X="21.25" Y="7.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAEAAAAAAAAAAAAAgAAAAAEAAAAAACAU=</HashCode>
+      <FileName>Enumeracoes\RegiaoAnatomica.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes.RegiaoTopograficaPe">
+    <Position X="18.75" Y="8" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAABAIgAAAAAAAAAAAAQgAAIAEAAAEABAAQ=</HashCode>
+      <FileName>Enumeracoes\RegiaoTopograficaPe.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes.Segmentacao">
+    <Position X="23.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAABAAAAAAAAABCAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enumeracoes\Segmentacao.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Pe">
+    <Position X="17.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Pe.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

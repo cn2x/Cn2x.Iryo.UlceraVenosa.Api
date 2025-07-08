@@ -20,9 +20,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     // DbSets
     public virtual DbSet<Ulcera> Ulceras { get; set; }
     public virtual DbSet<Paciente> Pacientes { get; set; }
-    public virtual DbSet<Topografia> Topografias { get; set; }
     public virtual DbSet<Segmento> Segmentos { get; set; }
-    public virtual DbSet<RegiaoAnatomica> RegioesAnatomicas { get; set; }
     public virtual DbSet<Exsudato> ExsudatoTipos { get; set; }
 
     public virtual DbSet<Medida> Medidas { get; set; }
@@ -103,9 +101,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         ConfigureUlcera(modelBuilder);
         ConfigurePaciente(modelBuilder);
 
-        ConfigureTopografia(modelBuilder);
         ConfigureSegmento(modelBuilder);
-        ConfigureRegiaoAnatomica(modelBuilder);
         ConfigureExsudato(modelBuilder);
 
         ConfigureMedida(modelBuilder);
@@ -120,7 +116,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
             entity.ToTable("ulceras");
             entity.HasKey(e => e.Id);
 
-            entity.OwnsOne(e => e.ClassificacaoCeap, ceap =>
+            entity.OwnsOne(e => e.Ceap, ceap =>
             {
                 ceap.ToTable("ceap");
                 ceap.WithOwner().HasForeignKey("ulcera_id");
@@ -140,10 +136,9 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
 
             entity.Property(e => e.PacienteId).HasColumnName("paciente_id");
 
-            entity.HasMany(e => e.Topografias)
-                  .WithOne(t => t.Ulcera)
-                  .HasForeignKey(t => t.UlceraId)
-                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(e => e.Segmentos)
+                  .WithMany(s => s.Ulceras)
+                  .UsingEntity(j => j.ToTable("ulcera_segmentos"));
 
             entity.HasMany(e => e.Avaliacoes)
                   .WithOne(a => a.Ulcera)
@@ -163,36 +158,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
 
             // Índices
             entity.HasIndex(e => e.Cpf).IsUnique();
-        });
-    }
-
-    private void ConfigureTopografia(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Topografia>(entity =>
-        {
-            entity.ToTable("topografias");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.UlceraId).HasColumnName("ulcera_id").IsRequired();
-            entity.Property(e => e.RegiaoId).HasColumnName("regiao_id").IsRequired();
-
-            entity.Property(x => x.Lado)
-                .HasColumnName("lado")
-                .HasConversion(new LateralidadeValueConvert())
-                .IsRequired();
-
-            // Relacionamentos
-            entity.HasOne(e => e.Ulcera)
-                  .WithMany(u => u.Topografias)
-                  .HasForeignKey(e => e.UlceraId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(e => e.Regiao)
-                  .WithMany(r => r.Topografias)
-                  .HasForeignKey(e => e.RegiaoId)
-                  .OnDelete(DeleteBehavior.Restrict);
-
-            // Índice único para UlceraId, RegiaoId e Lado
-            entity.HasIndex(e => new { e.UlceraId, e.RegiaoId, e.Lado }).IsUnique();
         });
     }
 
@@ -227,62 +192,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
                     Nome = "Terço médio e superior da perna",
                     Descricao = "Da metade até abaixo do joelho. Menos comum para úlceras venosas. Úlceras aqui sugerem causas mistas (venosa + arterial ou vasculite).",
                     CriadoEm = new DateTime(2025, 6, 28, 18, 0, 0, DateTimeKind.Utc)
-                }
-            );
-        });
-    }
-
-    private void ConfigureRegiaoAnatomica(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<RegiaoAnatomica>(entity =>
-        {
-            entity.ToTable("regioes_anatomicas");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.SegmentoId).HasColumnName("segmento_id").IsRequired();
-            entity.Property(e => e.Limites).HasColumnName("limites").HasMaxLength(500);
-
-            // Relacionamento
-            entity.HasOne(e => e.Segmento)
-                  .WithMany(s => s.RegioesAnatomicas)
-                  .HasForeignKey(e => e.SegmentoId)
-                  .OnDelete(DeleteBehavior.Restrict);
-
-            // Seed para regiões anatômicas específicas
-            entity.HasData(
-                new RegiaoAnatomica
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    SegmentoId = Guid.Parse("11111111-1111-1111-1111-111111111111"), // Zona 1
-                    Limites = "Região maleolar - Ao redor do maléolo medial e lateral (tornozelo). Frequência: 10%",
-                    CriadoEm = new DateTime(2025, 6, 28, 18, 30, 0, DateTimeKind.Utc)
-                },
-                new RegiaoAnatomica
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    SegmentoId = Guid.Parse("22222222-2222-2222-2222-222222222222"), // Zona 2
-                    Limites = "Terço inferior da perna - Entre a base do tornozelo e a metade da perna. Frequência: 73%",
-                    CriadoEm = new DateTime(2025, 6, 28, 18, 30, 0, DateTimeKind.Utc)
-                },
-                new RegiaoAnatomica
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    SegmentoId = Guid.Parse("33333333-3333-3333-3333-333333333333"), // Zona 3
-                    Limites = "Terço médio/superior da perna - Da metade da perna até a fossa poplítea (abaixo do joelho). Frequência: 0%",
-                    CriadoEm = new DateTime(2025, 6, 28, 18, 30, 0, DateTimeKind.Utc)
-                },
-                new RegiaoAnatomica
-                {
-                    Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                    SegmentoId = Guid.Parse("11111111-1111-1111-1111-111111111111"), // Zona 1
-                    Limites = "Maleolar + Terço inferior - Úlcera extensa envolvendo tornozelo e porção inferior da perna. Frequência: 15%",
-                    CriadoEm = new DateTime(2025, 6, 28, 18, 30, 0, DateTimeKind.Utc)
-                },
-                new RegiaoAnatomica
-                {
-                    Id = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                    SegmentoId = Guid.Parse("22222222-2222-2222-2222-222222222222"), // Zona 2
-                    Limites = "Terço inferior + Terço médio/superior - Lesões ascendentes ou disseminadas, raras em úlceras puramente venosas. Frequência: 2%",
-                    CriadoEm = new DateTime(2025, 6, 28, 18, 30, 0, DateTimeKind.Utc)
                 }
             );
         });
