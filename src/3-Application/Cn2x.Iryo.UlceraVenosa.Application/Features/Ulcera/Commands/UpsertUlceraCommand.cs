@@ -9,4 +9,5 @@ public class UpsertUlceraCommand : IRequest<Guid>
     public Guid? Id { get; set; } // Se null ou Guid.Empty, cria; senão, atualiza
     public Guid PacienteId { get; set; }
     public List<Guid> Topografias { get; set; } = new();
-} 
+    public Ceap? ClassificacaoCeap { get; set; }
+}

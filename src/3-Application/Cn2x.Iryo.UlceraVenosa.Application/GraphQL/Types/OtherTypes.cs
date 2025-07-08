@@ -16,26 +16,15 @@ public class LateralidadeType : ObjectType<Lateralidade>
     }
 }
 
-public class ExsudatoDaUlceraType : ObjectType<ExsudatoDaUlcera>
+public class ImagemAvaliacaoUlceraType : ObjectType<ImagemAvaliacaoUlcera>
 {
-    protected override void Configure(IObjectTypeDescriptor<ExsudatoDaUlcera> descriptor)
+    protected override void Configure(IObjectTypeDescriptor<ImagemAvaliacaoUlcera> descriptor)
     {
-        descriptor.Name("ExsudatoDaUlcera");
-        descriptor.Description("Exsudato associado à úlcera (tabela de vínculo)");
-        descriptor.Field(x => x.UlceraId).Description("Id da úlcera");
-        descriptor.Field(x => x.ExsudatoId).Description("Id do exsudato");
-        // Adicione outros campos relevantes conforme necessário
-    }
-}
-
-public class ImagemUlceraType : ObjectType<ImagemUlcera>
-{
-    protected override void Configure(IObjectTypeDescriptor<ImagemUlcera> descriptor)
-    {
-        descriptor.Name("ImagemUlcera");
-        descriptor.Description("Imagem associada à úlcera");
-        descriptor.Field(x => x.Id).Description("Id da imagem da úlcera");
-        // Adicione outros campos relevantes conforme necessário
+        descriptor.Name("ImagemAvaliacaoUlcera");
+        descriptor.Description("Imagem associada à avaliação da úlcera");
+        descriptor.Field(x => x.Id).Description("Id da imagem da avaliação da úlcera");
+        descriptor.Field(x => x.AvaliacaoUlceraId).Description("Id da avaliação da úlcera");
+        descriptor.Field(x => x.Imagem).Description("Metadados da imagem (VO)");
     }
 }
 
@@ -57,9 +46,9 @@ public class MedidaType : ObjectType<Medida>
         descriptor.Name("Medida");
         descriptor.Description("Medidas da úlcera (relacionamento 1:1)");
         descriptor.Field(x => x.Id).Description("Id da Medida (igual ao UlceraId)");
-        descriptor.Field(x => x.UlceraId).Description("Id da úlcera associada");
+        descriptor.Field(x => x.AvaliacaoUlceraId).Description("Id da avaliação associada");
         descriptor.Field(x => x.Comprimento).Description("Comprimento em cm");
         descriptor.Field(x => x.Largura).Description("Largura em cm");
         descriptor.Field(x => x.Profundidade).Description("Profundidade em cm");
     }
-} 
+}

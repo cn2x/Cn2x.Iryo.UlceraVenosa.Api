@@ -15,7 +15,7 @@ public class MedidaMutations
     {
         var command = new UpsertMedidaCommand
         {
-            UlceraId = input.UlceraId,
+            AvaliacaoUlceraId = input.AvaliacaoUlceraId,
             Comprimento = input.Comprimento,
             Largura = input.Largura,
             Profundidade = input.Profundidade
@@ -24,7 +24,7 @@ public class MedidaMutations
         return new Medida
         {
             Id = id,
-            UlceraId = input.UlceraId,
+            AvaliacaoUlceraId = input.AvaliacaoUlceraId,
             Comprimento = input.Comprimento,
             Largura = input.Largura,
             Profundidade = input.Profundidade
@@ -34,8 +34,8 @@ public class MedidaMutations
 
 public class UpsertMedidaInput
 {
-    public Guid UlceraId { get; set; }
+    public Guid AvaliacaoUlceraId { get; set; }
     public decimal? Comprimento { get; set; }
     public decimal? Largura { get; set; }
     public decimal? Profundidade { get; set; }
-} 
+}

@@ -14,6 +14,12 @@ public class Patofisiologica : Enumeration<PatofisiologicaEnum> {
 
     public string Descricao { get; private set; }
 
+    // Construtor sem parâmetros para o Entity Framework
+    protected Patofisiologica() : base(default, string.Empty)
+    {
+        Descricao = string.Empty;
+    }
+
     private Patofisiologica(PatofisiologicaEnum value, string sigla, string descricao)
         : base(value, sigla) {
         Descricao = descricao;

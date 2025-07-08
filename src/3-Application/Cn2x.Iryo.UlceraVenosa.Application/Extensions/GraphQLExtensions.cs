@@ -28,7 +28,6 @@ public static class GraphQLExtensions
             .AddMutationType(d => d.Name("Mutation"))
             .AddTypeExtension<UlceraMutations>()
             .AddTypeExtension<MedidaMutations>()
-            .AddTypeExtension<ExsudatoDaUlceraMutations>()
             .AddType<UlceraType>()
             .AddType<CaracteristicasType>()
             .AddType<SinaisInflamatoriosType>()
@@ -38,8 +37,7 @@ public static class GraphQLExtensions
             .AddType<AnatomicaType>()
             .AddType<PatofisiologicaType>()
             .AddType<TopografiaType>()
-            .AddType<ExsudatoDaUlceraType>()
-            .AddType<ImagemUlceraType>()
+            .AddType<ImagemAvaliacaoUlceraType>()
             .AddType<PacienteType>()
             .AddType<PagedResultUlceraType>()
             .AddErrorFilter<GraphQLErrorFilter>()
@@ -66,7 +64,6 @@ public static class GraphQLExtensions
             .AddMutationType(d => d.Name("Mutation"))
             .AddTypeExtension<UlceraMutations>()
             .AddTypeExtension<MedidaMutations>()
-            .AddTypeExtension<ExsudatoDaUlceraMutations>()
             .AddType<UlceraType>()
             .AddType<CaracteristicasType>()
             .AddType<SinaisInflamatoriosType>()
@@ -76,8 +73,7 @@ public static class GraphQLExtensions
             .AddType<AnatomicaType>()
             .AddType<PatofisiologicaType>()
             .AddType<TopografiaType>()
-            .AddType<ExsudatoDaUlceraType>()
-            .AddType<ImagemUlceraType>()
+            .AddType<ImagemAvaliacaoUlceraType>()
             .AddType<PacienteType>()
             .AddType<PagedResultUlceraType>()
             .AddErrorFilter<GraphQLErrorFilter>()
@@ -89,4 +85,4 @@ public static class GraphQLExtensions
 
         return services;
     }
-} 
+}

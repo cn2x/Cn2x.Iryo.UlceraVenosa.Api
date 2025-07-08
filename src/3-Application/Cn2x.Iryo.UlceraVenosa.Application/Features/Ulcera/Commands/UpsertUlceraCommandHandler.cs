@@ -24,10 +24,12 @@ public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, G
             ulcera = await _ulceraRepository.GetByIdAsync(request.Id.Value);
         }
 
+        Ceap? ceap = request.ClassificacaoCeap;
+
         if (ulcera == null)
         {
             // Criação
-            var novaUlcera = UlceraFactory.Create(request.PacienteId);
+            var novaUlcera = UlceraFactory.Create(request.PacienteId, ceap);
             novaUlcera.Topografias = request.Topografias.Select(id => new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia { Id = id }).ToList();
             await _ulceraRepository.AddAsync(novaUlcera);
             await _ulceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
@@ -38,7 +40,8 @@ public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, G
             // Atualização
             var ulceraAtualizada = UlceraFactory.CreateForUpdate(
                 ulcera.Id,
-                request.PacienteId
+                request.PacienteId,
+                ceap
             );
             ulceraAtualizada.Topografias = request.Topografias.Select(id => new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia { Id = id }).ToList();
             await _ulceraRepository.UpdateAsync(ulceraAtualizada);
@@ -46,4 +49,4 @@ public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, G
             return ulceraAtualizada.Id;
         }
     }
-} 
+}

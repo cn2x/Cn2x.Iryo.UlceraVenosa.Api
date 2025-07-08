@@ -1,8 +1,1 @@
-using MediatR;
-using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
-
-namespace Cn2x.Iryo.UlceraVenosa.Application.Features.ImagemUlcera;
-
-public class ListImagemUlceraQuery : IRequest<IEnumerable<Domain.Entities.ImagemUlcera>>
-{
-} 
+// Arquivo removido pois comandos/queries/handlers de ImagemUlcera não são mais válidos. Veja ImagemAvaliacaoUlcera.

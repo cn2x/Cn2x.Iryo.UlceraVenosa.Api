@@ -26,6 +26,12 @@ public class Clinica : Enumeration<ClinicaEnum> {
 
     public string Descricao { get; private set; }
 
+    // Construtor sem parâmetros para o Entity Framework
+    protected Clinica() : base(default, string.Empty)
+    {
+        Descricao = string.Empty;
+    }
+
     private Clinica(ClinicaEnum value, string displayName, string descricao)
         : base(value, displayName) {
         Descricao = descricao;

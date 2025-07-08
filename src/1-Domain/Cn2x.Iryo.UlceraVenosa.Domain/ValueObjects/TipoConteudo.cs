@@ -1,7 +1,6 @@
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 
-namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
-
+namespace Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 public class TipoConteudo : Enumeration<string> {
     public static readonly TipoConteudo Jpeg = new("image/jpeg", "JPEG");
@@ -13,5 +12,3 @@ public class TipoConteudo : Enumeration<string> {
         MimeType = value;
     }
 }
-
-// Arquivo removido pois ImagemUlcera não é mais uma entidade. Veja ImagemAvaliacaoUlcera e o VO Imagem.

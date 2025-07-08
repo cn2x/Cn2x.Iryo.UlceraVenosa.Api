@@ -20,6 +20,7 @@ public class UlceraType : ObjectType<Ulcera>
         descriptor.Field(x => x.Topografias).Type<ListType<TopografiaType>>().Description("Topografias da úlcera");
         descriptor.Field(x => x.Paciente).Type<PacienteType>().Description("Paciente relacionado");
         descriptor.Field(x => x.Avaliacoes).Type<ListType<AvaliacaoUlceraType>>().Description("Avaliações da úlcera");
+        descriptor.Field(x => x.ClassificacaoCeap).Type<CeapType>().Description("Classificação CEAP da úlcera");
         descriptor.Ignore(x => x.DomainEvents);
     }
 }

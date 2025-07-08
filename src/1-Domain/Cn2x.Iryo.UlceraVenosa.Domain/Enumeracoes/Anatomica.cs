@@ -18,6 +18,12 @@ public class Anatomica : Enumeration<AnatomicaEnum> {
 
     public string Descricao { get; private set; }
 
+    // Construtor sem parâmetros para o Entity Framework
+    protected Anatomica() : base(default, string.Empty)
+    {
+        Descricao = string.Empty;
+    }
+
     private Anatomica(AnatomicaEnum value, string sigla, string descricao)
         : base(value, sigla) {
         Descricao = descricao;

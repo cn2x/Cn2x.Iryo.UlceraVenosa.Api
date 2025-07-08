@@ -42,15 +42,13 @@
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera" BaseTypeListCollapsed="true">
     <Position X="11.25" Y="5.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAABAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAABAACAAAAwAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\Ulcera.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Paciente" />
+      <Property Name="ClassificacaoCeap" />
     </ShowAsAssociation>
-    <ShowAsCollectionAssociation>
-      <Property Name="Topografias" />
-    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Caracteristicas">
@@ -61,7 +59,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.SinaisInflamatorios">
-    <Position X="5.25" Y="5" Width="2" />
+    <Position X="5.5" Y="5" Width="2" />
     <TypeIdentifier>
       <HashCode>AACAAAAAAAAAAgBAIAAAAAAACAAAAAIAAAAAAAAACAA=</HashCode>
       <FileName>ValueObjects\SinaisInflamatorios.cs</FileName>
@@ -74,22 +72,10 @@
       <FileName>Enumeracoes\TipoDeConta.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ExsudatoDaUlcera">
-    <Position X="14" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>ACAAAACAgAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
-      <FileName>Entities\ExsudatoDaUlcera.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Ulcera" />
-      <Property Name="Exsudato" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" />
-  </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Exsudato">
-    <Position X="17" Y="5.5" Width="1.5" />
+    <Position X="16" Y="8" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\Exsudato.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -104,45 +90,65 @@
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Medida">
     <Position X="11.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAICAAAAgAAAAAAAAAAAgAAAAAAQAAAQAAAAAAAAAAA=</HashCode>
+      <HashCode>AAICAAAAAAAAAAAAAAAAgAAAAAAQAAAAAAAAAAASAAA=</HashCode>
       <FileName>Entities\Medida.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ImagemUlcera">
-    <Position X="5.5" Y="0.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>EAAAUAAAgACBAAAAAAAAEAAAAAAAAAAQAAAQAAIQAAA=</HashCode>
-      <FileName>Entities\ImagemUlcera.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera">
     <Position X="8.5" Y="5.5" Width="1.5" />
+    <AssociationLine Name="Medida" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Medida" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="9.812" Y="5.5" />
+        <Point X="9.812" Y="4.896" />
+        <Point X="10.25" Y="4.896" />
+        <Point X="10.25" Y="3.282" />
+        <Point X="11.5" Y="3.282" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAACCAgAAACAAAAAAAAAAAAACCQAAQAAgAAAAAAAA=</HashCode>
+      <HashCode>AAAAACCAgAAAAAAAAAAAAAAAAAiCQAAQAAgAAAAAAAA=</HashCode>
       <FileName>Entities\AvaliacaoUlcera.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Medida" />
       <Property Name="Caracteristicas" />
-      <Property Name="ClassificacaoCeap" />
-      <Property Name="Ulcera" />
       <Property Name="SinaisInflamatorios" />
+      <Property Name="Medida" />
+      <Property Name="Ulcera" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Exsudatos" />
-      <Property Name="Imagens" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ExsudatoDaAvaliacao">
-    <Position X="4.5" Y="8.5" Width="1.5" />
+    <Position X="13.5" Y="8.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>ACAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAA=</HashCode>
       <FileName>Entities\ExsudatoDaAvaliacao.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Exsudato" />
+    </ShowAsAssociation>
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ImagemAvaliacaoUlcera">
+    <Position X="2.5" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAASAAA=</HashCode>
+      <FileName>Entities\ImagemAvaliacaoUlcera.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Imagem" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Imagem">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAABAAAAAAAAAAIAAAAAAAAAAAAAAAAAAQAAAQAAA=</HashCode>
+      <FileName>ValueObjects\Imagem.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

@@ -21,13 +21,12 @@ public class AvaliacaoUlceraMutations
             Id = input.Id,
             UlceraId = input.UlceraId,
             DataAvaliacao = input.DataAvaliacao,
-            Duracao = input.Duracao,
+            MesesDuracao = input.MesesDuracao,
             Caracteristicas = input.Caracteristicas,
             SinaisInflamatorios = input.SinaisInflamatorios,
             Medida = input.Medida,
             Imagens = input.Imagens,
-            Exsudatos = input.Exsudatos,
-            ClassificacaoCeap = input.ClassificacaoCeap
+            Exsudatos = input.Exsudatos
         };
         var avaliacaoId = await mediator.Send(command);
         // Aqui você pode criar um GetAvaliacaoUlceraByIdQuery se desejar retornar o objeto atualizado
@@ -40,11 +39,11 @@ public class UpsertAvaliacaoUlceraInput
     public Guid? Id { get; set; }
     public Guid UlceraId { get; set; }
     public DateTime DataAvaliacao { get; set; }
+    public int MesesDuracao { get; set; }
     public string Duracao { get; set; } = string.Empty;
     public Caracteristicas Caracteristicas { get; set; } = new();
     public SinaisInflamatorios SinaisInflamatorios { get; set; } = new();
     public Medida? Medida { get; set; }
     public List<Guid>? Imagens { get; set; }
     public List<Guid>? Exsudatos { get; set; }
-    public Ceap ClassificacaoCeap { get; set; } = null!;
 }

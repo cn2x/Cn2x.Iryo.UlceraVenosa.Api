@@ -28,11 +28,11 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
             {
                 UlceraId = request.UlceraId,
                 DataAvaliacao = request.DataAvaliacao,
-                Duracao = request.Duracao,
+                MesesDuracao = request.MesesDuracao,
                 Caracteristicas = request.Caracteristicas,
                 SinaisInflamatorios = request.SinaisInflamatorios,
-                Medida = request.Medida,
-                ClassificacaoCeap = request.ClassificacaoCeap
+                Medida = request.Medida
+                // Removido: ClassificacaoCeap = request.ClassificacaoCeap
             };
             await _avaliacaoUlceraRepository.AddAsync(novaAvaliacao);
             await _avaliacaoUlceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
@@ -43,11 +43,11 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
             // Atualização
             avaliacao.UlceraId = request.UlceraId;
             avaliacao.DataAvaliacao = request.DataAvaliacao;
-            avaliacao.Duracao = request.Duracao;
+            avaliacao.MesesDuracao = request.MesesDuracao;
             avaliacao.Caracteristicas = request.Caracteristicas;
             avaliacao.SinaisInflamatorios = request.SinaisInflamatorios;
             avaliacao.Medida = request.Medida;
-            avaliacao.ClassificacaoCeap = request.ClassificacaoCeap;
+            // Removido: avaliacao.ClassificacaoCeap = request.ClassificacaoCeap;
             await _avaliacaoUlceraRepository.UpdateAsync(avaliacao);
             await _avaliacaoUlceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
             return avaliacao.Id;

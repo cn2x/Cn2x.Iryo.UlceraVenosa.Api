@@ -8,7 +8,4 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 public class Exsudato : Entity<Guid>, IAggregateRoot
 {
     public string Descricao { get; set; } = string.Empty;
-    
-    // Navegação
-    public virtual ICollection<ExsudatoDaUlcera> ExsudatosDaUlcera { get; set; } = new List<ExsudatoDaUlcera>();
 } 

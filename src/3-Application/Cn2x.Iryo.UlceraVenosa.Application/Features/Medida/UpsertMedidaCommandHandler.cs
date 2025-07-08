@@ -15,7 +15,7 @@ public class UpsertMedidaCommandHandler : IRequestHandler<UpsertMedidaCommand, G
 
     public async Task<Guid> Handle(UpsertMedidaCommand request, CancellationToken cancellationToken)
     {
-        var existing = await _medidaRepository.GetByIdAsync(request.UlceraId);
+        var existing = await _medidaRepository.GetByIdAsync(request.AvaliacaoUlceraId);
         if (existing != null)
         {
             existing.Comprimento = request.Comprimento;
@@ -26,8 +26,8 @@ public class UpsertMedidaCommandHandler : IRequestHandler<UpsertMedidaCommand, G
         }
         var medida = new Medida
         {
-            Id = request.UlceraId, // PK = UlceraId
-            UlceraId = request.UlceraId,
+            Id = request.AvaliacaoUlceraId, // PK = AvaliacaoUlceraId
+            AvaliacaoUlceraId = request.AvaliacaoUlceraId,
             Comprimento = request.Comprimento,
             Largura = request.Largura,
             Profundidade = request.Profundidade
@@ -35,4 +35,4 @@ public class UpsertMedidaCommandHandler : IRequestHandler<UpsertMedidaCommand, G
         await _medidaRepository.AddAsync(medida);
         return medida.Id;
     }
-} 
+}

@@ -13,17 +13,20 @@ public static class UlceraFactory
     /// Cria uma nova úlcera com todos os parâmetros obrigatórios
     /// </summary>
     public static Ulcera Create(
-        Guid pacienteId)
+        Guid pacienteId,
+        Ceap? classificacaoCeap = null)
     {
-        // Validações básicas
         if (pacienteId == Guid.Empty)
             throw new ArgumentException("PacienteId é obrigatório", nameof(pacienteId));
 
-        return new Ulcera
+        var ulcera = new Ulcera
         {
             PacienteId = pacienteId,
             Topografias = new List<Topografia>()
         };
+        if (classificacaoCeap != null)
+            ulcera.ClassificacaoCeap = classificacaoCeap;
+        return ulcera;
     }
 
     /// <summary>
@@ -31,10 +34,11 @@ public static class UlceraFactory
     /// </summary>
     public static Ulcera CreateForUpdate(
         Guid id,
-        Guid pacienteId)
+        Guid pacienteId,
+        Ceap? classificacaoCeap = null)
     {
-        var ulcera = Create(pacienteId);
+        var ulcera = Create(pacienteId, classificacaoCeap);
         ulcera.Id = id;
         return ulcera;
     }
-} 
+}

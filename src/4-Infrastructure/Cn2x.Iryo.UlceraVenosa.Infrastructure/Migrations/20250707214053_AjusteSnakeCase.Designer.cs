@@ -3,6 +3,7 @@ using System;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250707214053_AjusteSnakeCase")]
+    partial class AjusteSnakeCase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,7 +204,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                     b.ToTable("exsudatos_da_ulcera", (string)null);
                 });
 
-            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.ImagemAvaliacaoUlcera", b =>
+            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.ImagemUlcera", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -212,25 +215,69 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("atualizado_em");
 
-                    b.Property<Guid>("AvaliacaoUlceraId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("avaliacao_ulcera_id");
+                    b.Property<string>("CaminhoArquivo")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("caminho_arquivo");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("content_type");
 
                     b.Property<DateTime>("CriadoEm")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("criado_em");
 
+                    b.Property<DateTime>("DataCaptura")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("data_captura");
+
                     b.Property<bool>("Desativada")
                         .HasColumnType("boolean")
                         .HasColumnName("desativada");
 
+                    b.Property<string>("Descricao")
+                        .HasColumnType("text")
+                        .HasColumnName("descricao");
+
+                    b.Property<bool>("EhImagemPrincipal")
+                        .HasColumnType("boolean")
+                        .HasColumnName("eh_imagem_principal");
+
+                    b.Property<string>("NomeArquivo")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("nome_arquivo");
+
+                    b.Property<string>("Observacoes")
+                        .HasColumnType("text")
+                        .HasColumnName("observacoes");
+
+                    b.Property<int>("OrdemExibicao")
+                        .HasColumnType("integer")
+                        .HasColumnName("ordem_exibicao");
+
+                    b.Property<long>("TamanhoBytes")
+                        .HasColumnType("bigint")
+                        .HasColumnName("tamanho_bytes");
+
+                    b.Property<Guid>("UlceraId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("ulcera_id");
+
+                    b.Property<Guid>("UlceraId1")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id")
-                        .HasName("pk_imagem_avaliacao_ulcera");
+                        .HasName("pk_imagem_ulcera");
 
-                    b.HasIndex("AvaliacaoUlceraId")
-                        .HasDatabaseName("ix_imagem_avaliacao_ulcera_avaliacao_ulcera_id");
+                    b.HasIndex("UlceraId")
+                        .HasDatabaseName("ix_imagem_ulcera_ulcera_id");
 
-                    b.ToTable("imagens_avaliacao_ulcera", (string)null);
+                    b.HasIndex("UlceraId1");
+
+                    b.ToTable("imagem_ulcera");
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Medida", b =>
@@ -534,7 +581,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 
                     b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Caracteristicas", "Caracteristicas", b1 =>
                         {
-                            b1.Property<Guid>("avaliacao_ferida_id")
+                            b1.Property<Guid>("AvaliacaoUlceraId")
                                 .HasColumnType("uuid");
 
                             b1.Property<bool>("BordasDefinidas")
@@ -553,17 +600,17 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                                 .HasColumnType("boolean")
                                 .HasColumnName("tecido_granulacao");
 
-                            b1.HasKey("avaliacao_ferida_id");
+                            b1.HasKey("AvaliacaoUlceraId");
 
                             b1.ToTable("caracteristicas");
 
                             b1.WithOwner()
-                                .HasForeignKey("avaliacao_ferida_id");
+                                .HasForeignKey("AvaliacaoUlceraId");
                         });
 
                     b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.SinaisInflamatorios", "SinaisInflamatorios", b1 =>
                         {
-                            b1.Property<Guid>("avaliacao_ferida_id")
+                            b1.Property<Guid>("AvaliacaoUlceraId")
                                 .HasColumnType("uuid");
 
                             b1.Property<bool>("Calor")
@@ -590,12 +637,12 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                                 .HasColumnType("boolean")
                                 .HasColumnName("rubor");
 
-                            b1.HasKey("avaliacao_ferida_id");
+                            b1.HasKey("AvaliacaoUlceraId");
 
                             b1.ToTable("sinais_inflamatorios");
 
                             b1.WithOwner()
-                                .HasForeignKey("avaliacao_ferida_id");
+                                .HasForeignKey("AvaliacaoUlceraId");
                         });
 
                     b.Navigation("Caracteristicas")
@@ -645,44 +692,21 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                     b.Navigation("Ulcera");
                 });
 
-            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.ImagemAvaliacaoUlcera", b =>
+            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.ImagemUlcera", b =>
                 {
-                    b.HasOne("Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera", "AvaliacaoUlcera")
+                    b.HasOne("Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera", null)
                         .WithMany("Imagens")
-                        .HasForeignKey("AvaliacaoUlceraId")
+                        .HasForeignKey("UlceraId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Imagem", "Imagem", b1 =>
-                        {
-                            b1.Property<Guid>("ImagemAvaliacaoUlceraId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("ContentType")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("content_type");
-
-                            b1.Property<DateTime>("DataCaptura")
-                                .HasColumnType("timestamp with time zone")
-                                .HasColumnName("data_captura");
-
-                            b1.Property<long>("TamanhoBytes")
-                                .HasColumnType("bigint")
-                                .HasColumnName("tamanho_bytes");
-
-                            b1.HasKey("ImagemAvaliacaoUlceraId");
-
-                            b1.ToTable("imagem");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ImagemAvaliacaoUlceraId");
-                        });
-
-                    b.Navigation("AvaliacaoUlcera");
-
-                    b.Navigation("Imagem")
+                    b.HasOne("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera", "Ulcera")
+                        .WithMany()
+                        .HasForeignKey("UlceraId1")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Ulcera");
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Medida", b =>

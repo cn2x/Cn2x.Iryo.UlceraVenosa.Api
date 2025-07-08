@@ -22,7 +22,14 @@ public class UlceraMutations
         {
             Id = input.Id,
             PacienteId = input.PacienteId,
-            Topografias = input.Topografias
+            Topografias = input.Topografias,
+            ClassificacaoCeap = input.ClassificacaoCeap == null ? null :
+                new Ceap(
+                    Clinica.FromValue<Clinica>((ClinicaEnum)input.ClassificacaoCeap.ClasseClinica.Id),
+                    Etiologica.FromValue<Etiologica>((EtiologicaEnum)input.ClassificacaoCeap.Etiologia.Id),
+                    Anatomica.FromValue<Anatomica>((AnatomicaEnum)input.ClassificacaoCeap.Anatomia.Id),
+                    Patofisiologica.FromValue<Patofisiologica>((PatofisiologicaEnum)input.ClassificacaoCeap.Patofisiologia.Id)
+                )
         };
 
         var ulceraId = await mediator.Send(command);
@@ -113,9 +120,18 @@ public class PatofisiologicaInput
     public string Name { get; set; } = string.Empty;
 }
 
+public class CeapInput
+{
+    public ClinicaInput ClasseClinica { get; set; } = new();
+    public EtiologicaInput Etiologia { get; set; } = new();
+    public AnatomicaInput Anatomia { get; set; } = new();
+    public PatofisiologicaInput Patofisiologia { get; set; } = new();
+}
+
 public class UpsertUlceraInput
 {
     public Guid? Id { get; set; }
     public Guid PacienteId { get; set; }
     public List<Guid> Topografias { get; set; } = new();
-} 
+    public CeapInput? ClassificacaoCeap { get; set; }
+}

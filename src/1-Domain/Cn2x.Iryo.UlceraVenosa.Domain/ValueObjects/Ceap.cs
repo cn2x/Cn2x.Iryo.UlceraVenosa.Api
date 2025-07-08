@@ -8,10 +8,10 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 /// </summary>
 public class Ceap : ValueObject
 {
-    public Clinica ClasseClinica { get; private set; }
-    public Etiologica Etiologia { get; private set; }
-    public Anatomica Anatomia { get; private set; }
-    public Patofisiologica Patofisiologia { get; private set; }
+    public Clinica ClasseClinica { get; private set; } = null!;
+    public Etiologica Etiologia { get; private set; } = null!;
+    public Anatomica Anatomia { get; private set; } = null!;
+    public Patofisiologica Patofisiologia { get; private set; } = null!;
     
     public Ceap(Clinica classeClinica, Etiologica etiologia, Anatomica anatomia, Patofisiologica patofisiologia)
     {
@@ -34,6 +34,9 @@ public class Ceap : ValueObject
         Patofisiologia = patofisiologia;
     }
 
+    // Construtor padrão para o EF Core
+    private Ceap() { }
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return ClasseClinica;
@@ -46,4 +49,4 @@ public class Ceap : ValueObject
     {
         return $"{ClasseClinica.Name}{Etiologia.Name}{Anatomia.Name}{Patofisiologia.Name}";
     }
-} 
+}

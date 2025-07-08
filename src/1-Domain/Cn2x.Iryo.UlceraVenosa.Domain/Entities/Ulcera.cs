@@ -27,4 +27,5 @@ public class Ulcera : Entity<Guid>, IAggregateRoot
 
     // NOVO: Avaliações da úlcera
     public virtual ICollection<AvaliacaoUlcera> Avaliacoes { get; set; } = new List<AvaliacaoUlcera>();
-} 
+    public Ceap ClassificacaoCeap { get; set; } = null!;
+}

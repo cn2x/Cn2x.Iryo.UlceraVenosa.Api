@@ -23,7 +23,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     public virtual DbSet<Topografia> Topografias { get; set; }
     public virtual DbSet<Segmento> Segmentos { get; set; }
     public virtual DbSet<RegiaoAnatomica> RegioesAnatomicas { get; set; }
-    public virtual DbSet<ExsudatoDaUlcera> Exsudatos { get; set; }
     public virtual DbSet<Exsudato> ExsudatoTipos { get; set; }
 
     public virtual DbSet<Medida> Medidas { get; set; }
@@ -107,12 +106,11 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         ConfigureTopografia(modelBuilder);
         ConfigureSegmento(modelBuilder);
         ConfigureRegiaoAnatomica(modelBuilder);
-        ConfigureExsudatoDaUlcera(modelBuilder);
         ConfigureExsudato(modelBuilder);
 
         ConfigureMedida(modelBuilder);
         ConfigureAvaliacaoUlcera(modelBuilder);
-        ConfigureExsudatoDaAvaliacao(modelBuilder);
+        ConfigureImagemAvaliacaoUlcera(modelBuilder);
     }
 
     private void ConfigureUlcera(ModelBuilder modelBuilder)
@@ -121,6 +119,26 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         {
             entity.ToTable("ulceras");
             entity.HasKey(e => e.Id);
+
+            entity.OwnsOne(e => e.ClassificacaoCeap, ceap =>
+            {
+                ceap.ToTable("ceap");
+                ceap.WithOwner().HasForeignKey("ulcera_id");
+                ceap.Property(c => c.ClasseClinica)
+                    .HasColumnName("classe_clinica")
+                    .HasConversion(new ClinicaValueConverter());
+                ceap.Property(c => c.Etiologia)
+                    .HasColumnName("etiologia")
+                    .HasConversion(new EtiologicaValueConverter());
+                ceap.Property(c => c.Anatomia)
+                    .HasColumnName("anatomia")
+                    .HasConversion(new AnatomicaValueConverter());
+                ceap.Property(c => c.Patofisiologia)
+                    .HasColumnName("patofisiologia")
+                    .HasConversion(new PatofisiologicaValueConverter());
+            });
+
+            entity.Property(e => e.PacienteId).HasColumnName("paciente_id");
 
             entity.HasMany(e => e.Topografias)
                   .WithOne(t => t.Ulcera)
@@ -270,28 +288,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         });
     }
 
-    private void ConfigureExsudatoDaUlcera(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<ExsudatoDaUlcera>(entity =>
-        {
-            entity.ToTable("exsudatos_da_ulcera");
-            entity.HasKey(e => new { e.UlceraId, e.ExsudatoId });
-            entity.Property(e => e.UlceraId).HasColumnName("ulcera_id").IsRequired();
-            entity.Property(e => e.ExsudatoId).HasColumnName("exsudato_id").IsRequired();
-
-            // Relacionamentos
-            entity.HasOne(e => e.Ulcera)
-                  .WithMany()
-                  .HasForeignKey(e => e.UlceraId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(e => e.Exsudato)
-                  .WithMany(et => et.ExsudatosDaUlcera)
-                  .HasForeignKey(e => e.ExsudatoId)
-                  .OnDelete(DeleteBehavior.Restrict);
-        });
-    }
-
     private void ConfigureExsudato(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Exsudato>(entity =>
@@ -372,13 +368,13 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         {
             entity.ToTable("medidas");
             entity.HasKey(m => m.Id);
-            entity.Property(m => m.UlceraId).HasColumnName("ulcera_id");
+            entity.Property(m => m.AvaliacaoUlceraId).HasColumnName("avaliacao_ulcera_id");
             entity.Property(m => m.Comprimento).HasColumnName("comprimento").HasColumnType("decimal(10,2)");
             entity.Property(m => m.Largura).HasColumnName("largura").HasColumnType("decimal(10,2)");
             entity.Property(m => m.Profundidade).HasColumnName("profundidade").HasColumnType("decimal(10,2)");
-            entity.HasOne(m => m.Ulcera)
-                  .WithOne()
-                  .HasForeignKey<Medida>(m => m.UlceraId)
+            entity.HasOne(m => m.AvaliacaoUlcera)
+                  .WithOne(m => m.Medida)
+                  .HasForeignKey<Medida>(m => m.AvaliacaoUlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
     }
@@ -389,11 +385,13 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         {
             entity.ToTable("avaliacoes_ulcera");
             entity.HasKey(e => e.Id);
+            entity.Property(e => e.UlceraId).HasColumnName("ulcera_id");
             entity.Property(e => e.DataAvaliacao).HasColumnName("data_avaliacao").IsRequired();
-            entity.Property(e => e.Duracao).HasColumnName("duracao").HasMaxLength(100);
+            entity.Property(e => e.MesesDuracao).HasColumnName("meses_duracao").IsRequired();
 
             entity.OwnsOne(e => e.Caracteristicas, caracteristicas =>
             {
+                caracteristicas.WithOwner().HasForeignKey("avaliacao_ferida_id");
                 caracteristicas.Property(c => c.BordasDefinidas).HasColumnName("bordas_definidas").IsRequired();
                 caracteristicas.Property(c => c.TecidoGranulacao).HasColumnName("tecido_granulacao").IsRequired();
                 caracteristicas.Property(c => c.Necrose).HasColumnName("necrose").IsRequired();
@@ -402,6 +400,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
 
             entity.OwnsOne(e => e.SinaisInflamatorios, sinais =>
             {
+                sinais.WithOwner().HasForeignKey("avaliacao_ferida_id");
                 sinais.Property(s => s.Eritema).HasColumnName("eritema");
                 sinais.Property(s => s.Calor).HasColumnName("calor");
                 sinais.Property(s => s.Rubor).HasColumnName("rubor");
@@ -410,39 +409,19 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
                 sinais.Property(s => s.PerdadeFuncao).HasColumnName("perda_de_funcao");
             });
 
-            entity.OwnsOne(e => e.ClassificacaoCeap, ceap =>
-            {
-                ceap.Property(c => c.ClasseClinica).HasColumnName("classe_clinica").HasConversion(
-                    v => v.Id,
-                    v => Clinica.FromValue<Clinica>(v)
-                ).IsRequired();
-                ceap.Property(c => c.Etiologia).HasColumnName("etiologia").HasConversion(
-                    v => v.Id,
-                    v => Etiologica.FromValue<Etiologica>(v)
-                ).IsRequired();
-                ceap.Property(c => c.Anatomia).HasColumnName("anatomia").HasConversion(
-                    v => v.Id,
-                    v => Anatomica.FromValue<Anatomica>(v)
-                ).IsRequired();
-                ceap.Property(c => c.Patofisiologia).HasColumnName("patofisiologia").HasConversion(
-                    v => v.Id,
-                    v => Patofisiologica.FromValue<Patofisiologica>(v)
-                ).IsRequired();
-            });
-
             entity.HasOne(e => e.Ulcera)
                   .WithMany(u => u.Avaliacoes)
                   .HasForeignKey(e => e.UlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(e => e.Medida)
-                  .WithOne()
-                  .HasForeignKey<Medida>(m => m.UlceraId)
+                  .WithOne(m => m.AvaliacaoUlcera)
+                  .HasForeignKey<Medida>(m => m.AvaliacaoUlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasMany(e => e.Imagens)
-                  .WithOne()
-                  .HasForeignKey(i => i.UlceraId)
+                  .WithOne(i => i.AvaliacaoUlcera)
+                  .HasForeignKey(i => i.AvaliacaoUlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasMany(e => e.Exsudatos)
@@ -452,20 +431,29 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         });
     }
 
-    private void ConfigureExsudatoDaAvaliacao(ModelBuilder modelBuilder)
+    // Novo: Configuração da entidade ImagemAvaliacaoUlcera
+    private void ConfigureImagemAvaliacaoUlcera(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ExsudatoDaAvaliacao>(entity =>
+        modelBuilder.Entity<ImagemAvaliacaoUlcera>(entity =>
         {
-            entity.ToTable("exsudatos_avaliacao");
-            entity.HasKey(e => new { e.AvaliacaoUlceraId, e.ExsudatoId });
+            entity.ToTable("imagens_avaliacao_ulcera");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.AvaliacaoUlceraId).HasColumnName("avaliacao_ulcera_id");
             entity.HasOne(e => e.AvaliacaoUlcera)
-                  .WithMany(a => a.Exsudatos)
+                  .WithMany(a => a.Imagens)
                   .HasForeignKey(e => e.AvaliacaoUlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne(e => e.Exsudato)
-                  .WithMany()
-                  .HasForeignKey(e => e.ExsudatoId)
-                  .OnDelete(DeleteBehavior.Cascade);
+
+            // Configura o Value Object Imagem como owned type
+            entity.OwnsOne(e => e.Imagem, img =>
+            {
+                img.Property(i => i.ContentType)
+                    .HasColumnName("content_type")
+                    .HasConversion(new Cn2x.Iryo.UlceraVenosa.Infrastructure.ValueConverters.TipoConteudoValueConverter())
+                    .IsRequired();
+                img.Property(i => i.TamanhoBytes).HasColumnName("tamanho_bytes").IsRequired();
+                img.Property(i => i.DataCaptura).HasColumnName("data_captura").IsRequired();
+            });
         });
     }
 
@@ -477,4 +465,4 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         // Filtro global para pacientes ativos
         modelBuilder.Entity<Paciente>().HasQueryFilter(e => !e.Desativada);
     }
-} 
+}
