@@ -1,0 +1,1 @@
+Backup dos arquivos Features/Segmento removidos para refatoração do domínio. Caso necessário, restaurar manualmente.

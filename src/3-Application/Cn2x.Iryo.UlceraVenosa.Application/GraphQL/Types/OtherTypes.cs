@@ -1,5 +1,4 @@
 using HotChocolate.Types;
-using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 
 public class LateralidadeType : ObjectType<Lateralidade>
@@ -9,10 +8,10 @@ public class LateralidadeType : ObjectType<Lateralidade>
         descriptor.Name("Lateralidade");
         descriptor.Description("Lateralidade da topografia");
 
-        descriptor.Field("id")
-            .Type<EnumType<LateralidadeEnum>>()
-            .Resolve(ctx => ctx.Parent<Lateralidade>().Id);
-        descriptor.Field(x => x.Name).Description("Nome amigável da lateralidade");
+        descriptor.Field(x => x.Id)
+            .Type<IntType>()
+            .Description("Id da lateralidade");
+        descriptor.Field(x => x.Nome).Description("Nome da lateralidade");
     }
 }
 

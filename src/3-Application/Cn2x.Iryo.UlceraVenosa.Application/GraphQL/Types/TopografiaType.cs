@@ -1,3 +1,6 @@
+// Arquivo removido: TopografiaType não é mais utilizado na nova modelagem.
+// Conteúdo original comentado para build limpo.
+/*
 using HotChocolate.Types;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 
@@ -16,3 +19,4 @@ public class TopografiaType : ObjectType<Topografia>
         // Adicione outros campos relevantes conforme necessário
     }
 } 
+*/

@@ -17,7 +17,7 @@ public class UlceraType : ObjectType<Ulcera>
         descriptor.Field(x => x.Id).Type<IdType>().Description("ID único da úlcera");
         descriptor.Field(x => x.PacienteId).Type<StringType>().Description("ID do paciente");
         descriptor.Field(x => x.Desativada).Description("Indica se a úlcera está desativada");
-        descriptor.Field(x => x.Topografias).Type<ListType<TopografiaType>>().Description("Topografias da úlcera");
+        // descriptor.Field(x => x.Topografias).Type<ListType<TopografiaType>>().Description("Topografias da úlcera");
         descriptor.Field(x => x.Paciente).Type<PacienteType>().Description("Paciente relacionado");
         descriptor.Field(x => x.Avaliacoes).Type<ListType<AvaliacaoUlceraType>>().Description("Avaliações da úlcera");
         descriptor.Field(x => x.Ceap).Type<CeapType>().Description("Classificação CEAP da úlcera");

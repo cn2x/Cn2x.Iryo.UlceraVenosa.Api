@@ -5,7 +5,6 @@ using Cn2x.Iryo.UlceraVenosa.Application.Features.Paciente;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 using Cn2x.Iryo.UlceraVenosa.Domain.Specifications;
-using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Queries;
 
@@ -87,47 +86,8 @@ public class ExsudatoQueries
     }
 }
 
-[ExtendObjectType("Query")]
-public class EnumeracoesQueries
-{
-    [GraphQLName("clinicas")]
-    public IEnumerable<Clinica> Clinicas() => Enumeration<ClinicaEnum>.GetAll<Clinica>();
-
-    [GraphQLName("etiologias")]
-    public IEnumerable<Etiologica> Etiologias() => Enumeration<EtiologicaEnum>.GetAll<Etiologica>();
-
-    [GraphQLName("anatomicas")]
-    public IEnumerable<Anatomica> Anatomicas() => Enumeration<AnatomicaEnum>.GetAll<Anatomica>();
-
-    [GraphQLName("patofisiologicas")]
-    public IEnumerable<Patofisiologica> Patofisiologicas() => Enumeration<PatofisiologicaEnum>.GetAll<Patofisiologica>();
-
-    [GraphQLName("lateralidades")]
-    public IEnumerable<Lateralidade> Lateralidades() => Enumeration<LateralidadeEnum>.GetAll<Lateralidade>();
-}
-
-[ExtendObjectType("Query")]
-public class SegmentoQueries
-{
-    [GraphQLName("segmentos")]
-    public async Task<List<Segmento>> Segmentos([
-        Service] IRepository<Segmento> repository)
-    {
-        var result = await repository.GetAllAsync();
-        return result.ToList();
-    }
-}
-
-[ExtendObjectType("Query")]
-public class RegiaoAnatomicaQueries
-{
-    [GraphQLName("regioesAnatomicasPorSegmento")]
-    public async Task<List<RegiaoAnatomica>> RegioesAnatomicasPorSegmento(
-        Guid segmentoId,
-        [Service] IRepository<RegiaoAnatomica> repository)
-    {
-        var spec = new RegiaoAnatomicaBySegmentoSpecification(segmentoId);
-        var queryable = await repository.FindFilterByExpression(spec.SatisfiedBy());
-        return queryable.ToList();
-    }
-} 
+// Removido: EnumeracoesQueries e métodos baseados em Enumeration<T> e enums antigos.
+// As queries de Segmento e RegiaoAnatomica foram removidas pois não fazem mais parte da modelagem.
+// Caso precise de queries para enums ou value objects, implemente conforme a nova estrutura.
+// public class SegmentoQueries { ... }
+// public class RegiaoAnatomicaQueries { ... }

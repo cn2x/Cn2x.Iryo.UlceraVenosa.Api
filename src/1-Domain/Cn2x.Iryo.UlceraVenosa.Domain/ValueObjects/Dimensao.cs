@@ -1,1 +1,0 @@
-// Arquivo removido. O Value Object Dimensao não é mais utilizado, pois agora existe a entidade Medida.

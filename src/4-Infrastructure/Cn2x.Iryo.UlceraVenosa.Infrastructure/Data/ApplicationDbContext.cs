@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
-using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
-using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +18,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
     // DbSets
     public virtual DbSet<Ulcera> Ulceras { get; set; }
     public virtual DbSet<Paciente> Pacientes { get; set; }
-    public virtual DbSet<Segmento> Segmentos { get; set; }
     public virtual DbSet<Exsudato> ExsudatoTipos { get; set; }
 
     public virtual DbSet<Medida> Medidas { get; set; }
@@ -100,13 +97,85 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         // Configurações específicas
         ConfigureUlcera(modelBuilder);
         ConfigurePaciente(modelBuilder);
-
-        ConfigureSegmento(modelBuilder);
         ConfigureExsudato(modelBuilder);
-
         ConfigureMedida(modelBuilder);
         ConfigureAvaliacaoUlcera(modelBuilder);
         ConfigureImagemAvaliacaoUlcera(modelBuilder);
+        ConfigureExsudatoDaAvaliacao(modelBuilder);
+
+        // Garantir snake_case para Segmentacao e RegiaoAnatomica e RegiaoTopograficaPe
+        modelBuilder.Entity<Segmentacao>(entity =>
+        {
+            entity.ToTable("segmentacao");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Sigla).HasColumnName("sigla");
+            entity.Property(e => e.Descricao).HasColumnName("descricao");
+        });
+        modelBuilder.Entity<RegiaoAnatomica>(entity =>
+        {
+            entity.ToTable("regiao_anatomica");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Sigla).HasColumnName("sigla");
+            entity.Property(e => e.Descricao).HasColumnName("descricao");
+        });
+        modelBuilder.Entity<RegiaoTopograficaPe>(entity =>
+        {
+            entity.ToTable("regiao_topografica_pe");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Sigla).HasColumnName("sigla");
+            entity.Property(e => e.Descricao).HasColumnName("descricao");
+        });
+        // Seed para segmentacao
+        modelBuilder.Entity<Segmentacao>().HasData(
+            new { Id = 1, Sigla = "TS", Descricao = "Da fossa poplítea até ~2/3 da altura da perna", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 2, Sigla = "TM", Descricao = "Da porção média até cerca de 1/3 acima do maléolo", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 3, Sigla = "TI", Descricao = "Do final do médio até os maléolos (região do tornozelo)", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
+        );
+        // Seed para regiao_anatomica
+        modelBuilder.Entity<RegiaoAnatomica>().HasData(
+            new { Id = 1, Sigla = "M", Descricao = "Medial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 2, Sigla = "L", Descricao = "Lateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 3, Sigla = "A", Descricao = "Anterior", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 4, Sigla = "P", Descricao = "Posterior", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 5, Sigla = "AM", Descricao = "Anteromedial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 6, Sigla = "PL", Descricao = "Posterolateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
+        );
+        // Seed para regiao_topografica_pe
+        modelBuilder.Entity<RegiaoTopograficaPe>().HasData(
+            new { Id = 1, Sigla = "DOR", Descricao = "Dorsal", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 2, Sigla = "PLA", Descricao = "Plantar", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 3, Sigla = "CAL", Descricao = "Calcâneo", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 4, Sigla = "MED", Descricao = "Mediopé", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 5, Sigla = "ANT", Descricao = "Antepé", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 6, Sigla = "HAL", Descricao = "Halux", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 7, Sigla = "LAT", Descricao = "Lateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 8, Sigla = "MEDL", Descricao = "Medial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 9, Sigla = "MMED", Descricao = "Malelo Medial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = 10, Sigla = "MLAT", Descricao = "Malelo Lateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
+        );
+
+        // Configuração TPT para Topografia
+        modelBuilder.Entity<Topografia>()
+            .UseTptMappingStrategy();
+        modelBuilder.Entity<Topografia>().HasKey(e => e.Id); // Removido HasName
+        modelBuilder.Entity<TopografiaPerna>(entity =>
+        {
+            entity.ToTable("topografia_perna");
+        });
+        modelBuilder.Entity<TopografiaPe>(entity =>
+        {
+            entity.ToTable("topografia_pe");
+        });
+
+        // Relacionamento Ulcera -> Topografia (1:1)
+        modelBuilder.Entity<Ulcera>()
+            .HasOne(u => u.Topografia)
+            .WithMany() // ou .WithOne() se for 1:1
+            .HasForeignKey(u => u.TopografiaId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
     private void ConfigureUlcera(ModelBuilder modelBuilder)
@@ -136,10 +205,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
 
             entity.Property(e => e.PacienteId).HasColumnName("paciente_id");
 
-            entity.HasMany(e => e.Segmentos)
-                  .WithMany(s => s.Ulceras)
-                  .UsingEntity(j => j.ToTable("ulcera_segmentos"));
-
             entity.HasMany(e => e.Avaliacoes)
                   .WithOne(a => a.Ulcera)
                   .HasForeignKey(a => a.UlceraId)
@@ -158,42 +223,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
 
             // Índices
             entity.HasIndex(e => e.Cpf).IsUnique();
-        });
-    }
-
-    private void ConfigureSegmento(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Segmento>(entity =>
-        {
-            entity.ToTable("segmentos");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Descricao).HasColumnName("descricao").IsRequired().HasMaxLength(200);
-            entity.Property(e => e.Nome).HasColumnName("nome").IsRequired().HasMaxLength(100);
-
-            // Seed para zonas anatômicas
-            entity.HasData(
-                new Segmento
-                {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                    Nome = "Região maleolar ou perimaleolar",
-                    Descricao = "Ao redor dos maléolos (interno e externo), especialmente o maleolo medial (tíbia). Local mais comum de úlcera venosa. Associada à hipertensão venosa crônica.",
-                    CriadoEm = new DateTime(2025, 6, 28, 18, 0, 0, DateTimeKind.Utc)
-                },
-                new Segmento
-                {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Nome = "Terço inferior da perna",
-                    Descricao = "Entre o maléolo e a metade da perna. Região de drenagem venosa crítica. Úlceras nesta zona indicam comprometimento venoso avançado.",
-                    CriadoEm = new DateTime(2025, 6, 28, 18, 0, 0, DateTimeKind.Utc)
-                },
-                new Segmento
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Nome = "Terço médio e superior da perna",
-                    Descricao = "Da metade até abaixo do joelho. Menos comum para úlceras venosas. Úlceras aqui sugerem causas mistas (venosa + arterial ou vasculite).",
-                    CriadoEm = new DateTime(2025, 6, 28, 18, 0, 0, DateTimeKind.Utc)
-                }
-            );
         });
     }
 
@@ -363,6 +392,21 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
                 img.Property(i => i.TamanhoBytes).HasColumnName("tamanho_bytes").IsRequired();
                 img.Property(i => i.DataCaptura).HasColumnName("data_captura").IsRequired();
             });
+        });
+    }
+
+    private void ConfigureExsudatoDaAvaliacao(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ExsudatoDaAvaliacao>(entity =>
+        {
+            entity.ToTable("exsudatos_avaliacao");
+            entity.HasKey(e => new { e.AvaliacaoUlceraId, e.ExsudatoId });
+            entity.HasOne(e => e.AvaliacaoUlcera)
+                  .WithMany(a => a.Exsudatos)
+                  .HasForeignKey(e => e.AvaliacaoUlceraId);
+            entity.HasOne(e => e.Exsudato)
+                  .WithMany()
+                  .HasForeignKey(e => e.ExsudatoId);
         });
     }
 

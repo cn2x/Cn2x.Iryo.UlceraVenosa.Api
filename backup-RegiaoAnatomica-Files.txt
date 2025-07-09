@@ -1,0 +1,10 @@
+AtivarInativarRegiaoAnatomicaCommand.cs
+AtivarInativarRegiaoAnatomicaCommandHandler.cs
+CreateRegiaoAnatomicaCommand.cs
+CreateRegiaoAnatomicaCommandHandler.cs
+GetRegiaoAnatomicaByIdQuery.cs
+GetRegiaoAnatomicaByIdQueryHandler.cs
+ListRegiaoAnatomicaQuery.cs
+ListRegiaoAnatomicaQueryHandler.cs
+UpdateRegiaoAnatomicaCommand.cs
+UpdateRegiaoAnatomicaCommandHandler.cs

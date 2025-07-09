@@ -1,0 +1,2 @@
+CreateSegmentoCommand.cs
+CreateSegmentoCommandHandler.cs

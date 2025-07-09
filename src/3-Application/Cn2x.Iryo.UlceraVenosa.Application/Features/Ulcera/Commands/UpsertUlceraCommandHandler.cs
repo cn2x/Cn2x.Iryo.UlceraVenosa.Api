@@ -1,23 +1,31 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
-using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
-using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using Cn2x.Iryo.UlceraVenosa.Domain.Factories;
+using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands;
 
 public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, Guid>
 {
     private readonly IUlceraRepository _ulceraRepository;
+    private readonly DbContext _context;
 
-    public UpsertUlceraCommandHandler(IUlceraRepository ulceraRepository)
+    public UpsertUlceraCommandHandler(IUlceraRepository ulceraRepository, DbContext context)
     {
         _ulceraRepository = ulceraRepository;
+        _context = context;
     }
 
     public async Task<Guid> Handle(UpsertUlceraCommand request, CancellationToken cancellationToken)
     {
+        // Busca a topografia principal (exemplo: TopografiaPerna)
+        int topografiaId = request.Topografias.FirstOrDefault() != Guid.Empty ? (int)(request.Topografias.First().GetHashCode()) : 0;
+        var topografia = await _context.Set<TopografiaPerna>().FirstOrDefaultAsync(t => t.Id == topografiaId, cancellationToken);
+        if (topografia == null)
+            throw new Exception("Topografia principal não encontrada");
+
         Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera? ulcera = null;
         if (request.Id != null && request.Id != Guid.Empty)
         {
@@ -29,8 +37,7 @@ public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, G
         if (ulcera == null)
         {
             // Criação
-            var novaUlcera = UlceraFactory.Create(request.PacienteId, ceap);
-            novaUlcera.Topografias = request.Topografias.Select(id => new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia { Id = id }).ToList();
+            var novaUlcera = UlceraFactory.Create(request.PacienteId, topografia, ceap);
             await _ulceraRepository.AddAsync(novaUlcera);
             await _ulceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
             return novaUlcera.Id;
@@ -41,9 +48,9 @@ public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, G
             var ulceraAtualizada = UlceraFactory.CreateForUpdate(
                 ulcera.Id,
                 request.PacienteId,
+                topografia,
                 ceap
             );
-            ulceraAtualizada.Topografias = request.Topografias.Select(id => new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia { Id = id }).ToList();
             await _ulceraRepository.UpdateAsync(ulceraAtualizada);
             await _ulceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
             return ulceraAtualizada.Id;

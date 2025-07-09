@@ -1,5 +1,4 @@
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
-using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Factories;
@@ -14,16 +13,18 @@ public static class UlceraFactory
     /// </summary>
     public static Ulcera Create(
         Guid pacienteId,
-        Ceap? classificacaoCeap = null,
-        IEnumerable<SegmentoEnum>? segmentos = null)
+        Topografia topografia,
+        Ceap? classificacaoCeap = null)
     {
         if (pacienteId == Guid.Empty)
             throw new ArgumentException("PacienteId é obrigatório", nameof(pacienteId));
+        if (topografia == null)
+            throw new ArgumentNullException(nameof(topografia));
 
         var ulcera = new Ulcera
         {
             PacienteId = pacienteId,
-            Segmentos = segmentos != null ? segmentos.Select(s => new Segmento { Tipo = s }).ToList() : new List<Segmento>()
+            Topografia = topografia
         };
         if (classificacaoCeap != null)
             ulcera.Ceap = classificacaoCeap;
@@ -36,10 +37,10 @@ public static class UlceraFactory
     public static Ulcera CreateForUpdate(
         Guid id,
         Guid pacienteId,
-        Ceap? classificacaoCeap = null,
-        IEnumerable<SegmentoEnum>? segmentos = null)
+        Topografia topografia,
+        Ceap? classificacaoCeap = null)
     {
-        var ulcera = Create(pacienteId, classificacaoCeap, segmentos);
+        var ulcera = Create(pacienteId, topografia, classificacaoCeap);
         ulcera.Id = id;
         return ulcera;
     }

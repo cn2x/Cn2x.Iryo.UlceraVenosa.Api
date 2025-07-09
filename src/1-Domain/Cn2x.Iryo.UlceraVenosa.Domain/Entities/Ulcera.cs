@@ -14,4 +14,7 @@ public class Ulcera : Entity<Guid>, IAggregateRoot
     public virtual Paciente? Paciente { get; set; }
     public virtual ICollection<AvaliacaoUlcera> Avaliacoes { get; set; } = new List<AvaliacaoUlcera>();
     public Ceap Ceap { get; set; } = null!;
+
+    public int TopografiaId { get; set; }
+    public required Topografia Topografia { get; set; }
 }
