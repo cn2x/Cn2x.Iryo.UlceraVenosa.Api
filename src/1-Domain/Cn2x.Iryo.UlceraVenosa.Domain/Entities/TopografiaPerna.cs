@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities {
     public class TopografiaPerna : Topografia {
-        public int SegmentacaoId { get; set; }
+        public Guid SegmentacaoId { get; set; }
         public required Segmentacao Segmentacao { get; set; }
-        public int RegiaoAnatomicaId { get; set; }
+        public Guid RegiaoAnatomicaId { get; set; }
         public required RegiaoAnatomica RegiaoAnatomica { get; set; }
         public override TopografiaEnum Tipo => TopografiaEnum.Perna;
     }

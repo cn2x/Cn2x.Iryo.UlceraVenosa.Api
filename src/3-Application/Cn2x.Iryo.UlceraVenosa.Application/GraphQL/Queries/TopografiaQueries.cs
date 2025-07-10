@@ -1,6 +1,7 @@
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 [ExtendObjectType("Query")]
 public class TopografiaQueries
@@ -25,7 +26,7 @@ public class TopografiaQueries
     }
 
     [GraphQLName("topografiaPernaPorId")]
-    public async Task<TopografiaPerna?> GetTopografiaPernaPorId(int id, [Service] ApplicationDbContext ctx)
+    public async Task<TopografiaPerna?> GetTopografiaPernaPorId(Guid id, [Service] ApplicationDbContext ctx)
     {
         return await ctx.Set<TopografiaPerna>()
             .Include(t => t.Lateralidade)
@@ -35,7 +36,7 @@ public class TopografiaQueries
     }
 
     [GraphQLName("topografiaPePorId")]
-    public async Task<TopografiaPe?> GetTopografiaPePorId(int id, [Service] ApplicationDbContext ctx)
+    public async Task<TopografiaPe?> GetTopografiaPePorId(Guid id, [Service] ApplicationDbContext ctx)
     {
         return await ctx.Set<TopografiaPe>()
             .Include(t => t.Lateralidade)

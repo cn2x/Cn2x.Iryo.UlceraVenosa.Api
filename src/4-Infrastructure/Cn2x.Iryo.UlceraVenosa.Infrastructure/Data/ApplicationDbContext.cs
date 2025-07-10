@@ -28,6 +28,7 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
     public virtual DbSet<Topografia> Topografias { get; set; }
     public virtual DbSet<TopografiaPerna> TopografiasPerna { get; set; }
     public virtual DbSet<TopografiaPe> TopografiasPe { get; set; }
+    public virtual DbSet<Lateralidade> Lateralidades { get; set; }
 
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -132,54 +133,69 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
             entity.Property(e => e.Sigla).HasColumnName("sigla");
             entity.Property(e => e.Descricao).HasColumnName("descricao");
         });
+        modelBuilder.Entity<Lateralidade>(entity =>
+        {
+            entity.ToTable("lateralidades");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Nome).HasColumnName("nome");
+        });
         // Seed para segmentacao
         modelBuilder.Entity<Segmentacao>().HasData(
-            new { Id = 1, Sigla = "TS", Descricao = "Da fossa poplítea até ~2/3 da altura da perna", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 2, Sigla = "TM", Descricao = "Da porção média até cerca de 1/3 acima do maléolo", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 3, Sigla = "TI", Descricao = "Do final do médio até os maléolos (região do tornozelo)", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
+            new { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Sigla = "TS", Descricao = "Da fossa poplítea até ~2/3 da altura da perna", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("22222222-2222-2222-2222-222222222222"), Sigla = "TM", Descricao = "Da porção média até cerca de 1/3 acima do maléolo", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("33333333-3333-3333-3333-333333333333"), Sigla = "TI", Descricao = "Do final do médio até os maléolos (região do tornozelo)", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
         );
         // Seed para regiao_anatomica
         modelBuilder.Entity<RegiaoAnatomica>().HasData(
-            new { Id = 1, Sigla = "M", Descricao = "Medial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 2, Sigla = "L", Descricao = "Lateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 3, Sigla = "A", Descricao = "Anterior", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 4, Sigla = "P", Descricao = "Posterior", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 5, Sigla = "AM", Descricao = "Anteromedial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 6, Sigla = "PL", Descricao = "Posterolateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
+            new { Id = Guid.Parse("44444444-4444-4444-4444-444444444444"), Sigla = "M", Descricao = "Medial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("55555555-5555-5555-5555-555555555555"), Sigla = "L", Descricao = "Lateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("66666666-6666-6666-6666-666666666666"), Sigla = "A", Descricao = "Anterior", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("77777777-7777-7777-7777-777777777777"), Sigla = "P", Descricao = "Posterior", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("88888888-8888-8888-8888-888888888888"), Sigla = "AM", Descricao = "Anteromedial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("99999999-9999-9999-9999-999999999999"), Sigla = "PL", Descricao = "Posterolateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
         );
         // Seed para regiao_topografica_pe
         modelBuilder.Entity<RegiaoTopograficaPe>().HasData(
-            new { Id = 1, Sigla = "DOR", Descricao = "Dorsal", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 2, Sigla = "PLA", Descricao = "Plantar", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 3, Sigla = "CAL", Descricao = "Calcâneo", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 4, Sigla = "MED", Descricao = "Mediopé", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 5, Sigla = "ANT", Descricao = "Antepé", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 6, Sigla = "HAL", Descricao = "Halux", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 7, Sigla = "LAT", Descricao = "Lateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 8, Sigla = "MEDL", Descricao = "Medial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 9, Sigla = "MMED", Descricao = "Malelo Medial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
-            new { Id = 10, Sigla = "MLAT", Descricao = "Malelo Lateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
+            new { Id = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), Sigla = "DOR", Descricao = "Dorsal", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), Sigla = "PLA", Descricao = "Plantar", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"), Sigla = "CAL", Descricao = "Calcâneo", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddddd"), Sigla = "MED", Descricao = "Mediopé", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"), Sigla = "ANT", Descricao = "Antepé", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("ffffffff-ffff-ffff-ffff-ffffffffffff"), Sigla = "HAL", Descricao = "Halux", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("11111111-2222-3333-4444-555555555555"), Sigla = "LAT", Descricao = "Lateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("22222222-3333-4444-5555-666666666666"), Sigla = "MEDL", Descricao = "Medial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("33333333-4444-5555-6666-777777777777"), Sigla = "MMED", Descricao = "Malelo Medial", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("44444444-5555-6666-7777-888888888888"), Sigla = "MLAT", Descricao = "Malelo Lateral", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
+        );
+        // Seed para lateralidade
+        modelBuilder.Entity<Lateralidade>().HasData(
+            new { Id = Guid.Parse("55555555-aaaa-bbbb-cccc-111111111111"), Nome = "Direita", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false },
+            new { Id = Guid.Parse("66666666-bbbb-cccc-dddd-222222222222"), Nome = "Esquerda", CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, DateTimeKind.Utc), Desativada = false }
         );
 
-        // Configuração TPT para Topografia
+
+        // Mapeamento TPT de Topografia reativado
         modelBuilder.Entity<Topografia>()
-            .UseTptMappingStrategy();
-        modelBuilder.Entity<Topografia>().HasKey(e => e.Id); // Removido HasName
-        modelBuilder.Entity<TopografiaPerna>(entity =>
-        {
+            .ToTable("topografias")
+            .UseTptMappingStrategy()
+            .HasKey(e => e.Id);
+
+        modelBuilder.Entity<TopografiaPerna>(entity => {
             entity.ToTable("topografia_perna");
             entity.Ignore(x => x.Tipo);
         });
-        modelBuilder.Entity<TopografiaPe>(entity =>
-        {
+
+        modelBuilder.Entity<TopografiaPe>(entity => {
             entity.ToTable("topografia_pe");
             entity.Ignore(x => x.Tipo);
         });
 
+
         // Relacionamento Ulcera -> Topografia (1:1)
         modelBuilder.Entity<Ulcera>()
             .HasOne(u => u.Topografia)
-            .WithMany() // ou .WithOne() se for 1:1
+            .WithMany()
             .HasForeignKey(u => u.TopografiaId)
             .OnDelete(DeleteBehavior.Restrict);
     }
@@ -393,7 +409,7 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
             {
                 img.Property(i => i.ContentType)
                     .HasColumnName("content_type")
-                    .HasConversion(new Cn2x.Iryo.UlceraVenosa.Infrastructure.ValueConverters.TipoConteudoValueConverter())
+                    .HasConversion(new TipoConteudoValueConverter())
                     .IsRequired();
                 img.Property(i => i.TamanhoBytes).HasColumnName("tamanho_bytes").IsRequired();
                 img.Property(i => i.DataCaptura).HasColumnName("data_captura").IsRequired();

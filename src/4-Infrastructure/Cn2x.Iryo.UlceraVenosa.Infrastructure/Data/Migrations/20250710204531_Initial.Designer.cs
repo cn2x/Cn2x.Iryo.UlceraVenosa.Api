@@ -9,10 +9,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
+namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250709190933_Initial")]
+    [Migration("20250710204531_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -220,12 +220,10 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Lateralidade", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("AtualizadoEm")
                         .HasColumnType("timestamp with time zone")
@@ -245,9 +243,25 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                         .HasColumnName("nome");
 
                     b.HasKey("Id")
-                        .HasName("pk_lateralidade");
+                        .HasName("pk_lateralidades");
 
-                    b.ToTable("lateralidade");
+                    b.ToTable("lateralidades", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("55555555-aaaa-bbbb-cccc-111111111111"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Nome = "Direita"
+                        },
+                        new
+                        {
+                            Id = new Guid("66666666-bbbb-cccc-dddd-222222222222"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Nome = "Esquerda"
+                        });
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Medida", b =>
@@ -325,269 +339,10 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("Desativada")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("descricao");
-
-                    b.Property<string>("Sigla")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("sigla");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("regiao_anatomica", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Medial",
-                            Sigla = "M"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Lateral",
-                            Sigla = "L"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Anterior",
-                            Sigla = "A"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Posterior",
-                            Sigla = "P"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Anteromedial",
-                            Sigla = "AM"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Posterolateral",
-                            Sigla = "PL"
-                        });
-                });
-
-            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoTopograficaPe", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("Desativada")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("descricao");
-
-                    b.Property<string>("Sigla")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("sigla");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("regiao_topografica_pe", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Dorsal",
-                            Sigla = "DOR"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Plantar",
-                            Sigla = "PLA"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Calcâneo",
-                            Sigla = "CAL"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Mediopé",
-                            Sigla = "MED"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Antepé",
-                            Sigla = "ANT"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Halux",
-                            Sigla = "HAL"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Lateral",
-                            Sigla = "LAT"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Medial",
-                            Sigla = "MEDL"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Malelo Medial",
-                            Sigla = "MMED"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Malelo Lateral",
-                            Sigla = "MLAT"
-                        });
-                });
-
-            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmentacao", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("Desativada")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("descricao");
-
-                    b.Property<string>("Sigla")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("sigla");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("segmentacao", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Da fossa poplítea até ~2/3 da altura da perna",
-                            Sigla = "TS"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Da porção média até cerca de 1/3 acima do maléolo",
-                            Sigla = "TM"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Desativada = false,
-                            Descricao = "Do final do médio até os maléolos (região do tornozelo)",
-                            Sigla = "TI"
-                        });
-                });
-
-            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("AtualizadoEm")
                         .HasColumnType("timestamp with time zone")
@@ -601,17 +356,280 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("desativada");
 
-                    b.Property<int>("LateralidadeId")
-                        .HasColumnType("integer")
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("descricao");
+
+                    b.Property<string>("Sigla")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("sigla");
+
+                    b.HasKey("Id")
+                        .HasName("pk_regiao_anatomica");
+
+                    b.ToTable("regiao_anatomica", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Medial",
+                            Sigla = "M"
+                        },
+                        new
+                        {
+                            Id = new Guid("55555555-5555-5555-5555-555555555555"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Lateral",
+                            Sigla = "L"
+                        },
+                        new
+                        {
+                            Id = new Guid("66666666-6666-6666-6666-666666666666"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Anterior",
+                            Sigla = "A"
+                        },
+                        new
+                        {
+                            Id = new Guid("77777777-7777-7777-7777-777777777777"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Posterior",
+                            Sigla = "P"
+                        },
+                        new
+                        {
+                            Id = new Guid("88888888-8888-8888-8888-888888888888"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Anteromedial",
+                            Sigla = "AM"
+                        },
+                        new
+                        {
+                            Id = new Guid("99999999-9999-9999-9999-999999999999"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Posterolateral",
+                            Sigla = "PL"
+                        });
+                });
+
+            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoTopograficaPe", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("AtualizadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("atualizado_em");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("criado_em");
+
+                    b.Property<bool>("Desativada")
+                        .HasColumnType("boolean")
+                        .HasColumnName("desativada");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("descricao");
+
+                    b.Property<string>("Sigla")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("sigla");
+
+                    b.HasKey("Id")
+                        .HasName("pk_regiao_topografica_pe");
+
+                    b.ToTable("regiao_topografica_pe", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Dorsal",
+                            Sigla = "DOR"
+                        },
+                        new
+                        {
+                            Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Plantar",
+                            Sigla = "PLA"
+                        },
+                        new
+                        {
+                            Id = new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Calcâneo",
+                            Sigla = "CAL"
+                        },
+                        new
+                        {
+                            Id = new Guid("dddddddd-dddd-dddd-dddd-dddddddddddd"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Mediopé",
+                            Sigla = "MED"
+                        },
+                        new
+                        {
+                            Id = new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Antepé",
+                            Sigla = "ANT"
+                        },
+                        new
+                        {
+                            Id = new Guid("ffffffff-ffff-ffff-ffff-ffffffffffff"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Halux",
+                            Sigla = "HAL"
+                        },
+                        new
+                        {
+                            Id = new Guid("11111111-2222-3333-4444-555555555555"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Lateral",
+                            Sigla = "LAT"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-3333-4444-5555-666666666666"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Medial",
+                            Sigla = "MEDL"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-4444-5555-6666-777777777777"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Malelo Medial",
+                            Sigla = "MMED"
+                        },
+                        new
+                        {
+                            Id = new Guid("44444444-5555-6666-7777-888888888888"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Malelo Lateral",
+                            Sigla = "MLAT"
+                        });
+                });
+
+            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmentacao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("AtualizadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("atualizado_em");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("criado_em");
+
+                    b.Property<bool>("Desativada")
+                        .HasColumnType("boolean")
+                        .HasColumnName("desativada");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("descricao");
+
+                    b.Property<string>("Sigla")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("sigla");
+
+                    b.HasKey("Id")
+                        .HasName("pk_segmentacao");
+
+                    b.ToTable("segmentacao", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Da fossa poplítea até ~2/3 da altura da perna",
+                            Sigla = "TS"
+                        },
+                        new
+                        {
+                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Da porção média até cerca de 1/3 acima do maléolo",
+                            Sigla = "TM"
+                        },
+                        new
+                        {
+                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                            CriadoEm = new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Desativada = false,
+                            Descricao = "Do final do médio até os maléolos (região do tornozelo)",
+                            Sigla = "TI"
+                        });
+                });
+
+            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("AtualizadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("atualizado_em");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("criado_em");
+
+                    b.Property<bool>("Desativada")
+                        .HasColumnType("boolean")
+                        .HasColumnName("desativada");
+
+                    b.Property<Guid>("LateralidadeId")
+                        .HasColumnType("uuid")
                         .HasColumnName("lateralidade_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_topografia");
+                        .HasName("pk_topografias");
 
                     b.HasIndex("LateralidadeId")
-                        .HasDatabaseName("ix_topografia_lateralidade_id");
+                        .HasDatabaseName("ix_topografias_lateralidade_id");
 
-                    b.ToTable("topografia");
+                    b.ToTable("topografias", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
@@ -639,8 +657,8 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("paciente_id");
 
-                    b.Property<int>("TopografiaId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("TopografiaId")
+                        .HasColumnType("uuid")
                         .HasColumnName("topografia_id");
 
                     b.HasKey("Id")
@@ -659,10 +677,12 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 {
                     b.HasBaseType("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia");
 
-                    b.Property<int>("RegiaoTopograficaPeId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RegiaoTopograficaPeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("regiao_topografica_pe_id");
 
-                    b.HasIndex("RegiaoTopograficaPeId");
+                    b.HasIndex("RegiaoTopograficaPeId")
+                        .HasDatabaseName("ix_topografias_regiao_topografica_pe_id");
 
                     b.ToTable("topografia_pe", (string)null);
                 });
@@ -671,15 +691,19 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 {
                     b.HasBaseType("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia");
 
-                    b.Property<int>("RegiaoAnatomicaId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RegiaoAnatomicaId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("regiao_anatomica_id");
 
-                    b.Property<int>("SegmentacaoId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("SegmentacaoId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("segmentacao_id");
 
-                    b.HasIndex("RegiaoAnatomicaId");
+                    b.HasIndex("RegiaoAnatomicaId")
+                        .HasDatabaseName("ix_topografias_regiao_anatomica_id");
 
-                    b.HasIndex("SegmentacaoId");
+                    b.HasIndex("SegmentacaoId")
+                        .HasDatabaseName("ix_topografias_segmentacao_id");
 
                     b.ToTable("topografia_perna", (string)null);
                 });

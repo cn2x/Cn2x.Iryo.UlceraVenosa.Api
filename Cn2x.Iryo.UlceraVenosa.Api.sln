@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Infrastructure", "4-Infra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Tests", "5-Tests", "{0EFE30DA-B278-40C7-A2D7-96AF9D953818}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cn2x.Iryo.UlceraVenosa.IntegrationTests", "src\5-Tests\Cn2x.Iryo.UlceraVenosa.IntegrationTests\Cn2x.Iryo.UlceraVenosa.IntegrationTests.csproj", "{16544F92-FFBA-4268-9BD8-E6630663180C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{37D5881E-FC04-41F7-BE63-54B2EB50F845}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37D5881E-FC04-41F7-BE63-54B2EB50F845}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37D5881E-FC04-41F7-BE63-54B2EB50F845}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16544F92-FFBA-4268-9BD8-E6630663180C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16544F92-FFBA-4268-9BD8-E6630663180C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16544F92-FFBA-4268-9BD8-E6630663180C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16544F92-FFBA-4268-9BD8-E6630663180C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,5 +72,6 @@ Global
 		{7FE91D06-A81C-4662-B477-F60EA1C56502} = {0EFE30DA-B278-40C7-A2D7-96AF9D953818}
 		{AEAA466F-D11A-436C-8472-ECABC1522854} = {4C705AAC-6F23-484C-9439-691009C5B65B}
 		{37D5881E-FC04-41F7-BE63-54B2EB50F845} = {4C705AAC-6F23-484C-9439-691009C5B65B}
+		{16544F92-FFBA-4268-9BD8-E6630663180C} = {0EFE30DA-B278-40C7-A2D7-96AF9D953818}
 	EndGlobalSection
 EndGlobal

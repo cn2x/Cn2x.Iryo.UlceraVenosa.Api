@@ -1,10 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
-
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
 {
@@ -30,11 +27,10 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "lateralidade",
+                name: "lateralidades",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     nome = table.Column<string>(type: "text", nullable: false),
                     criado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     atualizado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -42,7 +38,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_lateralidade", x => x.id);
+                    table.PrimaryKey("pk_lateralidades", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,71 +61,67 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 name: "regiao_anatomica",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     sigla = table.Column<string>(type: "text", nullable: false),
                     descricao = table.Column<string>(type: "text", nullable: false),
-                    CriadoEm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AtualizadoEm = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Desativada = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_regiao_anatomica", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "regiao_topografica_pe",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    sigla = table.Column<string>(type: "text", nullable: false),
-                    descricao = table.Column<string>(type: "text", nullable: false),
-                    CriadoEm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AtualizadoEm = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Desativada = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_regiao_topografica_pe", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "segmentacao",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    sigla = table.Column<string>(type: "text", nullable: false),
-                    descricao = table.Column<string>(type: "text", nullable: false),
-                    CriadoEm = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AtualizadoEm = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Desativada = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_segmentacao", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "topografia",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    lateralidade_id = table.Column<int>(type: "integer", nullable: false),
                     criado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     atualizado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     desativada = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_topografia", x => x.id);
+                    table.PrimaryKey("pk_regiao_anatomica", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "regiao_topografica_pe",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    sigla = table.Column<string>(type: "text", nullable: false),
+                    descricao = table.Column<string>(type: "text", nullable: false),
+                    criado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    atualizado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    desativada = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_regiao_topografica_pe", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "segmentacao",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    sigla = table.Column<string>(type: "text", nullable: false),
+                    descricao = table.Column<string>(type: "text", nullable: false),
+                    criado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    atualizado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    desativada = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_segmentacao", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "topografias",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    lateralidade_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    criado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    atualizado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    desativada = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_topografias", x => x.id);
                     table.ForeignKey(
-                        name: "FK_topografia_lateralidade_lateralidade_id",
+                        name: "FK_topografias_lateralidades_lateralidade_id",
                         column: x => x.lateralidade_id,
-                        principalTable: "lateralidade",
+                        principalTable: "lateralidades",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -138,22 +130,22 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 name: "topografia_pe",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false),
-                    RegiaoTopograficaPeId = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    regiao_topografica_pe_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_topografia_pe", x => x.id);
+                    table.PrimaryKey("pk_topografias", x => x.id);
                     table.ForeignKey(
-                        name: "FK_topografia_pe_regiao_topografica_pe_RegiaoTopograficaPeId",
-                        column: x => x.RegiaoTopograficaPeId,
+                        name: "FK_topografia_pe_regiao_topografica_pe_regiao_topografica_pe_id",
+                        column: x => x.regiao_topografica_pe_id,
                         principalTable: "regiao_topografica_pe",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_topografia_pe_topografia_id",
+                        name: "FK_topografia_pe_topografias_id",
                         column: x => x.id,
-                        principalTable: "topografia",
+                        principalTable: "topografias",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -162,29 +154,29 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 name: "topografia_perna",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false),
-                    SegmentacaoId = table.Column<int>(type: "integer", nullable: false),
-                    RegiaoAnatomicaId = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    segmentacao_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    regiao_anatomica_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_topografia_perna", x => x.id);
+                    table.PrimaryKey("pk_topografias", x => x.id);
                     table.ForeignKey(
-                        name: "FK_topografia_perna_regiao_anatomica_RegiaoAnatomicaId",
-                        column: x => x.RegiaoAnatomicaId,
+                        name: "FK_topografia_perna_regiao_anatomica_regiao_anatomica_id",
+                        column: x => x.regiao_anatomica_id,
                         principalTable: "regiao_anatomica",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_topografia_perna_segmentacao_SegmentacaoId",
-                        column: x => x.SegmentacaoId,
+                        name: "FK_topografia_perna_segmentacao_segmentacao_id",
+                        column: x => x.segmentacao_id,
                         principalTable: "segmentacao",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_topografia_perna_topografia_id",
+                        name: "FK_topografia_perna_topografias_id",
                         column: x => x.id,
-                        principalTable: "topografia",
+                        principalTable: "topografias",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -195,7 +187,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     paciente_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    topografia_id = table.Column<int>(type: "integer", nullable: false),
+                    topografia_id = table.Column<Guid>(type: "uuid", nullable: false),
                     criado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     atualizado_em = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     desativada = table.Column<bool>(type: "boolean", nullable: false)
@@ -210,9 +202,9 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ulceras_topografia_topografia_id",
+                        name: "FK_ulceras_topografias_topografia_id",
                         column: x => x.topografia_id,
-                        principalTable: "topografia",
+                        principalTable: "topografias",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -409,43 +401,52 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "regiao_anatomica",
-                columns: new[] { "id", "AtualizadoEm", "CriadoEm", "Desativada", "descricao", "sigla" },
+                table: "lateralidades",
+                columns: new[] { "id", "atualizado_em", "criado_em", "desativada", "nome" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Medial", "M" },
-                    { 2, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Lateral", "L" },
-                    { 3, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Anterior", "A" },
-                    { 4, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Posterior", "P" },
-                    { 5, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Anteromedial", "AM" },
-                    { 6, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Posterolateral", "PL" }
+                    { new Guid("55555555-aaaa-bbbb-cccc-111111111111"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Direita" },
+                    { new Guid("66666666-bbbb-cccc-dddd-222222222222"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Esquerda" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "regiao_anatomica",
+                columns: new[] { "id", "atualizado_em", "criado_em", "desativada", "descricao", "sigla" },
+                values: new object[,]
+                {
+                    { new Guid("44444444-4444-4444-4444-444444444444"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Medial", "M" },
+                    { new Guid("55555555-5555-5555-5555-555555555555"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Lateral", "L" },
+                    { new Guid("66666666-6666-6666-6666-666666666666"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Anterior", "A" },
+                    { new Guid("77777777-7777-7777-7777-777777777777"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Posterior", "P" },
+                    { new Guid("88888888-8888-8888-8888-888888888888"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Anteromedial", "AM" },
+                    { new Guid("99999999-9999-9999-9999-999999999999"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Posterolateral", "PL" }
                 });
 
             migrationBuilder.InsertData(
                 table: "regiao_topografica_pe",
-                columns: new[] { "id", "AtualizadoEm", "CriadoEm", "Desativada", "descricao", "sigla" },
+                columns: new[] { "id", "atualizado_em", "criado_em", "desativada", "descricao", "sigla" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Dorsal", "DOR" },
-                    { 2, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Plantar", "PLA" },
-                    { 3, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Calcâneo", "CAL" },
-                    { 4, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Mediopé", "MED" },
-                    { 5, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Antepé", "ANT" },
-                    { 6, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Halux", "HAL" },
-                    { 7, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Lateral", "LAT" },
-                    { 8, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Medial", "MEDL" },
-                    { 9, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Malelo Medial", "MMED" },
-                    { 10, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Malelo Lateral", "MLAT" }
+                    { new Guid("11111111-2222-3333-4444-555555555555"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Lateral", "LAT" },
+                    { new Guid("22222222-3333-4444-5555-666666666666"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Medial", "MEDL" },
+                    { new Guid("33333333-4444-5555-6666-777777777777"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Malelo Medial", "MMED" },
+                    { new Guid("44444444-5555-6666-7777-888888888888"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Malelo Lateral", "MLAT" },
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Dorsal", "DOR" },
+                    { new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Plantar", "PLA" },
+                    { new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Calcâneo", "CAL" },
+                    { new Guid("dddddddd-dddd-dddd-dddd-dddddddddddd"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Mediopé", "MED" },
+                    { new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Antepé", "ANT" },
+                    { new Guid("ffffffff-ffff-ffff-ffff-ffffffffffff"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Halux", "HAL" }
                 });
 
             migrationBuilder.InsertData(
                 table: "segmentacao",
-                columns: new[] { "id", "AtualizadoEm", "CriadoEm", "Desativada", "descricao", "sigla" },
+                columns: new[] { "id", "atualizado_em", "criado_em", "desativada", "descricao", "sigla" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Da fossa poplítea até ~2/3 da altura da perna", "TS" },
-                    { 2, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Da porção média até cerca de 1/3 acima do maléolo", "TM" },
-                    { 3, null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Do final do médio até os maléolos (região do tornozelo)", "TI" }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Da fossa poplítea até ~2/3 da altura da perna", "TS" },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Da porção média até cerca de 1/3 acima do maléolo", "TM" },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), null, new DateTime(2025, 7, 9, 0, 0, 0, 0, DateTimeKind.Utc), false, "Do final do médio até os maléolos (região do tornozelo)", "TI" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -476,24 +477,24 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_topografia_lateralidade_id",
-                table: "topografia",
-                column: "lateralidade_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_topografia_pe_RegiaoTopograficaPeId",
+                name: "ix_topografias_regiao_topografica_pe_id",
                 table: "topografia_pe",
-                column: "RegiaoTopograficaPeId");
+                column: "regiao_topografica_pe_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_topografia_perna_RegiaoAnatomicaId",
+                name: "ix_topografias_regiao_anatomica_id",
                 table: "topografia_perna",
-                column: "RegiaoAnatomicaId");
+                column: "regiao_anatomica_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_topografia_perna_SegmentacaoId",
+                name: "ix_topografias_segmentacao_id",
                 table: "topografia_perna",
-                column: "SegmentacaoId");
+                column: "segmentacao_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_topografias_lateralidade_id",
+                table: "topografias",
+                column: "lateralidade_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_ulceras_paciente_id",
@@ -558,10 +559,10 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 name: "pacientes");
 
             migrationBuilder.DropTable(
-                name: "topografia");
+                name: "topografias");
 
             migrationBuilder.DropTable(
-                name: "lateralidade");
+                name: "lateralidades");
         }
     }
 }

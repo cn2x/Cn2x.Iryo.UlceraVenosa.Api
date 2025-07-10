@@ -1,10 +1,11 @@
 ﻿using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data {
     public class TopografiaPeFinder : ITipografiaFinder
     {
-        public async Task<Topografia?> FindAsync(ApplicationDbContext ctx, int id, int tipo, CancellationToken cancellationToken, ITipografiaFinder? next = null)
+        public async Task<Topografia?> FindAsync(ApplicationDbContext ctx, Guid id, int tipo, CancellationToken cancellationToken, ITipografiaFinder? next = null)
         {
             if (tipo == 2)
             {
