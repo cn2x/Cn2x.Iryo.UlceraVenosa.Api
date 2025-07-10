@@ -4,15 +4,16 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 using Cn2x.Iryo.UlceraVenosa.Domain.Factories;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
+using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands;
 
 public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, Guid>
 {
     private readonly IUlceraRepository _ulceraRepository;
-    private readonly DbContext _context;
+    private readonly ApplicationDbContext _context;
 
-    public UpsertUlceraCommandHandler(IUlceraRepository ulceraRepository, DbContext context)
+    public UpsertUlceraCommandHandler(IUlceraRepository ulceraRepository, ApplicationDbContext context)
     {
         _ulceraRepository = ulceraRepository;
         _context = context;
@@ -20,10 +21,10 @@ public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, G
 
     public async Task<Guid> Handle(UpsertUlceraCommand request, CancellationToken cancellationToken)
     {
-        // Busca a topografia principal (exemplo: TopografiaPerna)
-        int topografiaId = request.Topografias.FirstOrDefault() != Guid.Empty ? (int)(request.Topografias.First().GetHashCode()) : 0;
-        var topografia = await _context.Set<TopografiaPerna>().FirstOrDefaultAsync(t => t.Id == topografiaId, cancellationToken);
-        if (topografia == null)
+        var topografia = await _context
+            .FindTipografiaFilterByTypeAsync(cancellationToken, request.TopografiaId, (int)request.TipoTopografia);
+            
+        if (topografia is null)
             throw new Exception("Topografia principal não encontrada");
 
         Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera? ulcera = null;
@@ -34,7 +35,7 @@ public class UpsertUlceraCommandHandler : IRequestHandler<UpsertUlceraCommand, G
 
         Ceap? ceap = request.ClassificacaoCeap;
 
-        if (ulcera == null)
+        if (ulcera is null)
         {
             // Criação
             var novaUlcera = UlceraFactory.Create(request.PacienteId, topografia, ceap);

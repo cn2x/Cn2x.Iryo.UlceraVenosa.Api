@@ -25,6 +25,7 @@
     <ShowAsAssociation>
       <Property Name="Paciente" />
       <Property Name="Ceap" />
+      <Property Name="Topografia" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Avaliacoes" />
@@ -120,54 +121,78 @@
       <FileName>ValueObjects\Imagem.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Topografia">
-    <Position X="19.75" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAQgAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Topografia.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.TopografiaPerna">
-    <Position X="18.25" Y="7" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAgAgAAAAAAAAABAAAA=</HashCode>
-      <FileName>TopografiaPerna.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Segmentacao" />
-      <Property Name="RegiaoAnatomica" />
-    </ShowAsAssociation>
-  </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.TopografiaPe">
-    <Position X="21" Y="7" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>TopografiaPe.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="RegiaoTopograficaPe" />
-    </ShowAsAssociation>
-  </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmentacao">
-    <Position X="17.5" Y="9.5" Width="1.5" />
+    <Position X="19" Y="10.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\Segmentacao.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica">
-    <Position X="19.25" Y="9.5" Width="1.5" />
+    <Position X="14.75" Y="9.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\RegiaoAnatomica.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoTopograficaPe">
-    <Position X="21" Y="9.5" Width="1.75" />
+    <Position X="24" Y="7.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\RegiaoTopograficaPe.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia">
+    <Position X="19.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQgAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Entities\Topografia.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Lateralidade" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Lateralidade">
+    <Position X="24" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Entities\Lateralidade.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.TopografiaPe">
+    <Position X="21" Y="7.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Entities\TopografiaPe.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="RegiaoTopograficaPe" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.TopografiaPerna">
+    <Position X="18.75" Y="7.5" Width="1.75" />
+    <AssociationLine Name="Segmentacao" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmentacao" FixedFromPoint="true">
+      <Path>
+        <Point X="19.875" Y="9.117" />
+        <Point X="19.875" Y="10.5" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="RegiaoAnatomica" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.75" Y="8.209" />
+        <Point X="18.375" Y="8.209" />
+        <Point X="18.375" Y="10.094" />
+        <Point X="16.25" Y="10.094" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAgAgAAAAAAAAABAAAQ=</HashCode>
+      <FileName>Entities\TopografiaPerna.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Segmentacao" />
+      <Property Name="RegiaoAnatomica" />
+    </ShowAsAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

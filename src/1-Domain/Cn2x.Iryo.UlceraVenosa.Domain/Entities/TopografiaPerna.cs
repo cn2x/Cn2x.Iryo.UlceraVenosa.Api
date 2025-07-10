@@ -9,5 +9,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities {
         public required Segmentacao Segmentacao { get; set; }
         public int RegiaoAnatomicaId { get; set; }
         public required RegiaoAnatomica RegiaoAnatomica { get; set; }
+        public override TopografiaEnum Tipo => TopografiaEnum.Perna;
     }
 }

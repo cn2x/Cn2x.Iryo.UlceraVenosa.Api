@@ -7,6 +7,7 @@ public class UpsertUlceraInput
 {
     public Guid? Id { get; set; }
     public Guid PacienteId { get; set; }
-    public List<Guid> Topografias { get; set; } = new();
+    public int TopografiaId { get; set; }
+    public int TipoTopografia { get; set; }
     public CeapInput? ClassificacaoCeap { get; set; }
 }

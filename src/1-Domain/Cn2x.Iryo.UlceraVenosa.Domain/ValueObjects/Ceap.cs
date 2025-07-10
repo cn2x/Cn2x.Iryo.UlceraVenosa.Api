@@ -1,5 +1,6 @@
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
+using System;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 

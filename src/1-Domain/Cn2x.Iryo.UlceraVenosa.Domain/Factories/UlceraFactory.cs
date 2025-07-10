@@ -26,8 +26,10 @@ public static class UlceraFactory
             PacienteId = pacienteId,
             Topografia = topografia
         };
+
         if (classificacaoCeap != null)
             ulcera.Ceap = classificacaoCeap;
+
         return ulcera;
     }
 

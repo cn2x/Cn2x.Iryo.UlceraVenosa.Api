@@ -11,7 +11,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 /// <summary>
 /// Contexto principal do Entity Framework
 /// </summary>
-public class ApplicationDbContext : DbContext, IUnitOfWork
+public partial class ApplicationDbContext : DbContext, IUnitOfWork
 {
     public bool IsDesign { get; set; }
 
@@ -24,6 +24,10 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
 
     public virtual DbSet<AvaliacaoUlcera> AvaliacoesUlcera { get; set; }
     public virtual DbSet<ExsudatoDaAvaliacao> ExsudatosAvaliacao { get; set; }
+
+    public virtual DbSet<Topografia> Topografias { get; set; }
+    public virtual DbSet<TopografiaPerna> TopografiasPerna { get; set; }
+    public virtual DbSet<TopografiaPe> TopografiasPe { get; set; }
 
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -164,10 +168,12 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         modelBuilder.Entity<TopografiaPerna>(entity =>
         {
             entity.ToTable("topografia_perna");
+            entity.Ignore(x => x.Tipo);
         });
         modelBuilder.Entity<TopografiaPe>(entity =>
         {
             entity.ToTable("topografia_pe");
+            entity.Ignore(x => x.Tipo);
         });
 
         // Relacionamento Ulcera -> Topografia (1:1)

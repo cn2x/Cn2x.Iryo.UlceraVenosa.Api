@@ -21,7 +21,8 @@ public class UlceraMutations
         {
             Id = input.Id,
             PacienteId = input.PacienteId,
-            Topografias = input.Topografias,
+            TopografiaId = input.TopografiaId,
+            TipoTopografia = (TopografiaEnum)input.TipoTopografia,
             ClassificacaoCeap = input.ClassificacaoCeap == null ? null :
                 new Ceap(
                     Clinica.FromValue<Clinica>(input.ClassificacaoCeap.ClasseClinica),
