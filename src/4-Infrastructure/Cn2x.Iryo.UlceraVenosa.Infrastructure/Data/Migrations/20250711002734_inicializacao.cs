@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class inicializacao : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -135,7 +137,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_topografias", x => x.id);
+                    table.PrimaryKey("pk_topografias_x", x => x.id);
                     table.ForeignKey(
                         name: "FK_topografia_pe_regiao_topografica_pe_regiao_topografica_pe_id",
                         column: x => x.regiao_topografica_pe_id,
@@ -160,7 +162,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_topografias", x => x.id);
+                    table.PrimaryKey("pk_topografias_y", x => x.id);
                     table.ForeignKey(
                         name: "FK_topografia_perna_regiao_anatomica_regiao_anatomica_id",
                         column: x => x.regiao_anatomica_id,
