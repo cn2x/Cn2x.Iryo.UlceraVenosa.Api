@@ -9,7 +9,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities {
 
     public abstract class Topografia : Entity<Guid> {
         public abstract TopografiaEnum Tipo { get;  }
-        public Guid LateralidadeId { get; set; }
-        public required Lateralidade Lateralidade { get; set; }
+        public required Guid LateralidadeId { get; set; }
+        public  Lateralidade Lateralidade { get; set; }
     }
 }

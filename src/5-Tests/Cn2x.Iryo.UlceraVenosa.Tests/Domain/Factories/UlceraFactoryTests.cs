@@ -13,8 +13,11 @@ public class UlceraFactoryTests
         var topografia = new TopografiaPerna
         {
             Id = Guid.NewGuid(),
+            LateralidadeId = Guid.NewGuid(),
             Lateralidade = new Lateralidade { Id = Guid.NewGuid(), Nome = "Direita" },
+            SegmentacaoId = Guid.NewGuid(),
             Segmentacao = new Segmentacao { Id = Guid.NewGuid(), Sigla = "TS", Descricao = "desc" },
+            RegiaoAnatomicaId = Guid.NewGuid(),
             RegiaoAnatomica = new RegiaoAnatomica { Id = Guid.NewGuid(), Sigla = "M", Descricao = "Medial" }
         };
 
@@ -35,7 +38,9 @@ public class UlceraFactoryTests
         var topografia = new TopografiaPe
         {
             Id = Guid.NewGuid(),
+            LateralidadeId = Guid.NewGuid(),
             Lateralidade = new Lateralidade { Id = Guid.NewGuid(), Nome = "Esquerda" },
+            RegiaoTopograficaPeId = Guid.NewGuid(),
             RegiaoTopograficaPe = new RegiaoTopograficaPe { Id = Guid.NewGuid(), Sigla = "DOR", Descricao = "Dorsal" }
         };
 
