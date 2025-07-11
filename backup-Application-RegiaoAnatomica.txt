@@ -1,1 +1,0 @@
-Backup dos arquivos Features/RegiaoAnatomica removidos para refatoração do domínio. Caso necessário, restaurar manualmente.
