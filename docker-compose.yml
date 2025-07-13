@@ -1,0 +1,77 @@
+services:
+  # Banco de dados PostgreSQL para desenvolvimento
+  postgres-dev:
+    image: postgres:15
+    container_name: ulcera-venosa-postgres-dev
+    environment:
+      POSTGRES_DB: ulcera_venosa_dev
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password123
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ulcera-venosa-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev_user -d ulcera_venosa_dev"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # API da Úlcera Venosa
+  ulcera-venosa-api:
+    build:
+      context: .
+      dockerfile: src/2-Presentation/Cn2x.Iryo.UlceraVenosa.Api/Dockerfile
+    container_name: ulcera-venosa-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=postgres-dev;Database=ulcera_venosa_dev;Username=dev_user;Password=dev_password123;SSL Mode=Disable
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres-dev:
+        condition: service_healthy
+    networks:
+      - ulcera-venosa-network
+    restart: unless-stopped
+    volumes:
+      - ./src:/app/src:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # pgAdmin para gerenciar o banco
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ulcera-venosa-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@ulceravenosa.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres-dev
+    networks:
+      - ulcera-venosa-network
+    restart: unless-stopped
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  ulcera-venosa-network:
+    driver: bridge

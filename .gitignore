@@ -404,3 +404,19 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Docker & Desenvolvimento Local
+.env
+docker-compose.override.yml
+.docker/
+**/logs/
+**/data/
+
+# Banco de dados local
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs da aplicação
+logs/
+*.log
