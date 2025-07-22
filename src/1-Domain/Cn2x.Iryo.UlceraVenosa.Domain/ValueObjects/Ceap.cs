@@ -1,6 +1,7 @@
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
 using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using System;
+using System.Collections.Generic;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
@@ -49,5 +50,48 @@ public class Ceap : ValueObject
     public override string ToString()
     {
         return $"{ClasseClinica.Name}{Etiologia.Name}{Anatomia.Name}{Patofisiologia.Name}";
+    }
+
+    public static Ceap? FromInput(object? inputObj)
+    {
+        if (inputObj == null) return null;
+        // Cast seguro
+        var input = inputObj as dynamic;
+        var clinica = input.ClasseClinica switch
+        {
+            ClinicaEnum.SemSinais => Clinica.SemSinais,
+            ClinicaEnum.Telangiectasias => Clinica.Telangiectasias,
+            ClinicaEnum.Varizes => Clinica.Varizes,
+            ClinicaEnum.Edema => Clinica.Edema,
+            ClinicaEnum.PigmentacaoOuEczema => Clinica.PigmentacaoOuEczema,
+            ClinicaEnum.LipodermatoescleroseOuAtrofia => Clinica.LipodermatoescleroseOuAtrofia,
+            ClinicaEnum.UlceraCicatrizada => Clinica.UlceraCicatrizada,
+            ClinicaEnum.UlceraAtiva => Clinica.UlceraAtiva,
+            _ => null
+        };
+        var etiologica = input.Etiologia switch
+        {
+            EtiologicaEnum.Congenita => Etiologica.Congenita,
+            EtiologicaEnum.Primaria => Etiologica.Primaria,
+            EtiologicaEnum.Secundaria => Etiologica.Secundaria,
+            EtiologicaEnum.NaoIdentificada => Etiologica.NaoIdentificada,
+            _ => null
+        };
+        var anatomica = input.Anatomia switch
+        {
+            AnatomicaEnum.Superficial => Anatomica.Superficial,
+            AnatomicaEnum.Profundo => Anatomica.Profundo,
+            AnatomicaEnum.Perfurante => Anatomica.Perfurante,
+            AnatomicaEnum.NaoIdentificada => Anatomica.NaoIdentificada,
+            _ => null
+        };
+        var patofisiologica = input.Patofisiologia switch
+        {
+            PatofisiologicaEnum.Refluxo => Patofisiologica.Refluxo,
+            PatofisiologicaEnum.Obstrucao => Patofisiologica.Obstrucao,
+            PatofisiologicaEnum.NaoIdentificada => Patofisiologica.NaoIdentificada,
+            _ => null
+        };
+        return new Ceap(clinica!, etiologica!, anatomica!, patofisiologica!);
     }
 }

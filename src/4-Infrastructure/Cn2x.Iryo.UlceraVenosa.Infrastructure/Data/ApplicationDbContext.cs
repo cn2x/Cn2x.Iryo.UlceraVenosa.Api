@@ -29,6 +29,10 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
     public virtual DbSet<TopografiaPerna> TopografiasPerna { get; set; }
     public virtual DbSet<TopografiaPe> TopografiasPe { get; set; }
     public virtual DbSet<Lateralidade> Lateralidades { get; set; }
+    public virtual DbSet<Segmentacao> Segmentacoes { get; set; }
+    public virtual DbSet<RegiaoAnatomica> RegioesAnatomicas { get; set; }
+
+    public virtual DbSet<RegiaoTopograficaPe> RegioesTopograficasPe { get; set; }
 
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -224,6 +228,7 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
                     .HasColumnName("patofisiologia")
                     .HasConversion(new PatofisiologicaValueConverter());
             });
+            entity.Navigation(e => e.Ceap).IsRequired(false);
 
             entity.Property(e => e.PacienteId).HasColumnName("paciente_id");
 

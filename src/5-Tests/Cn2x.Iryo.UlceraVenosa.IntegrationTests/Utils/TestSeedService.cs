@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils
 {
@@ -14,9 +15,11 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils
         public static Guid PacienteId = Guid.Parse("11111111-1111-1111-1111-111111111111");
 
         public static void Seed(ApplicationDbContext db) {
-            db.Pacientes.Add(new Paciente { Id = PacienteId, Nome = "Paciente Teste" });           
-
-            db.SaveChanges();
+            if (!db.Pacientes.Any(p => p.Id == PacienteId))
+            {
+                db.Pacientes.Add(new Paciente { Id = PacienteId, Nome = "Paciente Teste" });           
+                db.SaveChanges();
+            }
         }
     }    
 }

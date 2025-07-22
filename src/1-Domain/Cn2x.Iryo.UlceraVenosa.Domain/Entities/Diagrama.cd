@@ -122,28 +122,28 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmentacao">
-    <Position X="19" Y="10.5" Width="1.5" />
+    <Position X="17" Y="12" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\Segmentacao.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica">
-    <Position X="14.75" Y="9.75" Width="1.5" />
+    <Position X="21.25" Y="12" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\RegiaoAnatomica.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoTopograficaPe">
-    <Position X="24" Y="7.5" Width="1.75" />
+    <Position X="24" Y="9" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\RegiaoTopograficaPe.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia">
-    <Position X="19.75" Y="5.25" Width="1.5" />
+    <Position X="19.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAQgAAAAAAAAAAAAAAAAAAAQ=</HashCode>
       <FileName>Entities\Topografia.cs</FileName>
@@ -153,14 +153,14 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Lateralidade">
-    <Position X="24" Y="5.25" Width="1.5" />
+    <Position X="22.5" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Entities\Lateralidade.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.TopografiaPe">
-    <Position X="21" Y="7.5" Width="2" />
+    <Position X="21" Y="9" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAQ=</HashCode>
       <FileName>Entities\TopografiaPe.cs</FileName>
@@ -170,19 +170,19 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.TopografiaPerna">
-    <Position X="18.75" Y="7.5" Width="1.75" />
+    <Position X="18.75" Y="9" Width="1.75" />
     <AssociationLine Name="Segmentacao" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmentacao" FixedFromPoint="true">
       <Path>
-        <Point X="19.875" Y="9.117" />
-        <Point X="19.875" Y="10.5" />
+        <Point X="19.875" Y="10.617" />
+        <Point X="19.875" Y="12.713" />
+        <Point X="18.5" Y="12.713" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="RegiaoAnatomica" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="18.75" Y="8.209" />
-        <Point X="18.375" Y="8.209" />
-        <Point X="18.375" Y="10.094" />
-        <Point X="16.25" Y="10.094" />
+        <Point X="20.125" Y="10.617" />
+        <Point X="20.125" Y="12.688" />
+        <Point X="21.25" Y="12.688" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
