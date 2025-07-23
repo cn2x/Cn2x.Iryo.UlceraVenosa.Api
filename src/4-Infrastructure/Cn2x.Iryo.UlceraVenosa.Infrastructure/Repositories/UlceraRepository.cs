@@ -36,6 +36,22 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 
+    public override async Task<Ulcera?> GetByIdAsync(Guid id)
+    {
+        return await _context.Ulceras
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPerna)!.Lateralidade)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPerna)!.Segmentacao)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPerna)!.RegiaoAnatomica)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPe)!.Lateralidade)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPe)!.RegiaoTopograficaPe)
+            .FirstOrDefaultAsync(u => u.Id == id);
+    }
+
     public async Task<PagedResult<Ulcera>> GetPagedAsync(int page, int pageSize, string? searchTerm = null)
     {
         var query = _context.Ulceras

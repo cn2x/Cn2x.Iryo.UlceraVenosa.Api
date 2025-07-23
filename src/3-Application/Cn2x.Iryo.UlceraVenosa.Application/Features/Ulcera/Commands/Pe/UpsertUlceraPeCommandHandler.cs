@@ -29,7 +29,7 @@ public class UpsertUlceraPeCommandHandler : IRequestHandler<UpsertUlceraPeComman
         if (lateralidade == null || regiao == null)
             throw new Exception("Dados de topografia inválidos para pé");
 
-        var regiaoTopograficaPe = await _context.RegioesTopograficasPe.FindAsync(new object[] { request.RegiaoAnatomicaId }, cancellationToken);
+        var regiaoTopograficaPe = await _context.RegioesTopograficasPe.FindAsync(new object[] { request.RegiaoTopograficaPeId }, cancellationToken);
         if (regiaoTopograficaPe == null)
             throw new Exception("Região topográfica do pé não encontrada");
 
@@ -37,7 +37,7 @@ public class UpsertUlceraPeCommandHandler : IRequestHandler<UpsertUlceraPeComman
         {
             LateralidadeId = request.LateralidadeId,
             Lateralidade = lateralidade,
-            RegiaoTopograficaPeId = request.RegiaoAnatomicaId,
+            RegiaoTopograficaPeId = request.RegiaoTopograficaPeId,
             RegiaoTopograficaPe = regiaoTopograficaPe
         };
 

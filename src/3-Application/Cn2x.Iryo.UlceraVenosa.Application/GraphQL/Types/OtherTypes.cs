@@ -1,5 +1,6 @@
 using HotChocolate.Types;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
+using HotChocolate.Types.Relay;
 
 public class LateralidadeType : ObjectType<Lateralidade>
 {
@@ -52,10 +53,28 @@ public class MedidaType : ObjectType<Medida>
     }
 }
 
+public interface ITopografiaType {}
+
+public class TopografiaInterfaceType : InterfaceType<Topografia>
+{
+    protected override void Configure(IInterfaceTypeDescriptor<Topografia> descriptor)
+    {
+        descriptor.Name("Topografia");
+        descriptor.Field(x => x.Id).Description("Id da topografia");
+        descriptor.ResolveAbstractType((ctx, obj) =>
+        {
+            if (obj is TopografiaPerna) return ctx.Schema.GetType<TopografiaPernaType>(nameof(TopografiaPerna));
+            if (obj is TopografiaPe) return ctx.Schema.GetType<TopografiaPeType>(nameof(TopografiaPe));
+            return null;
+        });
+    }
+}
+
 public class TopografiaPernaType : ObjectType<TopografiaPerna>
 {
     protected override void Configure(IObjectTypeDescriptor<TopografiaPerna> descriptor)
     {
+        descriptor.Implements<TopografiaInterfaceType>();
         descriptor.Name("TopografiaPerna");
         descriptor.Description("Topografia anatômica da perna");
         descriptor.Field(x => x.Id).Description("Id da topografia");
@@ -69,6 +88,7 @@ public class TopografiaPeType : ObjectType<TopografiaPe>
 {
     protected override void Configure(IObjectTypeDescriptor<TopografiaPe> descriptor)
     {
+        descriptor.Implements<TopografiaInterfaceType>();
         descriptor.Name("TopografiaPe");
         descriptor.Description("Topografia anatômica do pé");
         descriptor.Field(x => x.Id).Description("Id da topografia");

@@ -21,6 +21,7 @@ public class UlceraPeMutations
             PacienteId = input.PacienteId,
             LateralidadeId = input.Topografia.LateralidadeId,
             RegiaoAnatomicaId = input.Topografia.RegiaoAnatomicaId,
+            RegiaoTopograficaPeId = input.Topografia.RegiaoTopograficaPeId,
             ClassificacaoCeap = input.ClassificacaoCeap
         };
 
