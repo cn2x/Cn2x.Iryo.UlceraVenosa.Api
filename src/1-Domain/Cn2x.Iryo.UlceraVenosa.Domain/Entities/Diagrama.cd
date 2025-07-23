@@ -10,14 +10,6 @@
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera" BaseTypeListCollapsed="true">
     <Position X="11.25" Y="5.5" Width="2" />
-    <AssociationLine Name="Ceap" Type="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Ceap" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="12.125" Y="5.5" />
-        <Point X="12.125" Y="4.021" />
-        <Point X="13.812" Y="4.021" />
-        <Point X="13.812" Y="3.646" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAAAAAAAABAAAAABAwwAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\Ulcera.cs</FileName>
@@ -57,7 +49,7 @@
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Ceap">
     <Position X="13" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACAAEAAAAAAEIAAAAAAABAAAAAAAAAAQAAAAAAA=</HashCode>
+      <HashCode>AAAAACAAEAAACAAEIAAAAAAABAAAAAAAAAAQAAAAAAA=</HashCode>
       <FileName>ValueObjects\Ceap.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -171,17 +163,17 @@
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.TopografiaPerna">
     <Position X="18.75" Y="9" Width="1.75" />
-    <AssociationLine Name="Segmentacao" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmentacao" FixedFromPoint="true">
+    <AssociationLine Name="Segmentacao" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Segmentacao" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="19.875" Y="10.617" />
-        <Point X="19.875" Y="12.713" />
+        <Point X="19.312" Y="10.617" />
+        <Point X="19.312" Y="12.713" />
         <Point X="18.5" Y="12.713" />
       </Path>
     </AssociationLine>
     <AssociationLine Name="RegiaoAnatomica" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="20.125" Y="10.617" />
-        <Point X="20.125" Y="12.688" />
+        <Point X="19.938" Y="10.617" />
+        <Point X="19.938" Y="12.688" />
         <Point X="21.25" Y="12.688" />
       </Path>
     </AssociationLine>
