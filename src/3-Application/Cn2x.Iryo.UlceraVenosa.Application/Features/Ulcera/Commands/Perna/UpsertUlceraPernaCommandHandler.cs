@@ -52,11 +52,11 @@ public class UpsertUlceraPernaCommandHandler : IRequestHandler<UpsertUlceraPerna
 
         if (ulcera == null)
         {
-            ulcera = new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera
-            {
+            ulcera = new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera {
                 PacienteId = request.PacienteId,
                 Topografia = topografia,
-                Ceap = ceap
+                Ceap = ceap,
+                Id = request.Id??Guid.NewGuid()
             };
             await _ulceraRepository.AddAsync(ulcera);
         }
@@ -66,7 +66,7 @@ public class UpsertUlceraPernaCommandHandler : IRequestHandler<UpsertUlceraPerna
             ulcera.Ceap = ceap;
             await _ulceraRepository.UpdateAsync(ulcera);
         }
-        await _context.SaveChangesAsync(cancellationToken);
+        var xReturn = await _ulceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
         return ulcera.Id;
     }
 }

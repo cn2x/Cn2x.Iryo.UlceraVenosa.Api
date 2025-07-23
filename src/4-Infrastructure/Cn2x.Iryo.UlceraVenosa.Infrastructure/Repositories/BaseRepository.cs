@@ -34,15 +34,13 @@ public abstract class BaseRepository<T> : IRepository<T> where T : class, IAggre
 
     public virtual async Task<T> AddAsync(T entity)
     {
-        var result = await _dbSet.AddAsync(entity);
-        await _context.SaveChangesAsync();
+        var result = await _dbSet.AddAsync(entity);        
         return result.Entity;
     }
 
     public virtual async Task<T> UpdateAsync(T entity)
     {
-        _dbSet.Update(entity);
-        await _context.SaveChangesAsync();
+        _dbSet.Update(entity);        
         return entity;
     }
 
@@ -52,8 +50,7 @@ public abstract class BaseRepository<T> : IRepository<T> where T : class, IAggre
         if (entity == null)
             return false;
 
-        _dbSet.Remove(entity);
-        await _context.SaveChangesAsync();
+        _dbSet.Remove(entity);        
         return true;
     }
 

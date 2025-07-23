@@ -4,7 +4,6 @@ using MediatR;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Commands;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Types;
-using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Mutations;
@@ -28,22 +27,7 @@ public class AvaliacaoUlceraMutations
             Imagens = input.Imagens,
             Exsudatos = input.Exsudatos
         };
-        var avaliacaoId = await mediator.Send(command);
-        // Aqui você pode criar um GetAvaliacaoUlceraByIdQuery se desejar retornar o objeto atualizado
+        var avaliacaoId = await mediator.Send(command);        
         return null; // ou retorne a consulta se implementada
     }
-}
-
-public class UpsertAvaliacaoUlceraInput
-{
-    public Guid? Id { get; set; }
-    public Guid UlceraId { get; set; }
-    public DateTime DataAvaliacao { get; set; }
-    public int MesesDuracao { get; set; }
-    public string Duracao { get; set; } = string.Empty;
-    public Caracteristicas Caracteristicas { get; set; } = new();
-    public SinaisInflamatorios SinaisInflamatorios { get; set; } = new();
-    public Medida? Medida { get; set; }
-    public List<Guid>? Imagens { get; set; }
-    public List<Guid>? Exsudatos { get; set; }
 }

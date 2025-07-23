@@ -261,39 +261,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Medida", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("AvaliacaoUlceraId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("avaliacao_ulcera_id");
-
-                    b.Property<decimal?>("Comprimento")
-                        .HasColumnType("decimal(10,2)")
-                        .HasColumnName("comprimento");
-
-                    b.Property<decimal?>("Largura")
-                        .HasColumnType("decimal(10,2)")
-                        .HasColumnName("largura");
-
-                    b.Property<decimal?>("Profundidade")
-                        .HasColumnType("decimal(10,2)")
-                        .HasColumnName("profundidade");
-
-                    b.HasKey("Id")
-                        .HasName("pk_medidas");
-
-                    b.HasIndex("AvaliacaoUlceraId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_medidas_avaliacao_ulcera_id");
-
-                    b.ToTable("medidas", (string)null);
-                });
-
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Paciente", b =>
                 {
                     b.Property<Guid>("Id")
@@ -742,6 +709,31 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                                 .HasForeignKey("avaliacao_ferida_id");
                         });
 
+                    b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Medida", "Medida", b1 =>
+                        {
+                            b1.Property<Guid>("avaliacao_ferida_id")
+                                .HasColumnType("uuid");
+
+                            b1.Property<decimal?>("Comprimento")
+                                .HasColumnType("decimal(10,2)")
+                                .HasColumnName("comprimento");
+
+                            b1.Property<decimal?>("Largura")
+                                .HasColumnType("decimal(10,2)")
+                                .HasColumnName("largura");
+
+                            b1.Property<decimal?>("Profundidade")
+                                .HasColumnType("decimal(10,2)")
+                                .HasColumnName("profundidade");
+
+                            b1.HasKey("avaliacao_ferida_id");
+
+                            b1.ToTable("medida");
+
+                            b1.WithOwner()
+                                .HasForeignKey("avaliacao_ferida_id");
+                        });
+
                     b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.SinaisInflamatorios", "SinaisInflamatorios", b1 =>
                         {
                             b1.Property<Guid>("avaliacao_ferida_id")
@@ -781,6 +773,8 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
 
                     b.Navigation("Caracteristicas")
                         .IsRequired();
+
+                    b.Navigation("Medida");
 
                     b.Navigation("SinaisInflamatorios")
                         .IsRequired();
@@ -845,17 +839,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
 
                     b.Navigation("Imagem")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Medida", b =>
-                {
-                    b.HasOne("Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera", "AvaliacaoUlcera")
-                        .WithOne("Medida")
-                        .HasForeignKey("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Medida", "AvaliacaoUlceraId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AvaliacaoUlcera");
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia", b =>
@@ -966,8 +949,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                     b.Navigation("Exsudatos");
 
                     b.Navigation("Imagens");
-
-                    b.Navigation("Medida");
                 });
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Paciente", b =>

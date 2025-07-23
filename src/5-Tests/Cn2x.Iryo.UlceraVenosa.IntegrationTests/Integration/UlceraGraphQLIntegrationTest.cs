@@ -2,17 +2,12 @@ using FluentAssertions;
 using System.Text;
 using System.Text.Json;
 using Xunit;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
-using Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils;
+using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
-namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
-{
+namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration {
     public class UlceraGraphQLIntegrationTest : IClassFixture<DatabaseFixture>
     {
         private readonly HttpClient _client;
@@ -399,6 +394,91 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
             ceapQuery2.GetProperty("etiologia").GetProperty("id").GetString().Should().Be("CONGENITA");
             ceapQuery2.GetProperty("anatomia").GetProperty("id").GetString().Should().Be("SUPERFICIAL");
             ceapQuery2.GetProperty("patofisiologia").GetProperty("id").GetString().Should().Be("NAO_IDENTIFICADA");
+        }
+
+        [Fact]
+        public async Task Deve_Upsertar_Medida()
+        {
+            // Arrange: seed de entidades relacionadas
+            using (var seedScope = _factory.Services.CreateScope())
+            {
+                var seedDb = seedScope.ServiceProvider.GetRequiredService<Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.ApplicationDbContext>();
+                Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.Seed(seedDb);
+                // Cria TopografiaPerna com os IDs do seed
+                var topografia = new TopografiaPerna {
+                    LateralidadeId = Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.LateralidadeId,
+                    SegmentacaoId = Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.SegmentacaoId,
+                    RegiaoAnatomicaId = Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.RegiaoAnatomicaId
+                };
+                // Cria Ulcera usando a factory
+                var ulcera = Cn2x.Iryo.UlceraVenosa.Domain.Factories.UlceraFactory.Create(
+                    Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.PacienteId,
+                    topografia,
+                    new Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Ceap(
+                        Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes.Clinica.SemSinais,
+                        Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes.Etiologica.Primaria,
+                        Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes.Anatomica.Profundo,
+                        Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes.Patofisiologica.Refluxo)
+                );
+                seedDb.Ulceras.Add(ulcera);
+                seedDb.SaveChanges();
+                var avaliacao = new AvaliacaoUlcera {
+                    Id = Guid.NewGuid(),
+                    UlceraId = ulcera.Id,
+                    DataAvaliacao = DateTime.UtcNow,
+                    MesesDuracao = 1,
+                    Caracteristicas = new(),
+                    SinaisInflamatorios = new(),
+                    Medida = new Medida { Comprimento = 0, Largura = 0, Profundidade = 0 }
+                };
+                seedDb.AvaliacoesUlcera.Add(avaliacao);
+                seedDb.SaveChanges();
+            }
+            // Recupera ids
+            Guid avaliacaoId;
+            using (var dbScope = _factory.Services.CreateScope())
+            {
+                var db = dbScope.ServiceProvider.GetRequiredService<Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.ApplicationDbContext>();
+                avaliacaoId = db.AvaliacoesUlcera.AsNoTracking().OrderByDescending(a => a.DataAvaliacao).First().Id;
+                var exists = db.AvaliacoesUlcera.Any(a => a.Id == avaliacaoId);
+                Console.WriteLine($"[DEBUG] AvaliacaoUlceraId usado: {avaliacaoId}, existe no banco: {exists}");
+                Assert.True(exists, $"AvaliacaoUlceraId {avaliacaoId} não existe no banco!");
+            }
+            // Monta mutation GraphQL para criar Medida
+            var mutation = new {
+                query = @"mutation ($input: UpsertMedidaInput!) { upsertMedida(input: $input) { comprimento largura profundidade } }",
+                variables = new {
+                    input = new {
+                        avaliacaoUlceraId = avaliacaoId,
+                        comprimento = 10.5m,
+                        largura = 5.2m,
+                        profundidade = 1.1m
+                    }
+                }
+            };
+            var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(mutation), System.Text.Encoding.UTF8, "application/json");
+            // Act
+            var response = await _client.PostAsync("/graphql", content);
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"[DEBUG] Resposta GraphQL Mutation Medida: {json}");
+            var dict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, System.Text.Json.JsonElement>>(json, _jsonOptions);
+            var data = dict["data"].GetProperty("upsertMedida");
+            if (data.ValueKind == JsonValueKind.Null)
+                throw new Exception($"Mutation upsertMedida retornou null. Resposta: {json}");
+            // Assert resposta da mutation
+            data.GetProperty("comprimento").GetDecimal().Should().Be(10.5m);
+            data.GetProperty("largura").GetDecimal().Should().Be(5.2m);
+            data.GetProperty("profundidade").GetDecimal().Should().Be(1.1m);
+            // Validação direta no banco
+            using var dbScope2 = _factory.Services.CreateScope();
+            var validaDb = dbScope2.ServiceProvider.GetRequiredService<Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.ApplicationDbContext>();
+            var avaliacaoDb = await validaDb.AvaliacoesUlcera.AsNoTracking().FirstOrDefaultAsync(a => a.Id == avaliacaoId);
+            Assert.NotNull(avaliacaoDb);
+            Assert.NotNull(avaliacaoDb.Medida);
+            avaliacaoDb.Medida.Comprimento.Should().Be(10.5m);
+            avaliacaoDb.Medida.Largura.Should().Be(5.2m);
+            avaliacaoDb.Medida.Profundidade.Should().Be(1.1m);
         }
     }
 }

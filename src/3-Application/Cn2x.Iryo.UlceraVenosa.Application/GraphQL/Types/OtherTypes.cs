@@ -1,6 +1,7 @@
 using HotChocolate.Types;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using HotChocolate.Types.Relay;
+using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 public class LateralidadeType : ObjectType<Lateralidade>
 {
@@ -45,8 +46,6 @@ public class MedidaType : ObjectType<Medida>
     {
         descriptor.Name("Medida");
         descriptor.Description("Medidas da úlcera (relacionamento 1:1)");
-        descriptor.Field(x => x.Id).Description("Id da Medida (igual ao UlceraId)");
-        descriptor.Field(x => x.AvaliacaoUlceraId).Description("Id da avaliação associada");
         descriptor.Field(x => x.Comprimento).Description("Comprimento em cm");
         descriptor.Field(x => x.Largura).Description("Largura em cm");
         descriptor.Field(x => x.Profundidade).Description("Profundidade em cm");
