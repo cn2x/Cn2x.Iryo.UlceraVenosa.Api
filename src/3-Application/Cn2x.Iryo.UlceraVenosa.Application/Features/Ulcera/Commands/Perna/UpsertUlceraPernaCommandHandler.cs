@@ -1,12 +1,8 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
-using Cn2x.Iryo.UlceraVenosa.Domain.Factories;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
-using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Inputs.Ulcera;
-using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands.Perna;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands;
@@ -42,7 +38,7 @@ public class UpsertUlceraPernaCommandHandler : IRequestHandler<UpsertUlceraPerna
             RegiaoAnatomica = regiao
         };
 
-        Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera? ulcera = null;
+        Domain.Entities.Ulcera? ulcera = null;
         if (request.Id != null && request.Id != Guid.Empty)
         {
             ulcera = await _ulceraRepository.GetByIdAsync(request.Id.Value);
