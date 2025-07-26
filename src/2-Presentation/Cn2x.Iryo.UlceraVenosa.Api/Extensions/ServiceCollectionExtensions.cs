@@ -1,13 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.Cors;
 using System.Runtime;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Extensions;
-using Cn2x.Iryo.UlceraVenosa.Application.Extensions;
 using MediatR;
-using Cn2x.Iryo.UlceraVenosa.Infrastructure;
-using FluentValidation;
 
 namespace Cn2x.Iryo.UlceraVenosa.Api.Extensions;
 

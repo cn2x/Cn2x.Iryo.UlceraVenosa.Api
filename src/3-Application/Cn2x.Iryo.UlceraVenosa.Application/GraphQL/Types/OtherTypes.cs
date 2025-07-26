@@ -69,6 +69,16 @@ public class TopografiaInterfaceType : InterfaceType<Topografia>
     }
 }
 
+public class KeyValueDtoType : ObjectType<KeyValueDto>
+{
+    protected override void Configure(IObjectTypeDescriptor<KeyValueDto> descriptor)
+    {
+        descriptor.Name("KeyValueDto");
+        descriptor.Field(x => x.Key).Description("Chave do par chave-valor");
+        descriptor.Field(x => x.Value).Description("Valor do par chave-valor");
+    }
+}
+
 public class TopografiaPernaType : ObjectType<TopografiaPerna>
 {
     protected override void Configure(IObjectTypeDescriptor<TopografiaPerna> descriptor)
