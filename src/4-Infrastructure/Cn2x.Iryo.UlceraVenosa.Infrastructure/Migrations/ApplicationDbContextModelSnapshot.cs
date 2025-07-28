@@ -4,7 +4,6 @@ using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,41 +15,37 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.7");
 
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<DateTime>("DataAvaliacao")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("data_avaliacao");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.Property<int>("MesesDuracao")
-                        .HasColumnType("integer")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("meses_duracao");
 
                     b.Property<Guid>("UlceraId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("ulcera_id");
 
                     b.HasKey("Id")
@@ -66,25 +61,25 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("descricao");
 
                     b.HasKey("Id")
@@ -168,11 +163,11 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
             modelBuilder.Entity("Cn2x.Iryo.UlceraVenosa.Domain.Entities.ExsudatoDaAvaliacao", b =>
                 {
                     b.Property<Guid>("AvaliacaoUlceraId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("avaliacao_ulcera_id");
 
                     b.Property<Guid>("ExsudatoId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("exsudato_id");
 
                     b.HasKey("AvaliacaoUlceraId", "ExsudatoId");
@@ -187,23 +182,23 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<Guid>("AvaliacaoUlceraId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("avaliacao_ulcera_id");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.HasKey("Id")
@@ -219,24 +214,24 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("nome");
 
                     b.HasKey("Id")
@@ -265,31 +260,31 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<string>("Cpf")
                         .IsRequired()
                         .HasMaxLength(14)
-                        .HasColumnType("character varying(14)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("cpf");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("nome");
 
                     b.HasKey("Id")
@@ -305,29 +300,29 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("descricao");
 
                     b.Property<string>("Sigla")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("sigla");
 
                     b.HasKey("Id")
@@ -390,29 +385,29 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("descricao");
 
                     b.Property<string>("Sigla")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("sigla");
 
                     b.HasKey("Id")
@@ -507,29 +502,29 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("descricao");
 
                     b.Property<string>("Sigla")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("TEXT")
                         .HasColumnName("sigla");
 
                     b.HasKey("Id")
@@ -568,23 +563,23 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.Property<Guid>("LateralidadeId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("lateralidade_id");
 
                     b.HasKey("Id")
@@ -602,27 +597,27 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("AtualizadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("atualizado_em");
 
                     b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("TEXT")
                         .HasColumnName("criado_em");
 
                     b.Property<bool>("Desativada")
-                        .HasColumnType("boolean")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("desativada");
 
                     b.Property<Guid>("PacienteId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("paciente_id");
 
                     b.Property<Guid>("TopografiaId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("topografia_id");
 
                     b.HasKey("Id")
@@ -642,7 +637,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                     b.HasBaseType("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia");
 
                     b.Property<Guid>("RegiaoTopograficaPeId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("regiao_topografica_pe_id");
 
                     b.HasIndex("RegiaoTopograficaPeId")
@@ -656,11 +651,11 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                     b.HasBaseType("Cn2x.Iryo.UlceraVenosa.Domain.Entities.Topografia");
 
                     b.Property<Guid>("RegiaoAnatomicaId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("regiao_anatomica_id");
 
                     b.Property<Guid>("SegmentacaoId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("TEXT")
                         .HasColumnName("segmentacao_id");
 
                     b.HasIndex("RegiaoAnatomicaId")
@@ -683,22 +678,22 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                     b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Caracteristicas", "Caracteristicas", b1 =>
                         {
                             b1.Property<Guid>("avaliacao_ferida_id")
-                                .HasColumnType("uuid");
+                                .HasColumnType("TEXT");
 
                             b1.Property<bool>("BordasDefinidas")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("bordas_definidas");
 
                             b1.Property<bool>("Necrose")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("necrose");
 
                             b1.Property<bool>("OdorFetido")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("odor_fetido");
 
                             b1.Property<bool>("TecidoGranulacao")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("tecido_granulacao");
 
                             b1.HasKey("avaliacao_ferida_id");
@@ -712,7 +707,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                     b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Medida", "Medida", b1 =>
                         {
                             b1.Property<Guid>("avaliacao_ferida_id")
-                                .HasColumnType("uuid");
+                                .HasColumnType("TEXT");
 
                             b1.Property<decimal?>("Comprimento")
                                 .HasColumnType("decimal(10,2)")
@@ -737,30 +732,30 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                     b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.SinaisInflamatorios", "SinaisInflamatorios", b1 =>
                         {
                             b1.Property<Guid>("avaliacao_ferida_id")
-                                .HasColumnType("uuid");
+                                .HasColumnType("TEXT");
 
                             b1.Property<bool>("Calor")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("calor");
 
                             b1.Property<bool>("Dor")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("dor");
 
                             b1.Property<bool>("Edema")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("edema");
 
                             b1.Property<bool>("Eritema")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("eritema");
 
                             b1.Property<bool>("PerdadeFuncao")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("perda_de_funcao");
 
                             b1.Property<bool>("Rubor")
-                                .HasColumnType("boolean")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("rubor");
 
                             b1.HasKey("avaliacao_ferida_id");
@@ -812,19 +807,19 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                     b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Imagem", "Imagem", b1 =>
                         {
                             b1.Property<Guid>("ImagemAvaliacaoUlceraId")
-                                .HasColumnType("uuid");
+                                .HasColumnType("TEXT");
 
                             b1.Property<string>("ContentType")
                                 .IsRequired()
-                                .HasColumnType("text")
+                                .HasColumnType("TEXT")
                                 .HasColumnName("content_type");
 
                             b1.Property<DateTime>("DataCaptura")
-                                .HasColumnType("timestamp with time zone")
+                                .HasColumnType("TEXT")
                                 .HasColumnName("data_captura");
 
                             b1.Property<long>("TamanhoBytes")
-                                .HasColumnType("bigint")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("tamanho_bytes");
 
                             b1.HasKey("ImagemAvaliacaoUlceraId");
@@ -869,22 +864,22 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                     b.OwnsOne("Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Ceap", "Ceap", b1 =>
                         {
                             b1.Property<Guid>("ulcera_id")
-                                .HasColumnType("uuid");
+                                .HasColumnType("TEXT");
 
                             b1.Property<int>("Anatomia")
-                                .HasColumnType("integer")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("anatomia");
 
                             b1.Property<int>("ClasseClinica")
-                                .HasColumnType("integer")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("classe_clinica");
 
                             b1.Property<int>("Etiologia")
-                                .HasColumnType("integer")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("etiologia");
 
                             b1.Property<int>("Patofisiologia")
-                                .HasColumnType("integer")
+                                .HasColumnType("INTEGER")
                                 .HasColumnName("patofisiologia");
 
                             b1.HasKey("ulcera_id");

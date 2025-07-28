@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Xunit;
-using Testcontainers.PostgreSql;
 using System;
 using Npgsql;
 using Microsoft.EntityFrameworkCore;
@@ -14,49 +13,56 @@ using Microsoft.AspNetCore.Http;
 namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration;
 
 public class DatabaseFixture : IAsyncLifetime {
-    public PostgreSqlContainer Container { get; private set; } = default!;
-    public string ConnectionString => Container.GetConnectionString();
+    public string ConnectionString { get; private set; } = "Host=pgsql52-farm1.kinghost.net;Database=mytms2;Username=mytm2s;Password=Rickyelton10@;SSL Mode=Prefer;Trust Server Certificate=true;Timeout=60;Command Timeout=120;";
 
     public async Task InitializeAsync() {
-        Container = new PostgreSqlBuilder()
-            .WithImage("postgres:15-alpine")
-            .WithDatabase("testdb")
-            .WithUsername("test")
-            .WithPassword("test")
-            .WithCleanUp(true)
-            .Build();
-
-        await Container.StartAsync();
-        // Aguarda até o banco estar realmente pronto para conexões
-        var maxAttempts = 10;
-        var delayMs = 1000;
-        var npgsqlConn = new NpgsqlConnection(Container.GetConnectionString());
+        // Testa a conexão com o banco KingHost
+        var maxAttempts = 5;
+        var delayMs = 2000;
+        
         for (int i = 0; i < maxAttempts; i++)
         {
             try
             {
+                using var npgsqlConn = new NpgsqlConnection(ConnectionString);
                 await npgsqlConn.OpenAsync();
                 await npgsqlConn.CloseAsync();
-                Console.WriteLine($"[DatabaseFixture] Banco pronto após {i + 1} tentativas.");
+                Console.WriteLine($"[DatabaseFixture] Conexão com KingHost estabelecida após {i + 1} tentativas.");
                 break;
             }
-            catch
+            catch (Exception ex)
             {
-                Console.WriteLine($"[DatabaseFixture] Tentativa {i + 1} de conexão falhou, aguardando...");
+                Console.WriteLine($"[DatabaseFixture] Tentativa {i + 1} de conexão falhou: {ex.Message}");
+                if (i == maxAttempts - 1)
+                {
+                    throw new InvalidOperationException($"Não foi possível conectar ao banco KingHost após {maxAttempts} tentativas.", ex);
+                }
                 await Task.Delay(delayMs);
             }
         }
 
         // Aplica as migrations automaticamente
-        var optionsBuilder = new DbContextOptionsBuilder<Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.ApplicationDbContext>();
-        optionsBuilder.UseNpgsql(Container.GetConnectionString());
-        var mediatorMock = new Moq.Mock<MediatR.IMediator>();
-        var httpContextAccessorMock = new Moq.Mock<Microsoft.AspNetCore.Http.IHttpContextAccessor>();
-        using var db = new Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.ApplicationDbContext(optionsBuilder.Options, mediatorMock.Object, httpContextAccessorMock.Object);
-        db.Database.Migrate();
+        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+        optionsBuilder.UseNpgsql(ConnectionString, npgsqlOptions =>
+        {
+            npgsqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorCodesToAdd: null);
+            
+            npgsqlOptions.CommandTimeout(60);
+        });
+        
+        var mediatorMock = new Mock<IMediator>();
+        var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+        
+        using var db = new ApplicationDbContext(optionsBuilder.Options, mediatorMock.Object, httpContextAccessorMock.Object);
+        await db.Database.MigrateAsync();
+        Console.WriteLine("[DatabaseFixture] Migrations aplicadas com sucesso.");
     }
 
     public async Task DisposeAsync() {
-        await Container.DisposeAsync();
+        // Não há nada para limpar quando usando banco remoto
+        await Task.CompletedTask;
     }
 }
