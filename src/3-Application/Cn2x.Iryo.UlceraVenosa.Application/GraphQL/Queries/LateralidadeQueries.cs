@@ -1,6 +1,7 @@
 using HotChocolate;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
-using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
+using Cn2x.Iryo.UlceraVenosa.Domain.Core;
+using MediatR;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Queries;
 
@@ -8,8 +9,9 @@ namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Queries;
 public class LateralidadeQueries
 {
     [GraphQLName("lateralidades")]
-    public async Task<List<Lateralidade>> GetLateralidadesAsync([Service] ApplicationDbContext ctx)
+    public async Task<List<Lateralidade>> GetLateralidadesAsync([Service] IRepository<Lateralidade> repository)
     {
-        return await ctx.GetLateralidadesAtivasAsync();
+        var lateralidades = await repository.GetAllAsync();
+        return lateralidades.ToList();
     }
 } 
