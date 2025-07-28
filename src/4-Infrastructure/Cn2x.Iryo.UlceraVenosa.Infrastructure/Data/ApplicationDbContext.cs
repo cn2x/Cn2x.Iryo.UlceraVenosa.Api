@@ -20,8 +20,6 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
     public virtual DbSet<Paciente> Pacientes { get; set; }
     public virtual DbSet<Exsudato> ExsudatoTipos { get; set; }
 
-    public virtual DbSet<Medida> Medidas { get; set; }
-
     public virtual DbSet<AvaliacaoUlcera> AvaliacoesUlcera { get; set; }
     public virtual DbSet<ExsudatoDaAvaliacao> ExsudatosAvaliacao { get; set; }
 
@@ -29,6 +27,10 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
     public virtual DbSet<TopografiaPerna> TopografiasPerna { get; set; }
     public virtual DbSet<TopografiaPe> TopografiasPe { get; set; }
     public virtual DbSet<Lateralidade> Lateralidades { get; set; }
+    public virtual DbSet<Segmentacao> Segmentacoes { get; set; }
+    public virtual DbSet<RegiaoAnatomica> RegioesAnatomicas { get; set; }
+
+    public virtual DbSet<RegiaoTopograficaPe> RegioesTopograficasPe { get; set; }
 
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -103,7 +105,6 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
         ConfigureUlcera(modelBuilder);
         ConfigurePaciente(modelBuilder);
         ConfigureExsudato(modelBuilder);
-        ConfigureMedida(modelBuilder);
         ConfigureAvaliacaoUlcera(modelBuilder);
         ConfigureImagemAvaliacaoUlcera(modelBuilder);
         ConfigureExsudatoDaAvaliacao(modelBuilder);
@@ -224,6 +225,7 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
                     .HasColumnName("patofisiologia")
                     .HasConversion(new PatofisiologicaValueConverter());
             });
+            entity.Navigation(e => e.Ceap).IsRequired(false);
 
             entity.Property(e => e.PacienteId).HasColumnName("paciente_id");
 
@@ -322,23 +324,6 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
         });
     }
 
-    private void ConfigureMedida(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Medida>(entity =>
-        {
-            entity.ToTable("medidas");
-            entity.HasKey(m => m.Id);
-            entity.Property(m => m.AvaliacaoUlceraId).HasColumnName("avaliacao_ulcera_id");
-            entity.Property(m => m.Comprimento).HasColumnName("comprimento").HasColumnType("decimal(10,2)");
-            entity.Property(m => m.Largura).HasColumnName("largura").HasColumnType("decimal(10,2)");
-            entity.Property(m => m.Profundidade).HasColumnName("profundidade").HasColumnType("decimal(10,2)");
-            entity.HasOne(m => m.AvaliacaoUlcera)
-                  .WithOne(m => m.Medida)
-                  .HasForeignKey<Medida>(m => m.AvaliacaoUlceraId)
-                  .OnDelete(DeleteBehavior.Cascade);
-        });
-    }
-
     private void ConfigureAvaliacaoUlcera(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AvaliacaoUlcera>(entity =>
@@ -369,14 +354,17 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
                 sinais.Property(s => s.PerdadeFuncao).HasColumnName("perda_de_funcao");
             });
 
+            entity.OwnsOne(e => e.Medida, medida =>
+            {
+                medida.WithOwner().HasForeignKey("avaliacao_ferida_id");
+                medida.Property(m => m.Comprimento).HasColumnName("comprimento").HasColumnType("decimal(10,2)");
+                medida.Property(m => m.Largura).HasColumnName("largura").HasColumnType("decimal(10,2)");
+                medida.Property(m => m.Profundidade).HasColumnName("profundidade").HasColumnType("decimal(10,2)");
+            });
+
             entity.HasOne(e => e.Ulcera)
                   .WithMany(u => u.Avaliacoes)
                   .HasForeignKey(e => e.UlceraId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(e => e.Medida)
-                  .WithOne(m => m.AvaliacaoUlcera)
-                  .HasForeignKey<Medida>(m => m.AvaliacaoUlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasMany(e => e.Imagens)

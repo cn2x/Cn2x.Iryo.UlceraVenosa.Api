@@ -13,29 +13,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Mutations;
 [ExtendObjectType("Mutation")]
 public class UlceraMutations
 {
-    public async Task<Ulcera?> UpsertUlceraAsync(
-        UpsertUlceraInput input,
-        [Service] IMediator mediator)
-    {
-        var command = new UpsertUlceraCommand
-        {
-            Id = input.Id,
-            PacienteId = input.PacienteId,
-            TopografiaId = input.TopografiaId,
-            TipoTopografia = (TopografiaEnum)input.TipoTopografia,
-            ClassificacaoCeap = input.ClassificacaoCeap == null ? null :
-                new Ceap(
-                    Clinica.FromValue<Clinica>(input.ClassificacaoCeap.ClasseClinica),
-                    Etiologica.FromValue<Etiologica>(input.ClassificacaoCeap.Etiologia),
-                    Anatomica.FromValue<Anatomica>(input.ClassificacaoCeap.Anatomia),
-                    Patofisiologica.FromValue<Patofisiologica>(input.ClassificacaoCeap.Patofisiologia)
-                )
-        };
-
-        var ulceraId = await mediator.Send(command);
-        var query = new GetUlceraByIdQuery { Id = ulceraId };
-        return await mediator.Send(query);
-    }
 
     public async Task<bool> AtivarInativarUlceraAsync(
         Guid id,

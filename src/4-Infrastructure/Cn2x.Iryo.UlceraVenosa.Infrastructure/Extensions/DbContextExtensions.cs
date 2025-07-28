@@ -59,9 +59,11 @@ public static class DbContextExtensions
             options.UseNpgsql(connectionString, npgsqlOptions =>
             {
                 npgsqlOptions.EnableRetryOnFailure(
-                    maxRetryCount: 3,
-                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    maxRetryCount: 10,
+                    maxRetryDelay: TimeSpan.FromSeconds(120),
                     errorCodesToAdd: null);
+                
+                npgsqlOptions.CommandTimeout(120);
             });
             
             // Configurações para desenvolvimento

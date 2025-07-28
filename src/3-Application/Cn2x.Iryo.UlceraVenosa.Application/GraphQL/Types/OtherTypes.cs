@@ -1,5 +1,7 @@
 using HotChocolate.Types;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
+using HotChocolate.Types.Relay;
+using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 public class LateralidadeType : ObjectType<Lateralidade>
 {
@@ -9,7 +11,7 @@ public class LateralidadeType : ObjectType<Lateralidade>
         descriptor.Description("Lateralidade da topografia");
 
         descriptor.Field(x => x.Id)
-            .Type<IntType>()
+            .Type<UuidType>()
             .Description("Id da lateralidade");
         descriptor.Field(x => x.Nome).Description("Nome da lateralidade");
     }
@@ -44,11 +46,36 @@ public class MedidaType : ObjectType<Medida>
     {
         descriptor.Name("Medida");
         descriptor.Description("Medidas da úlcera (relacionamento 1:1)");
-        descriptor.Field(x => x.Id).Description("Id da Medida (igual ao UlceraId)");
-        descriptor.Field(x => x.AvaliacaoUlceraId).Description("Id da avaliação associada");
         descriptor.Field(x => x.Comprimento).Description("Comprimento em cm");
         descriptor.Field(x => x.Largura).Description("Largura em cm");
         descriptor.Field(x => x.Profundidade).Description("Profundidade em cm");
+    }
+}
+
+public interface ITopografiaType {}
+
+public class TopografiaInterfaceType : InterfaceType<Topografia>
+{
+    protected override void Configure(IInterfaceTypeDescriptor<Topografia> descriptor)
+    {
+        descriptor.Name("Topografia");
+        descriptor.Field(x => x.Id).Description("Id da topografia");
+        descriptor.ResolveAbstractType((ctx, obj) =>
+        {
+            if (obj is TopografiaPerna) return ctx.Schema.GetType<TopografiaPernaType>(nameof(TopografiaPerna));
+            if (obj is TopografiaPe) return ctx.Schema.GetType<TopografiaPeType>(nameof(TopografiaPe));
+            return null;
+        });
+    }
+}
+
+public class KeyValueDtoType : ObjectType<KeyValueDto>
+{
+    protected override void Configure(IObjectTypeDescriptor<KeyValueDto> descriptor)
+    {
+        descriptor.Name("KeyValueDto");
+        descriptor.Field(x => x.Key).Description("Chave do par chave-valor");
+        descriptor.Field(x => x.Value).Description("Valor do par chave-valor");
     }
 }
 
@@ -56,6 +83,7 @@ public class TopografiaPernaType : ObjectType<TopografiaPerna>
 {
     protected override void Configure(IObjectTypeDescriptor<TopografiaPerna> descriptor)
     {
+        descriptor.Implements<TopografiaInterfaceType>();
         descriptor.Name("TopografiaPerna");
         descriptor.Description("Topografia anatômica da perna");
         descriptor.Field(x => x.Id).Description("Id da topografia");
@@ -69,6 +97,7 @@ public class TopografiaPeType : ObjectType<TopografiaPe>
 {
     protected override void Configure(IObjectTypeDescriptor<TopografiaPe> descriptor)
     {
+        descriptor.Implements<TopografiaInterfaceType>();
         descriptor.Name("TopografiaPe");
         descriptor.Description("Topografia anatômica do pé");
         descriptor.Field(x => x.Id).Description("Id da topografia");

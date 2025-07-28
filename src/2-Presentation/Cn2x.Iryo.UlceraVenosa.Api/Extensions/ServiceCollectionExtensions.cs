@@ -1,14 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.Cors;
 using System.Runtime;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Extensions;
-using Cn2x.Iryo.UlceraVenosa.Application.Extensions;
 using MediatR;
-using Cn2x.Iryo.UlceraVenosa.Infrastructure;
-using FluentValidation;
-using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Validators;
 
 namespace Cn2x.Iryo.UlceraVenosa.Api.Extensions;
 
@@ -151,7 +144,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         // ... outros serviços ...
-        services.AddValidatorsFromAssembly(typeof(UpsertUlceraCommandValidator).Assembly);
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         // ... outros serviços ...
         return services;
