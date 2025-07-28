@@ -53,7 +53,20 @@ app.UseRouting();
 app.MapGraphQL();
 
 // Health checks
-app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
+app.MapGet("/health", () => Results.Ok(new { 
+    status = "healthy", 
+    timestamp = DateTime.UtcNow,
+    version = "1.0.0",
+    environment = app.Environment.EnvironmentName
+}));
+
+// Root endpoint
+app.MapGet("/", () => Results.Ok(new { 
+    message = "Úlcera Venosa API is running", 
+    graphql = "/graphql",
+    health = "/health",
+    version = "1.0.0"
+}));
 
 app.Run();
 public partial class Program { }
