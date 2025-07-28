@@ -27,6 +27,7 @@ public static class GraphQLExtensions
             .AddTypeExtension<PacienteQueries>()
             .AddTypeExtension<SegmentacaoQueries>()
             .AddTypeExtension<RegiaoAnatomicaQueries>()
+            .AddTypeExtension<LateralidadeQueries>()
             .AddMutationType(d => d.Name("Mutation"))
             .AddTypeExtension<UlceraMutations>()
             .AddTypeExtension<UlceraPernaMutations>()
@@ -47,6 +48,7 @@ public static class GraphQLExtensions
             // .AddType<TopografiaType>()
             .AddType<ImagemAvaliacaoUlceraType>()
             .AddType<PacienteType>()
+            .AddType<LateralidadeType>()
             .AddType<PagedResultUlceraType>()
             .AddErrorFilter<GraphQLErrorFilter>()
             .ModifyRequestOptions(opt =>
@@ -71,6 +73,7 @@ public static class GraphQLExtensions
             .AddTypeExtension<PacienteQueries>()
             .AddTypeExtension<SegmentacaoQueries>()
             .AddTypeExtension<RegiaoAnatomicaQueries>()
+            .AddTypeExtension<LateralidadeQueries>()
             .AddMutationType(d => d.Name("Mutation"))
             .AddTypeExtension<UlceraMutations>()
             .AddTypeExtension<UlceraPernaMutations>()
@@ -91,6 +94,7 @@ public static class GraphQLExtensions
             // .AddType<TopografiaType>()
             .AddType<ImagemAvaliacaoUlceraType>()
             .AddType<PacienteType>()
+            .AddType<LateralidadeType>()
             .AddType<PagedResultUlceraType>()
             .AddErrorFilter<GraphQLErrorFilter>()
             .ModifyRequestOptions(opt =>

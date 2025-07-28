@@ -11,7 +11,7 @@ public class LateralidadeType : ObjectType<Lateralidade>
         descriptor.Description("Lateralidade da topografia");
 
         descriptor.Field(x => x.Id)
-            .Type<IntType>()
+            .Type<UuidType>()
             .Description("Id da lateralidade");
         descriptor.Field(x => x.Nome).Description("Nome da lateralidade");
     }
