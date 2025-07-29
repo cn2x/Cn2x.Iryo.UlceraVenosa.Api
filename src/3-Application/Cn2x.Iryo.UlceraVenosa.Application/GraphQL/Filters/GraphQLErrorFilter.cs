@@ -1,8 +1,5 @@
-using HotChocolate;
-using HotChocolate.Execution;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-
 namespace Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Filters;
 
 /// <summary>

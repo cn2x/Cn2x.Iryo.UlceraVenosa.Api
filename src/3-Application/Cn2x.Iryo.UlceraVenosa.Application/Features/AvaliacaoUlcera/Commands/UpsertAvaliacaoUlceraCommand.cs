@@ -13,7 +13,7 @@ public class UpsertAvaliacaoUlceraCommand : IRequest<Guid>
     public int MesesDuracao { get; set; } // duração em meses desde o surgimento da úlcera
     public Caracteristicas Caracteristicas { get; set; } = new();
     public SinaisInflamatorios SinaisInflamatorios { get; set; } = new();
-    public Medida? Medida { get; set; }
+    public Domain.ValueObjects.Medida? Medida { get; set; }
     public List<Guid>? Imagens { get; set; }
     public List<Guid>? Exsudatos { get; set; }
 }

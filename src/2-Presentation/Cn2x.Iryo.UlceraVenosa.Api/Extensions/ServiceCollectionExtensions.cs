@@ -137,7 +137,7 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddMediatR(this IServiceCollection services)
     {
         // Registra MediatR real para a aplicação
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Cn2x.Iryo.UlceraVenosa.Application.Features.Paciente.SearchPacienteQueryHandler).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands.AtivarInativarUlceraCommand).Assembly));
         return services;
     }
 

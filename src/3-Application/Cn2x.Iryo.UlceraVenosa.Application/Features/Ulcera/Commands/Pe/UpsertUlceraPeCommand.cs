@@ -10,5 +10,5 @@ public class UpsertUlceraPeCommand : IRequest<Guid>
     public Guid LateralidadeId { get; set; }
     public Guid RegiaoAnatomicaId { get; set; }
     public Guid RegiaoTopograficaPeId { get; set; }
-    public Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Inputs.Ulcera.CeapInput? ClassificacaoCeap { get; set; }
+    public Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.GraphQL.Inputs.CeapInput? ClassificacaoCeap { get; set; }
 }

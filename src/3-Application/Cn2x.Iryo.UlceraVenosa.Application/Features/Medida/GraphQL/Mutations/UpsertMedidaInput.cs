@@ -1,12 +1,9 @@
-using MediatR;
-using System;
+﻿namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Medida.GraphQL.Mutations;
 
-namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Medida;
-
-public class UpsertMedidaCommand : IRequest<Guid>
+public class UpsertMedidaInput
 {
     public Guid AvaliacaoUlceraId { get; set; }
     public decimal? Comprimento { get; set; }
     public decimal? Largura { get; set; }
     public decimal? Profundidade { get; set; }
-}
+} 

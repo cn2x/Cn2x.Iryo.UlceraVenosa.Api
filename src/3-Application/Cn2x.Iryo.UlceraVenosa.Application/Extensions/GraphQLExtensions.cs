@@ -3,9 +3,20 @@ using HotChocolate;
 using HotChocolate.AspNetCore;
 using HotChocolate.Execution.Configuration;
 using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Filters;
-using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Queries;
-using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Mutations;
-using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Types;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.GraphQL.Queries;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.GraphQL.Mutations;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Paciente.GraphQL.Queries;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Exsudato.GraphQL.Queries;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Referencia.GraphQL.Queries;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.Mutations;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Medida.GraphQL.Mutations;
+// Types organizados por feature
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.GraphQL.Types;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Paciente.GraphQL.Types;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Medida.GraphQL.Types;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Referencia.GraphQL.Types;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.Types;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Exsudato.GraphQL.Types;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Extensions;
 
@@ -33,6 +44,7 @@ public static class GraphQLExtensions
             .AddTypeExtension<UlceraPernaMutations>()
             .AddTypeExtension<UlceraPeMutations>()
             .AddTypeExtension<MedidaMutations>()
+            // Types da feature Ulcera
             .AddType<UlceraType>()
             .AddType<CaracteristicasType>()
             .AddType<SinaisInflamatoriosType>()
@@ -41,15 +53,21 @@ public static class GraphQLExtensions
             .AddType<EtiologicaType>()
             .AddType<AnatomicaType>()
             .AddType<PatofisiologicaType>()
+            .AddType<PagedResultUlceraType>()
+            // Types da feature Paciente
+            .AddType<PacienteType>()
+            // Types da feature Medida
+            .AddType<MedidaType>()
+            // Types da feature Referencia
             .AddType<TopografiaInterfaceType>()
             .AddType<TopografiaPernaType>()
             .AddType<TopografiaPeType>()
-            .AddType<KeyValueDtoType>()
-            // .AddType<TopografiaType>()
-            .AddType<ImagemAvaliacaoUlceraType>()
-            .AddType<PacienteType>()
             .AddType<LateralidadeType>()
-            .AddType<PagedResultUlceraType>()
+            // Types da feature AvaliacaoUlcera
+            .AddType<AvaliacaoUlceraType>()
+            .AddType<ImagemAvaliacaoUlceraType>()
+            .AddType<ExsudatoDaAvaliacaoType>()
+            .AddType<ExsudatoType>()
             .AddErrorFilter<GraphQLErrorFilter>()
             .ModifyRequestOptions(opt =>
             {
@@ -79,6 +97,7 @@ public static class GraphQLExtensions
             .AddTypeExtension<UlceraPernaMutations>()
             .AddTypeExtension<UlceraPeMutations>()
             .AddTypeExtension<MedidaMutations>()
+            // Types da feature Ulcera
             .AddType<UlceraType>()
             .AddType<CaracteristicasType>()
             .AddType<SinaisInflamatoriosType>()
@@ -87,15 +106,21 @@ public static class GraphQLExtensions
             .AddType<EtiologicaType>()
             .AddType<AnatomicaType>()
             .AddType<PatofisiologicaType>()
+            .AddType<PagedResultUlceraType>()
+            // Types da feature Paciente
+            .AddType<PacienteType>()
+            // Types da feature Medida
+            .AddType<MedidaType>()
+            // Types da feature Referencia
             .AddType<TopografiaInterfaceType>()
             .AddType<TopografiaPernaType>()
             .AddType<TopografiaPeType>()
-            .AddType<KeyValueDtoType>()
-            // .AddType<TopografiaType>()
-            .AddType<ImagemAvaliacaoUlceraType>()
-            .AddType<PacienteType>()
             .AddType<LateralidadeType>()
-            .AddType<PagedResultUlceraType>()
+            // Types da feature AvaliacaoUlcera
+            .AddType<AvaliacaoUlceraType>()
+            .AddType<ImagemAvaliacaoUlceraType>()
+            .AddType<ExsudatoDaAvaliacaoType>()
+            .AddType<ExsudatoType>()
             .AddErrorFilter<GraphQLErrorFilter>()
             .ModifyRequestOptions(opt =>
             {

@@ -19,19 +19,15 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
     public virtual DbSet<Ulcera> Ulceras { get; set; }
     public virtual DbSet<Paciente> Pacientes { get; set; }
     public virtual DbSet<Exsudato> ExsudatoTipos { get; set; }
-
     public virtual DbSet<AvaliacaoUlcera> AvaliacoesUlcera { get; set; }
     public virtual DbSet<ExsudatoDaAvaliacao> ExsudatosAvaliacao { get; set; }
-
     public virtual DbSet<Topografia> Topografias { get; set; }
     public virtual DbSet<TopografiaPerna> TopografiasPerna { get; set; }
     public virtual DbSet<TopografiaPe> TopografiasPe { get; set; }
     public virtual DbSet<Lateralidade> Lateralidades { get; set; }
     public virtual DbSet<Segmentacao> Segmentacoes { get; set; }
     public virtual DbSet<RegiaoAnatomica> RegioesAnatomicas { get; set; }
-
     public virtual DbSet<RegiaoTopograficaPe> RegioesTopograficasPe { get; set; }
-
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
 

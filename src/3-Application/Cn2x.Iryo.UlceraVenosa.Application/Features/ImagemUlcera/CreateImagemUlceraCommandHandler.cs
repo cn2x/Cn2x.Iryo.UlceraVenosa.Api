@@ -1,1 +1,0 @@
-// Arquivo removido pois comandos/queries/handlers de ImagemUlcera não são mais válidos. Veja ImagemAvaliacaoUlcera.

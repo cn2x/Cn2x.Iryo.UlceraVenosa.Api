@@ -5,7 +5,7 @@ using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 using Cn2x.Iryo.UlceraVenosa.Domain.Factories;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
-using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Inputs.Ulcera;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.GraphQL.Inputs;
 using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands.Pe;
 

@@ -1,7 +1,7 @@
 using MediatR;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
-using Cn2x.Iryo.UlceraVenosa.Application.GraphQL.Inputs.Ulcera;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.GraphQL.Inputs;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands.Perna;
 

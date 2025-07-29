@@ -131,12 +131,12 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration {
             using (var seedScope = _factory.Services.CreateScope())
             {
                 var seedDb = seedScope.ServiceProvider.GetRequiredService<Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.ApplicationDbContext>();
-                Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.Seed(seedDb);
+                Utils.TestSeedData.Seed(seedDb);
             }
-            var pacienteId = Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.PacienteId;
-            var lateralidadeId = Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.LateralidadeId;
-            var segmentacaoId = Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.SegmentacaoId;
-            var regiaoAnatomicaId = Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.RegiaoAnatomicaId;
+            var pacienteId = Utils.TestSeedData.PacienteId;
+            var lateralidadeId = Utils.TestSeedData.LateralidadeId;
+            var segmentacaoId = Utils.TestSeedData.SegmentacaoId;
+            var regiaoAnatomicaId = Utils.TestSeedData.RegiaoAnatomicaId;
             var content = CriarUpsertUlceraPernaRequest(null, pacienteId, lateralidadeId, segmentacaoId, regiaoAnatomicaId);
 
             // Act
@@ -479,6 +479,101 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration {
             avaliacaoDb.Medida.Comprimento.Should().Be(10.5m);
             avaliacaoDb.Medida.Largura.Should().Be(5.2m);
             avaliacaoDb.Medida.Profundidade.Should().Be(1.1m);
+        }
+
+        [Fact]
+        public async Task Deve_Buscar_Todas_Ulceras_Do_Paciente()
+        {
+            // Arrange
+            using (var seedScope = _factory.Services.CreateScope())
+            {
+                var seedDb = seedScope.ServiceProvider.GetRequiredService<Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.ApplicationDbContext>();
+                Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils.TestSeedData.Seed(seedDb);
+            }
+            
+            var pacienteId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var lateralidadeId = Guid.Parse("33333333-3333-3333-3333-333333333333");
+            var segmentacaoId = Guid.Parse("44444444-4444-4444-4444-444444444444");
+            var regiaoAnatomicaId = Guid.Parse("55555555-5555-5555-5555-555555555555");
+
+            // Criar primeira úlcera
+            var content1 = CriarUpsertUlceraPernaRequest(null, pacienteId, lateralidadeId, segmentacaoId, regiaoAnatomicaId);
+            var response1 = await _client.PostAsync("/graphql", content1);
+            var json1 = await response1.Content.ReadAsStringAsync();
+            Console.WriteLine($"[DEBUG] Resposta GraphQL Mutation 1: {json1}");
+            
+            if (!response1.IsSuccessStatusCode)
+            {
+                throw new Exception($"Erro na mutation 1: {response1.StatusCode}\n{json1}");
+            }
+
+            // Criar segunda úlcera
+            var content2 = CriarUpsertUlceraPernaRequest(null, pacienteId, lateralidadeId, segmentacaoId, regiaoAnatomicaId);
+            var response2 = await _client.PostAsync("/graphql", content2);
+            var json2 = await response2.Content.ReadAsStringAsync();
+            Console.WriteLine($"[DEBUG] Resposta GraphQL Mutation 2: {json2}");
+            
+            if (!response2.IsSuccessStatusCode)
+            {
+                throw new Exception($"Erro na mutation 2: {response2.StatusCode}\n{json2}");
+            }
+
+            // Query para buscar todas as úlceras do paciente
+            var queryRequest = new
+            {
+                query = @"
+                query ($pacienteId: UUID!) {
+                    ulcerasByPaciente(pacienteId: $pacienteId) {
+                        id
+                        pacienteId
+                        topografia {
+                          id
+                          ... on TopografiaPerna {
+                            lateralidadeId
+                            segmentacaoId
+                            regiaoAnatomicaId
+                          }
+                          ... on TopografiaPe {
+                            lateralidadeId
+                            regiaoTopograficaPeId
+                          }
+                        }
+                        ceap {
+                          classeClinica { id name }
+                          etiologia { id name }
+                          anatomia { id name }
+                          patofisiologia { id name }
+                        }
+                    }
+                }",
+                variables = new
+                {
+                    pacienteId = pacienteId.ToString()
+                }
+            };
+
+            var queryContent = new StringContent(JsonSerializer.Serialize(queryRequest), Encoding.UTF8, "application/json");
+
+            // Act
+            var queryResponse = await _client.PostAsync("/graphql", queryContent);
+            var queryJson = await queryResponse.Content.ReadAsStringAsync();
+            Console.WriteLine($"[DEBUG] Resposta GraphQL Query: {queryJson}");
+
+            // Assert
+            queryResponse.IsSuccessStatusCode.Should().BeTrue();
+            var queryDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(queryJson, _jsonOptions);
+            var ulceras = queryDict["data"].GetProperty("ulcerasByPaciente");
+            
+            // Deve retornar uma lista com pelo menos 2 úlceras
+            var count = ulceras.GetArrayLength();
+            count.Should().BeGreaterThanOrEqualTo(2);
+            
+            // Verificar se todas as úlceras pertencem ao paciente correto
+            foreach (var ulcera in ulceras.EnumerateArray())
+            {
+                var ulceraPacienteId = ulcera.GetProperty("pacienteId").GetString();
+                Guid.Parse(ulceraPacienteId).Should().Be(pacienteId);
+            }
         }
     }
 }

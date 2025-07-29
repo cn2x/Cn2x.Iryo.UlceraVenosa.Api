@@ -3,7 +3,7 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
-namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Medidas;
+namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Medida;
 
 public class UpsertMedidaCommandHandler : IRequestHandler<UpsertMedidaCommand, Guid>
 {
@@ -21,7 +21,7 @@ public class UpsertMedidaCommandHandler : IRequestHandler<UpsertMedidaCommand, G
             throw new Exception($"Avaliação de úlcera {request.AvaliacaoUlceraId} não encontrada");
 
         // Sempre cria ou atualiza a Medida embutida
-        avaliacao.Medida = new Medida
+        avaliacao.Medida = new Domain.ValueObjects.Medida
         {
             Comprimento = request.Comprimento,
             Largura = request.Largura,

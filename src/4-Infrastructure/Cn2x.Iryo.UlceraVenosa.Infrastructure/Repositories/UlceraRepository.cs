@@ -16,8 +16,41 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
     public async Task<IEnumerable<Ulcera>> GetByPacienteIdAsync(Guid pacienteId)
     {
         return await _context.Ulceras
-            .Where(u => u.PacienteId == pacienteId)
+            .Include(u => u.Paciente)
+            .Include(u => u.Avaliacoes)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPerna)!.Lateralidade)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPerna)!.Segmentacao)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPerna)!.RegiaoAnatomica)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPe)!.Lateralidade)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPe)!.RegiaoTopograficaPe)
+            .Where(u => u.PacienteId == pacienteId && !u.Desativada)
+            .OrderByDescending(u => u.Id)
             .ToListAsync();
+    }
+
+    public async Task<Ulcera?> GetByPacienteIdSingleAsync(Guid pacienteId)
+    {
+        return await _context.Ulceras
+            .Include(u => u.Paciente)
+            .Include(u => u.Avaliacoes)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPerna)!.Lateralidade)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPerna)!.Segmentacao)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPerna)!.RegiaoAnatomica)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPe)!.Lateralidade)
+            .Include(u => u.Topografia)
+            .ThenInclude(t => (t as TopografiaPe)!.RegiaoTopograficaPe)
+            .Where(u => u.PacienteId == pacienteId && !u.Desativada)
+            .OrderByDescending(u => u.Id)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Ulcera>> GetWithDetailsAsync()
@@ -64,7 +97,8 @@ public class UlceraRepository : BaseRepository<Ulcera>, IUlceraRepository
         {
             query = query.Where(u => 
                 u.Paciente.Nome.Contains(searchTerm) ||
-                u.Paciente.Cpf.Contains(searchTerm)
+                u.Paciente.Cpf.Contains(searchTerm) ||
+                u.Paciente.Id.Equals(searchTerm)
             );
         }
 
