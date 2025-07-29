@@ -38,9 +38,6 @@ jobs:
   deploy:
     runs-on: windows-latest
     needs: build
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
 
     steps:
       - name: Download artifact from build job
@@ -48,19 +45,12 @@ jobs:
         with:
           name: .net-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_00FA403DC71C4501A24EC8A1A5228F48 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_299F721E67084BBCBE85B778251B1F9C }}
-          subscription-id: 'b4d66e76-c41e-44c7-9461-e7366132f3bd'
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'cn2x-iryo-ulcera-venosa-api-d9hwadb5dbdsf8bz'
+          app-name: 'cn2x-Iryo-ulcera-venosa-api'
           slot-name: 'Production'
           package: .
-          resource-group-name: 'my-tms_group'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           
