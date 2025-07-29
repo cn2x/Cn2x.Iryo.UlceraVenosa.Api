@@ -59,7 +59,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'cn2x-iryo-ulcera-venosa-api-d9hwadb5dbdsf8bz'
+          app-name: 'cn2x-iryo-ulceravenosa-api'
           slot-name: 'Production'
           package: .
           
