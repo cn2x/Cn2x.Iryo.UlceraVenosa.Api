@@ -53,13 +53,14 @@ jobs:
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_00FA403DC71C4501A24EC8A1A5228F48 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_299F721E67084BBCBE85B778251B1F9C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2DA0D39130C64A81AF0A65BE3B329B3E }}
+          subscription-id: 'b4d66e76-c41e-44c7-9461-e7366132f3bd'
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'cn2x-iryo-ulceravenosa-api'
+          app-name: 'cn2x-iryo-ulcera-venosa-api-d9hwadb5dbdsf8bz'
           slot-name: 'Production'
           package: .
+          resource-group-name: 'my-tms_group'
           
