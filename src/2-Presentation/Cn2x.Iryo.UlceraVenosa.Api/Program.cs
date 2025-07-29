@@ -32,6 +32,9 @@ else
     builder.Services.AddGraphQLServices();
 }
 
+// Configuração dos Health Checks
+builder.Services.AddHealthChecksServices(builder.Configuration);
+
 // Configurações de controllers
 // builder.Services.AddControllers();
 
@@ -52,19 +55,16 @@ app.UseRouting();
 // Configurações de GraphQL
 app.MapGraphQL();
 
-// Health checks
-app.MapGet("/health", () => Results.Ok(new { 
-    status = "healthy", 
-    timestamp = DateTime.UtcNow,
-    version = "1.0.0",
-    environment = app.Environment.EnvironmentName
-}));
+// Configuração dos Health Checks
+app.UseHealthChecks();
 
 // Root endpoint
 app.MapGet("/", () => Results.Ok(new { 
     message = "Úlcera Venosa API is running", 
     graphql = "/graphql",
     health = "/health",
+    healthReady = "/health/ready",
+    healthLive = "/health/live",
     version = "1.0.0"
 }));
 

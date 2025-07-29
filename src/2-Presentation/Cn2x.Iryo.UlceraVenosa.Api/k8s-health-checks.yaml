@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ulcera-venosa-api
+  labels:
+    app: ulcera-venosa-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ulcera-venosa-api
+  template:
+    metadata:
+      labels:
+        app: ulcera-venosa-api
+    spec:
+      containers:
+      - name: ulcera-venosa-api
+        image: ulcera-venosa-api:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        - name: ConnectionStrings__DefaultConnection
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: connection-string
+        # Liveness Probe - Verifica se o processo está vivo
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        # Readiness Probe - Verifica se está pronto para receber tráfego
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        # Startup Probe - Para aplicações que demoram para inicializar
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 80
+          failureThreshold: 30
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ulcera-venosa-api-service
+spec:
+  selector:
+    app: ulcera-venosa-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ulcera-venosa-api-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/health-check-path: /health
+    nginx.ingress.kubernetes.io/health-check-interval: "30s"
+    nginx.ingress.kubernetes.io/health-check-timeout: "10s"
+spec:
+  rules:
+  - host: api.ulceravenosa.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ulcera-venosa-api-service
+            port:
+              number: 80
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+type: Opaque
+data:
+  connection-string: <base64-encoded-connection-string>

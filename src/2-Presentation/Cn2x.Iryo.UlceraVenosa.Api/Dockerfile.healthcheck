@@ -1,0 +1,30 @@
+# Dockerfile com Health Checks configurados
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+# Instala curl para health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY ["Cn2x.Iryo.UlceraVenosa.Api.csproj", "Cn2x.Iryo.UlceraVenosa.Api/"]
+COPY ["../3-Application/Cn2x.Iryo.UlceraVenosa.Application/Cn2x.Iryo.UlceraVenosa.Application.csproj", "../3-Application/Cn2x.Iryo.UlceraVenosa.Application/"]
+RUN dotnet restore "Cn2x.Iryo.UlceraVenosa.Api/Cn2x.Iryo.UlceraVenosa.Api.csproj"
+COPY . .
+WORKDIR "/src/Cn2x.Iryo.UlceraVenosa.Api"
+RUN dotnet build "Cn2x.Iryo.UlceraVenosa.Api.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Cn2x.Iryo.UlceraVenosa.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+# Configuração de Health Check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost/health || exit 1
+
+ENTRYPOINT ["dotnet", "Cn2x.Iryo.UlceraVenosa.Api.dll"]

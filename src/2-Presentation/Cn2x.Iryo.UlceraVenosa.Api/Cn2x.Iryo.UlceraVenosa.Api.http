@@ -1,6 +1,21 @@
 @Cn2x.Iryo.UlceraVenosa.Api_HostAddress = http://localhost:5283
 
-GET {{Cn2x.Iryo.UlceraVenosa.Api_HostAddress}}/weatherforecast/
+### Health Check Geral
+GET {{Cn2x.Iryo.UlceraVenosa.Api_HostAddress}}/health
 Accept: application/json
 
-###
+### Health Check Readiness (Pronto para receber tráfego)
+GET {{Cn2x.Iryo.UlceraVenosa.Api_HostAddress}}/health/ready
+Accept: application/json
+
+### Health Check Liveness (Aplicação viva)
+GET {{Cn2x.Iryo.UlceraVenosa.Api_HostAddress}}/health/live
+Accept: application/json
+
+### Root endpoint
+GET {{Cn2x.Iryo.UlceraVenosa.Api_HostAddress}}/
+Accept: application/json
+
+### GraphQL endpoint
+GET {{Cn2x.Iryo.UlceraVenosa.Api_HostAddress}}/graphql
+Accept: application/json
