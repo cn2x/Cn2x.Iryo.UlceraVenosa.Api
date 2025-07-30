@@ -424,4 +424,40 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
         // Filtro global para pacientes ativos
         modelBuilder.Entity<Paciente>().HasQueryFilter(e => !e.Desativada);
     }
+
+    // Métodos de consulta para Paciente
+    /// <summary>
+    /// Busca pacientes por termo de busca
+    /// </summary>
+    public async Task<IEnumerable<Paciente>> SearchPacientesAsync(string term)
+    {
+        if (string.IsNullOrWhiteSpace(term))
+            return new List<Paciente>();
+
+        var spec = new Domain.Specifications.PacienteFullTextSpecification(term);
+        return await Pacientes.AsNoTracking()
+            .Where(spec.SatisfiedBy())
+            .Take(100)
+            .ToListAsync();
+    }
+
+    /// <summary>
+    /// Busca pacientes por ID, CPF ou nome
+    /// </summary>
+    public async Task<List<Paciente>> GetPacientesAsync(Guid? id, string? cpf, string? nome)
+    {
+        var spec = new Domain.Specifications.PacienteOrSpecification(id, cpf, nome);
+        var queryable = await Set<Paciente>().AsNoTracking().Where(spec.SatisfiedBy()).ToListAsync();
+        return queryable;
+    }
+
+    // Métodos de consulta para Exsudato
+    /// <summary>
+    /// Busca todos os exsudatos ativos
+    /// </summary>
+    public async Task<IEnumerable<Exsudato>> GetExsudatosAtivosAsync()
+    {
+        var all = await ExsudatoTipos.AsNoTracking().ToListAsync();
+        return all.Where(e => !e.Desativada);
+    }
 }
