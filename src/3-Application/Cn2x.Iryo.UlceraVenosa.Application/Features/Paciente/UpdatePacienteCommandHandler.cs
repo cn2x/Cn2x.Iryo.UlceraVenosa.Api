@@ -18,6 +18,7 @@ public class UpdatePacienteCommandHandler : IRequestHandler<UpdatePacienteComman
         paciente.Nome = request.Nome;
         paciente.Cpf = request.Cpf;
         await _repository.UpdateAsync(paciente);
+        await _repository.UnitOfWork.SaveChangesAsync();
         return true;
     }
 } 

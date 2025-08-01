@@ -22,6 +22,7 @@ public class CreatePacienteCommandHandler : IRequestHandler<CreatePacienteComman
             Desativada = false
         };
         await _repository.AddAsync(paciente);
+        await _repository.UnitOfWork.SaveChangesAsync();
         return paciente.Id;
     }
 } 

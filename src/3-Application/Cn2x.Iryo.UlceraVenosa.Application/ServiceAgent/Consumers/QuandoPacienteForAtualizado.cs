@@ -38,12 +38,12 @@ namespace Cn2x.Iryo.UlceraVenosa.Application.Consumers
                     .AsNoTracking()
                     .FirstOrDefaultAsync(p => p.Cpf == message.Cpf);
 
-                if (pacienteExistente != null)
+                if (pacienteExistente is not null)
                 {
                     // Atualiza paciente existente
                     var updateCommand = new UpdatePacienteCommand
                     {
-                        Id = pacienteExistente.Id,
+                        Id = message.PacienteId,
                         Nome = message.Nome,
                         Cpf = message.Cpf
                     };

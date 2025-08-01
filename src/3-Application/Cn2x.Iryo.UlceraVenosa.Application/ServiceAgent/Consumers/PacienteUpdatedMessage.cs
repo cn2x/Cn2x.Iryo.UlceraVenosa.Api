@@ -1,4 +1,6 @@
-﻿namespace Cn2x.Paciente.Application.Features.Paciente.Messages;
+﻿using MediatR;
+
+namespace Cn2x.Paciente.Application.Features.Paciente.Messages;
 
 public class PacienteUpdatedMessage {
     public Guid PacienteId { get; set; }
