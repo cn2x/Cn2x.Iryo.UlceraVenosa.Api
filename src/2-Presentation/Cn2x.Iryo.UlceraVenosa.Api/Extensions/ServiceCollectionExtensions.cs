@@ -15,6 +15,8 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddCustomMassTransit(configuration);
+
         // Configurações de performance
         services.AddPerformanceOptimizations();
         

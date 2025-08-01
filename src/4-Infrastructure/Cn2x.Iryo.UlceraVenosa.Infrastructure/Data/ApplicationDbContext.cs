@@ -14,8 +14,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 public partial class ApplicationDbContext : DbContext, IUnitOfWork
 {
     public bool IsDesign { get; set; }
-
-    // DbSets
+    
     public virtual DbSet<Ulcera> Ulceras { get; set; }
     public virtual DbSet<Paciente> Pacientes { get; set; }
     public virtual DbSet<Exsudato> ExsudatoTipos { get; set; }

@@ -16,6 +16,7 @@ public class CreatePacienteCommandHandler : IRequestHandler<CreatePacienteComman
     {
         var paciente = new Domain.Entities.Paciente
         {
+            Id = request.Id ?? Guid.NewGuid(),
             Nome = request.Nome,
             Cpf = request.Cpf,
             Desativada = false
