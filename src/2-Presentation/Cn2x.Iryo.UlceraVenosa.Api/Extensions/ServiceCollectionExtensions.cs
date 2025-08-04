@@ -65,8 +65,7 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Configura CORS
     /// </summary>
-    private static IServiceCollection AddCorsConfiguration(this IServiceCollection services)
-    {
+    private static IServiceCollection AddCorsConfiguration(this IServiceCollection services) {
         services.AddCors(options =>
         {
             options.AddPolicy("AllowedOrigins", policy =>
@@ -78,7 +77,9 @@ public static class ServiceCollectionExtensions
                         "http://localhost:9000",
                         "https://localhost:9000",
                         "https://firebasestorage.googleapis.com",
-                        "https://cdn.jsdelivr.net"
+                        "https://cdn.jsdelivr.net",
+                        "https://cn2x-iryo-ui-7b0bf.web.app",  // Adicione o orquestrador
+                        "https://cn2x-iryo-ui-7b0bf.firebaseapp.com"  // Versão alternativa do Firebase
                     )
                     .AllowAnyMethod()
                     .AllowAnyHeader()
