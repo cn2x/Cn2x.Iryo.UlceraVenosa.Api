@@ -345,7 +345,9 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
                 sinais.Property(s => s.Calor).HasColumnName("calor");
                 sinais.Property(s => s.Rubor).HasColumnName("rubor");
                 sinais.Property(s => s.Edema).HasColumnName("edema");
-                sinais.Property(s => s.Dor).HasColumnName("dor");
+                sinais.Property(s => s.Dor)
+                    .HasColumnName("dor")
+                    .HasConversion(new DorValueConverter());
                 sinais.Property(s => s.PerdadeFuncao).HasColumnName("perda_de_funcao");
             });
 

@@ -12,10 +12,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration;
 
-public class DatabaseFixture : IAsyncLifetime {
+public class DatabaseFixture : IAsyncLifetime 
+{
     public string ConnectionString { get; private set; } = "Host=pgsql52-farm1.kinghost.net;Database=mytms2;Username=mytm2s;Password=Rickyelton10@;SSL Mode=Prefer;Trust Server Certificate=true;Timeout=60;Command Timeout=120;";
 
-    public async Task InitializeAsync() {
+    public async Task InitializeAsync() 
+    {
         // Testa a conexão com o banco KingHost
         var maxAttempts = 5;
         var delayMs = 2000;
@@ -61,8 +63,10 @@ public class DatabaseFixture : IAsyncLifetime {
         Console.WriteLine("[DatabaseFixture] Migrations aplicadas com sucesso.");
     }
 
-    public async Task DisposeAsync() {
+    public async Task DisposeAsync() 
+    {
         // Não há nada para limpar quando usando banco remoto
         await Task.CompletedTask;
     }
 }
+

@@ -58,6 +58,9 @@
       <HashCode>AACAAAAAAAAAAgBAIAAAAAAACAAAAAIAAAAAAAAACAA=</HashCode>
       <FileName>ValueObjects\SinaisInflamatorios.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Dor" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.Exsudato">
     <Position X="11.25" Y="11" Width="1.5" />
@@ -120,8 +123,8 @@
     <AssociationLine Name="AvaliacaoUlcera" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="4.312" Y="3.983" />
-        <Point X="4.312" Y="4.358" />
-        <Point X="8.844" Y="4.358" />
+        <Point X="4.312" Y="4.569" />
+        <Point X="8.844" Y="4.569" />
         <Point X="8.844" Y="5.5" />
       </Path>
     </AssociationLine>
@@ -148,6 +151,7 @@
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Entities\Segmentacao.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.RegiaoAnatomica">
     <Position X="21.25" Y="12" Width="1.75" />
@@ -180,6 +184,7 @@
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Entities\Lateralidade.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.TopografiaPe">
     <Position X="21" Y="9" Width="2" />
@@ -216,12 +221,29 @@
       <Property Name="RegiaoAnatomica" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Medida" Collapsed="true">
-    <Position X="8.5" Y="2.75" Width="1.5" />
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Medida">
+    <Position X="8.25" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAAAAAIAAAgAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ValueObjects\Medida.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Dor">
+    <Position X="5.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAABAAAAAAAQAAAAAAAACAA=</HashCode>
+      <FileName>ValueObjects\Dor.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Intensidade" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Intensidade">
+    <Position X="3.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAABABIAAAAACAADAACAAAAQAAAAAAAgAAAAEAAAA=</HashCode>
+      <FileName>ValueObjects\Intensidade.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
