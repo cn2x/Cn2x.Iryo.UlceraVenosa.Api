@@ -17,6 +17,7 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
     
     public virtual DbSet<Ulcera> Ulceras { get; set; }
     public virtual DbSet<Paciente> Pacientes { get; set; }
+    public virtual DbSet<Profissional> Profissionais { get; set; }
     public virtual DbSet<Exsudato> ExsudatoTipos { get; set; }
     public virtual DbSet<AvaliacaoUlcera> AvaliacoesUlcera { get; set; }
     public virtual DbSet<ExsudatoDaAvaliacao> ExsudatosAvaliacao { get; set; }
@@ -99,6 +100,7 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
         // Configurações específicas
         ConfigureUlcera(modelBuilder);
         ConfigurePaciente(modelBuilder);
+        ConfigureProfissional(modelBuilder);
         ConfigureExsudato(modelBuilder);
         ConfigureAvaliacaoUlcera(modelBuilder);
         ConfigureImagemAvaliacaoUlcera(modelBuilder);
@@ -245,6 +247,19 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
         });
     }
 
+    private void ConfigureProfissional(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Profissional>(entity =>
+        {
+            entity.ToTable("profissionais");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Nome).HasColumnName("nome").IsRequired().HasMaxLength(200);
+
+            // Índices
+            entity.HasIndex(e => e.Nome);
+        });
+    }
+
     private void ConfigureExsudato(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Exsudato>(entity =>
@@ -326,6 +341,7 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
             entity.ToTable("avaliacoes_ulcera");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.UlceraId).HasColumnName("ulcera_id");
+            entity.Property(e => e.ProfissionalId).HasColumnName("profissional_id");
             entity.Property(e => e.DataAvaliacao).HasColumnName("data_avaliacao").IsRequired();
             entity.Property(e => e.MesesDuracao).HasColumnName("meses_duracao").IsRequired();
 
@@ -363,6 +379,11 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
                   .WithMany(u => u.Avaliacoes)
                   .HasForeignKey(e => e.UlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Profissional)
+                  .WithMany(p => p.Avaliacoes)
+                  .HasForeignKey(e => e.ProfissionalId)
+                  .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasMany(e => e.Imagens)
                   .WithOne(i => i.AvaliacaoUlcera)
@@ -424,6 +445,9 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
     {
         // Filtro global para pacientes ativos
         modelBuilder.Entity<Paciente>().HasQueryFilter(e => !e.Desativada);
+        
+        // Filtro global para profissionais ativos
+        modelBuilder.Entity<Profissional>().HasQueryFilter(e => !e.Desativada);
     }
 
     // Métodos de consulta para Paciente

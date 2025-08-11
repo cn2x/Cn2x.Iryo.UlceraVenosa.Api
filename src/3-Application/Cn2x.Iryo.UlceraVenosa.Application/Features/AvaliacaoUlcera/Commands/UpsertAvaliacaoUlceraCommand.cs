@@ -9,6 +9,7 @@ public class UpsertAvaliacaoUlceraCommand : IRequest<Guid>
 {
     public Guid? Id { get; set; } // Se null ou Guid.Empty, cria; senão, atualiza
     public Guid UlceraId { get; set; }
+    public Guid ProfissionalId { get; set; }
     public DateTime DataAvaliacao { get; set; }
     public int MesesDuracao { get; set; } // duração em meses desde o surgimento da úlcera
     public Caracteristicas Caracteristicas { get; set; } = new();

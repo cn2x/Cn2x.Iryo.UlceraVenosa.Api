@@ -27,6 +27,7 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
             var novaAvaliacao = new Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera
             {
                 UlceraId = request.UlceraId,
+                ProfissionalId = request.ProfissionalId,
                 DataAvaliacao = request.DataAvaliacao,
                 MesesDuracao = request.MesesDuracao,
                 Caracteristicas = request.Caracteristicas,
@@ -42,6 +43,7 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
         {
             // Atualização
             avaliacao.UlceraId = request.UlceraId;
+            avaliacao.ProfissionalId = request.ProfissionalId;
             avaliacao.DataAvaliacao = request.DataAvaliacao;
             avaliacao.MesesDuracao = request.MesesDuracao;
             avaliacao.Caracteristicas = request.Caracteristicas;

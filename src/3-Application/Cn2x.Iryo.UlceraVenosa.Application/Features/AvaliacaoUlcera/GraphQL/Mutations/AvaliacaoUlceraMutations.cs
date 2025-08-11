@@ -18,6 +18,7 @@ public class AvaliacaoUlceraMutations
         {
             Id = input.Id,
             UlceraId = input.UlceraId,
+            ProfissionalId = input.ProfissionalId,
             DataAvaliacao = input.DataAvaliacao,
             MesesDuracao = input.MesesDuracao,
             Caracteristicas = input.Caracteristicas,

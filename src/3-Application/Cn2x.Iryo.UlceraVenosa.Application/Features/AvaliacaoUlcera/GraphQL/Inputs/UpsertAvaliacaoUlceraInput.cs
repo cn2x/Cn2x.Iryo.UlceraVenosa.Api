@@ -7,6 +7,7 @@ public class UpsertAvaliacaoUlceraInput
 {
     public Guid? Id { get; set; }
     public Guid UlceraId { get; set; }
+    public Guid ProfissionalId { get; set; }
     public DateTime DataAvaliacao { get; set; }
     public int MesesDuracao { get; set; }    
     public Caracteristicas Caracteristicas { get; set; } = new();

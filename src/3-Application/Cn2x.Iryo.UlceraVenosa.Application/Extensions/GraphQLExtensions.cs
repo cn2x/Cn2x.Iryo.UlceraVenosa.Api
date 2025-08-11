@@ -10,6 +10,9 @@ using Cn2x.Iryo.UlceraVenosa.Application.Features.Exsudato.GraphQL.Queries;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Referencia.GraphQL.Queries;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.Mutations;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Medida.GraphQL.Mutations;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Profissional.GraphQL.Queries;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Profissional.GraphQL.Mutations;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.Profissional.GraphQL.Types;
 // Types organizados por feature
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.GraphQL.Types;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Paciente.GraphQL.Types;
@@ -36,6 +39,7 @@ public static class GraphQLExtensions
             .AddTypeExtension<UlceraQueries>()
             .AddTypeExtension<ClassificacaoQueries>()
             .AddTypeExtension<PacienteQueries>()
+            .AddTypeExtension<ProfissionalQueries>()
             .AddTypeExtension<SegmentacaoQueries>()
             .AddTypeExtension<RegiaoAnatomicaQueries>()
             .AddTypeExtension<LateralidadeQueries>()
@@ -44,6 +48,8 @@ public static class GraphQLExtensions
             .AddTypeExtension<UlceraPernaMutations>()
             .AddTypeExtension<UlceraPeMutations>()
             .AddTypeExtension<MedidaMutations>()
+            .AddTypeExtension<ProfissionalMutations>()
+            .AddTypeExtension<AvaliacaoUlceraMutations>()
             // Types da feature Ulcera
             .AddType<UlceraType>()
             .AddType<CaracteristicasType>()
@@ -56,6 +62,8 @@ public static class GraphQLExtensions
             .AddType<PagedResultUlceraType>()
             // Types da feature Paciente
             .AddType<PacienteType>()
+            // Types da feature Profissional
+            .AddType<ProfissionalType>()
             // Types da feature Medida
             .AddType<MedidaType>()
             // Types da feature Referencia
@@ -89,6 +97,7 @@ public static class GraphQLExtensions
             .AddTypeExtension<UlceraQueries>()
             .AddTypeExtension<ClassificacaoQueries>()
             .AddTypeExtension<PacienteQueries>()
+            .AddTypeExtension<ProfissionalQueries>()
             .AddTypeExtension<SegmentacaoQueries>()
             .AddTypeExtension<RegiaoAnatomicaQueries>()
             .AddTypeExtension<LateralidadeQueries>()
@@ -97,6 +106,8 @@ public static class GraphQLExtensions
             .AddTypeExtension<UlceraPernaMutations>()
             .AddTypeExtension<UlceraPeMutations>()
             .AddTypeExtension<MedidaMutations>()
+            .AddTypeExtension<ProfissionalMutations>()
+            .AddTypeExtension<AvaliacaoUlceraMutations>()
             // Types da feature Ulcera
             .AddType<UlceraType>()
             .AddType<CaracteristicasType>()
@@ -109,6 +120,8 @@ public static class GraphQLExtensions
             .AddType<PagedResultUlceraType>()
             // Types da feature Paciente
             .AddType<PacienteType>()
+            // Types da feature Profissional
+            .AddType<ProfissionalType>()
             // Types da feature Medida
             .AddType<MedidaType>()
             // Types da feature Referencia

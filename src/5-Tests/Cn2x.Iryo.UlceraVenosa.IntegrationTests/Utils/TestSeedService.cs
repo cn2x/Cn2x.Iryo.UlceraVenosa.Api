@@ -13,6 +13,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils
 {
     public static class TestSeedData {
         public static Guid PacienteId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+        public static Guid ProfissionalId = Guid.Parse("66666666-6666-6666-6666-666666666666");
         public static Guid RegiaoTopograficaPeId = Guid.Parse("22222222-2222-2222-2222-222222222222");
         public static Guid LateralidadeId = Guid.Parse("33333333-3333-3333-3333-333333333333");
         public static Guid SegmentacaoId = Guid.Parse("44444444-4444-4444-4444-444444444444");
@@ -21,6 +22,10 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Utils
         public static void Seed(ApplicationDbContext db) {
             if (!db.Pacientes.Any(p => p.Id == PacienteId)) {
                 db.Pacientes.Add(new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Paciente { Id = PacienteId, Nome = "Paciente Teste" });
+                db.SaveChanges();
+            }
+            if (!db.Profissionais.Any(p => p.Id == ProfissionalId)) {
+                db.Profissionais.Add(new Cn2x.Iryo.UlceraVenosa.Domain.Entities.Profissional { Id = ProfissionalId, Nome = "Profissional Teste", CriadoEm = DateTime.UtcNow });
                 db.SaveChanges();
             }
             if (!db.RegioesTopograficasPe.Any(r => r.Id == RegiaoTopograficaPeId)) {

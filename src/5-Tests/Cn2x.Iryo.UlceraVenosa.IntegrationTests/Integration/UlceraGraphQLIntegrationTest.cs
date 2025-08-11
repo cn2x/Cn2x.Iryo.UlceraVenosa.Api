@@ -425,6 +425,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration {
                 var avaliacao = new AvaliacaoUlcera {
                     Id = Guid.NewGuid(),
                     UlceraId = ulcera.Id,
+                    ProfissionalId = Utils.TestSeedData.ProfissionalId,
                     DataAvaliacao = DateTime.UtcNow,
                     MesesDuracao = 1,
                     Caracteristicas = new(),
