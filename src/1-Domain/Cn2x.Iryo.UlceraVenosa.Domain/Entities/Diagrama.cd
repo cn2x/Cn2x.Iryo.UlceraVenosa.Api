@@ -113,16 +113,9 @@
   </Class>
   <Class Name="Cn2x.Iryo.UlceraVenosa.Domain.Entities.ImagemAvaliacaoUlcera">
     <Position X="3" Y="2.75" Width="2" />
-    <AssociationLine Name="Imagem" Type="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Imagem" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="3.875" Y="3.983" />
-        <Point X="3.875" Y="7.107" />
-        <Point X="2.75" Y="7.107" />
-      </Path>
-    </AssociationLine>
     <AssociationLine Name="AvaliacaoUlcera" Type="Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="4.312" Y="3.983" />
+        <Point X="4.312" Y="4.175" />
         <Point X="4.312" Y="4.569" />
         <Point X="8.844" Y="4.569" />
         <Point X="8.844" Y="5.5" />
@@ -133,7 +126,6 @@
       <FileName>Entities\ImagemAvaliacaoUlcera.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Imagem" />
       <Property Name="AvaliacaoUlcera" />
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
