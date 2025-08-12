@@ -86,7 +86,7 @@
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAACCAgAAAAAAAAAAAAAAAAAiCQAAQAAgAAAAAAAA=</HashCode>
+      <HashCode>AAAAACCAgAAAAAAAAgAAAAAAAAiCQAAQAAgAABAAAAA=</HashCode>
       <FileName>Entities\AvaliacaoUlcera.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -238,7 +238,7 @@
       <Property Name="Intensidade" />
     </ShowAsAssociation>
   </Class>
-  <Enum Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Intensidade">
+  <Enum Name="Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects.Intensidade" Collapsed="true">
     <Position X="3.25" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAABABIAAAAACAADAACAAAAQAAAAAAAgAAAAEAAAA=</HashCode>

@@ -1,6 +1,6 @@
 using System;
 using Cn2x.Iryo.UlceraVenosa.Domain.Core;
-using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
+using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 
 namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 

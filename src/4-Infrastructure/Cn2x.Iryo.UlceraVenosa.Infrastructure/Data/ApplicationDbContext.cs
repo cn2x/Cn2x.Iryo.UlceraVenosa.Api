@@ -103,6 +103,7 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
         ConfigureProfissional(modelBuilder);
         ConfigureExsudato(modelBuilder);
         ConfigureAvaliacaoUlcera(modelBuilder);
+        ConfigureImagem(modelBuilder);
         ConfigureImagemAvaliacaoUlcera(modelBuilder);
         ConfigureExsudatoDaAvaliacao(modelBuilder);
 
@@ -397,6 +398,20 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
         });
     }
 
+    // Configuração da entidade Imagem
+    private void ConfigureImagem(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Imagem>(entity =>
+        {
+            entity.ToTable("imagens");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Url).HasColumnName("url").IsRequired();
+            entity.Property(e => e.Descricao).HasColumnName("descricao");
+            entity.Property(e => e.DataCaptura).HasColumnName("data_captura").IsRequired();
+            entity.Property(e => e.CriadoEm).HasColumnName("criado_em").IsRequired();
+        });
+    }
+
     // Novo: Configuração da entidade ImagemAvaliacaoUlcera
     private void ConfigureImagemAvaliacaoUlcera(ModelBuilder modelBuilder)
     {
@@ -410,16 +425,11 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
                   .HasForeignKey(e => e.AvaliacaoUlceraId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            // Configura o Value Object Imagem como owned type
-            entity.OwnsOne(e => e.Imagem, img =>
-            {
-                img.Property(i => i.ContentType)
-                    .HasColumnName("content_type")
-                    .HasConversion(new TipoConteudoValueConverter())
-                    .IsRequired();
-                img.Property(i => i.TamanhoBytes).HasColumnName("tamanho_bytes").IsRequired();
-                img.Property(i => i.DataCaptura).HasColumnName("data_captura").IsRequired();
-            });
+            // Configura o relacionamento com a entidade Imagem
+            entity.HasOne(e => e.Imagem)
+                  .WithMany()
+                  .HasForeignKey("imagem_id")
+                  .OnDelete(DeleteBehavior.Cascade);
         });
     }
 

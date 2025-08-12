@@ -105,3 +105,4 @@ query {
 - O relacionamento é opcional: uma avaliação pode não ter profissional associado
 
 
+
