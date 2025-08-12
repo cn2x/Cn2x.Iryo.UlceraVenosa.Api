@@ -7,7 +7,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 /// </summary>
 public class Imagem : Entity<Guid>, IAggregateRoot
 {
-    public string Url { get; set; } = string.Empty;
+    public string Url { get; private set; } = string.Empty;
     public string? Descricao { get; set; }
     public DateTime DataCaptura { get; set; }
     public DateTime CriadoEm { get; set; } = DateTime.UtcNow;
@@ -25,4 +25,16 @@ public class Imagem : Entity<Guid>, IAggregateRoot
     
     // Construtor para EF Core
     private Imagem() { }
+    
+    /// <summary>
+    /// Atualiza a URL da imagem após upload para o Google Cloud Storage
+    /// </summary>
+    /// <param name="url">Nova URL da imagem</param>
+    public void AtualizarUrl(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+            throw new ArgumentException("URL não pode ser vazia", nameof(url));
+            
+        Url = url;
+    }
 }

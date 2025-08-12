@@ -14,7 +14,7 @@ Esta documentação fornece exemplos de como usar as mutations GraphQL para cria
 - `sinaisInflamatorios`: Sinais inflamatórios
 - `medida`: Medidas da úlcera
 - `exsudatos`: Lista de IDs de exsudatos
-- `imagens`: Lista de IDs de imagens
+- `imagens`: Lista de arquivos de imagem (base64) + metadados
 
 ---
 
@@ -86,12 +86,12 @@ mutation CreateAvaliacaoUlceraCompleta {
     ]
     imagens: [
       {
-        url: "https://storage.googleapis.com/ulcera-images/ferida-001.jpg"
+        arquivoBase64: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
         descricao: "Foto da ferida - vista frontal"
         dataCaptura: "2024-01-15T10:00:00Z"
       },
       {
-        url: "https://storage.googleapis.com/ulcera-images/ferida-002.jpg"
+        arquivoBase64: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
         descricao: "Foto da ferida - vista lateral"
         dataCaptura: "2024-01-15T10:05:00Z"
       }
@@ -168,12 +168,12 @@ mutation AdicionarImagensAvaliacao {
     # ... outros campos existentes ...
     imagens: [
       {
-        url: "https://storage.googleapis.com/ulcera-images/nova-imagem-001.jpg"
+        arquivoBase64: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
         descricao: "Nova foto da evolução da ferida"
         dataCaptura: "2024-01-20T14:30:00Z"
       },
       {
-        url: "https://storage.googleapis.com/ulcera-images/nova-imagem-002.jpg"
+        arquivoBase64: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
         descricao: "Foto do curativo aplicado"
         dataCaptura: "2024-01-20T14:35:00Z"
       }
@@ -293,6 +293,28 @@ query GetAvaliacaoUlceraCompleta {
 
 ---
 
+## 🚀 **Arquitetura de Upload de Imagens**
+
+### **Fluxo Completo:**
+```mermaid
+graph TD
+    A[Cliente envia mutation] --> B[Handler salva avaliação]
+    B --> C[Dispara ImagemUploadSolicitadaEvent]
+    C --> D[EventHandler processa evento]
+    D --> E[Upload para Google Cloud Storage]
+    E --> F[Atualiza entidade com URL]
+    F --> G[Salva alterações no banco]
+```
+
+### **Vantagens da Abordagem:**
+- ✅ **Separação de Responsabilidades**: Upload separado da lógica de negócio
+- ✅ **Processamento Assíncrono**: Não bloqueia a resposta da mutation
+- ✅ **Escalabilidade**: Múltiplas imagens podem ser processadas em paralelo
+- ✅ **Resiliência**: Falhas no upload não afetam a criação da avaliação
+- ✅ **Auditoria**: Eventos podem ser logados e monitorados
+
+---
+
 ## ⚠️ **Observações Importantes**
 
 ### **Comportamento do Upsert:**
@@ -301,11 +323,20 @@ query GetAvaliacaoUlceraCompleta {
 - **Array vazio**: Remove todos os relacionamentos
 - **Null/undefined**: Mantém os relacionamentos existentes
 
+### **Fluxo de Imagens:**
+1. **Upload**: Imagem é enviada no payload (base64)
+2. **Salvamento**: Entidade é salva temporariamente sem URL
+3. **Evento**: `ImagemUploadSolicitadaEvent` é disparado
+4. **Processamento**: Handler faz upload para Google Cloud Storage
+5. **Atualização**: URL é atualizada na entidade
+
 ### **Validações:**
-- Os IDs de exsudatos e imagens devem existir no sistema
+- Os IDs de exsudatos devem existir no sistema
 - O `profissionalId` é obrigatório
 - A `ulceraId` deve existir
+- Arquivos base64 devem ser válidos
 
 ### **Performance:**
 - Para grandes quantidades de imagens/exsudatos, considere usar mutations específicas
 - O upsert atualiza todos os relacionamentos em uma única operação
+- Upload de imagens é processado de forma assíncrona via eventos

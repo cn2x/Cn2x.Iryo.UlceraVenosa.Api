@@ -9,10 +9,14 @@ namespace Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Commands;
 public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliacaoUlceraCommand, Guid>
 {
     private readonly IAvaliacaoUlceraRepository _avaliacaoUlceraRepository;
+    private readonly IMediator _mediator;
 
-    public UpsertAvaliacaoUlceraCommandHandler(IAvaliacaoUlceraRepository avaliacaoUlceraRepository)
+    public UpsertAvaliacaoUlceraCommandHandler(
+        IAvaliacaoUlceraRepository avaliacaoUlceraRepository,
+        IMediator mediator)
     {
         _avaliacaoUlceraRepository = avaliacaoUlceraRepository;
+        _mediator = mediator;
     }
 
     public async Task<Guid> Handle(UpsertAvaliacaoUlceraCommand request, CancellationToken cancellationToken)
@@ -55,8 +59,9 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
             {
                 foreach (var imagemInput in request.Imagens)
                 {
+                    // Criar imagem temporária (sem URL ainda)
                     var imagem = new Domain.Entities.Imagem(
-                        imagemInput.Url,
+                        string.Empty, // URL será preenchida pelo evento de domínio
                         imagemInput.Descricao,
                         imagemInput.DataCaptura
                     );
@@ -71,6 +76,23 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
 
             await _avaliacaoUlceraRepository.AddAsync(novaAvaliacao);
             await _avaliacaoUlceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+            
+            // Disparar eventos para upload das imagens
+            if (request.Imagens?.Any() == true)
+            {
+                foreach (var imagemInput in request.Imagens)
+                {
+                    var evento = new Domain.Events.ImagemUploadSolicitadaEvent(
+                        novaAvaliacao.Id,
+                        imagemInput.ArquivoBase64,
+                        imagemInput.Descricao,
+                        imagemInput.DataCaptura
+                    );
+                    
+                    await _mediator.Publish(evento, cancellationToken);
+                }
+            }
+            
             return novaAvaliacao.Id;
         }
         else
@@ -125,8 +147,9 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
         {
             foreach (var imagemInput in novasImagens)
             {
+                // Criar imagem temporária (sem URL ainda)
                 var imagem = new Domain.Entities.Imagem(
-                    imagemInput.Url,
+                    string.Empty, // URL será preenchida pelo evento de domínio
                     imagemInput.Descricao,
                     imagemInput.DataCaptura
                 );
