@@ -3,7 +3,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Services;
 /// <summary>
 /// Interface para o serviço de Google Cloud Storage
 /// </summary>
-public interface IGoogleCloudStorageService
+public interface IGoogleCloudStorageService 
 {
     /// <summary>
     /// Faz upload de uma imagem para o Google Cloud Storage
