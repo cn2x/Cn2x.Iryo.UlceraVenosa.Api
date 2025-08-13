@@ -24,7 +24,9 @@ public class AvaliacaoUlceraMutations
             Caracteristicas = input.Caracteristicas,
             SinaisInflamatorios = input.SinaisInflamatorios,
             Medida = input.Medida,
-            Imagens = input.Imagens,
+            Arquivo = input.Arquivo,
+            DescricaoImagem = input.DescricaoImagem,
+            DataCapturaImagem = input.DataCapturaImagem,
             Exsudatos = input.Exsudatos
         };
         var avaliacaoId = await mediator.Send(command);        

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using System.Runtime;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Extensions;
+using Cn2x.Iryo.UlceraVenosa.Application.Extensions;
 using MediatR;
 
 namespace Cn2x.Iryo.UlceraVenosa.Api.Extensions;
@@ -40,6 +41,9 @@ public static class ServiceCollectionExtensions
         
         // Configurações de infraestrutura
         services.AddInfrastructureServices();
+        
+        // Configurações de aplicação
+        services.AddApplicationServices();
         
         // Configurações de GraphQL
         // services.AddGraphQLServices();

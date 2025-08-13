@@ -3,6 +3,8 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.Inputs;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Services;
+using HotChocolate.Types;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Commands;
 
@@ -10,13 +12,16 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
 {
     private readonly IAvaliacaoUlceraRepository _avaliacaoUlceraRepository;
     private readonly IMediator _mediator;
+    private readonly IFileUploadService _fileUploadService;
 
     public UpsertAvaliacaoUlceraCommandHandler(
         IAvaliacaoUlceraRepository avaliacaoUlceraRepository,
-        IMediator mediator)
+        IMediator mediator,
+        IFileUploadService fileUploadService)
     {
         _avaliacaoUlceraRepository = avaliacaoUlceraRepository;
         _mediator = mediator;
+        _fileUploadService = fileUploadService;
     }
 
     public async Task<Guid> Handle(UpsertAvaliacaoUlceraCommand request, CancellationToken cancellationToken)
@@ -54,43 +59,41 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
                 }
             }
 
-            // Processar imagens se fornecidas
-            if (request.Imagens?.Any() == true)
+            // Processar arquivo se fornecido
+            if (request.Arquivo != null)
             {
-                foreach (var imagemInput in request.Imagens)
+                // Processar o arquivo para obter bytes e metadados
+                var fileResult = await _fileUploadService.ProcessFileAsync(request.Arquivo);
+                
+                // Criar imagem temporária (sem URL ainda)
+                var imagem = new Domain.Entities.Imagem(
+                    string.Empty, // URL será preenchida pelo evento de domínio
+                    request.DescricaoImagem ?? fileResult.Description ?? "Imagem da úlcera",
+                    request.DataCapturaImagem ?? fileResult.CaptureDate
+                );
+                
+                novaAvaliacao.Imagens.Add(new ImagemAvaliacaoUlcera
                 {
-                    // Criar imagem temporária (sem URL ainda)
-                    var imagem = new Domain.Entities.Imagem(
-                        string.Empty, // URL será preenchida pelo evento de domínio
-                        imagemInput.Descricao,
-                        imagemInput.DataCaptura
-                    );
-                    
-                    novaAvaliacao.Imagens.Add(new ImagemAvaliacaoUlcera
-                    {
-                        AvaliacaoUlceraId = novaAvaliacao.Id,
-                        Imagem = imagem
-                    });
-                }
+                    AvaliacaoUlceraId = novaAvaliacao.Id,
+                    Imagem = imagem
+                });
             }
 
             await _avaliacaoUlceraRepository.AddAsync(novaAvaliacao);
             await _avaliacaoUlceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
             
-            // Disparar eventos para upload das imagens
-            if (request.Imagens?.Any() == true)
+            // Disparar evento para upload da imagem
+            if (request.Arquivo != null)
             {
-                foreach (var imagemInput in request.Imagens)
-                {
-                    var evento = new Domain.Events.ImagemUploadSolicitadaEvent(
-                        novaAvaliacao.Id,
-                        imagemInput.ArquivoBase64,
-                        imagemInput.Descricao,
-                        imagemInput.DataCaptura
-                    );
-                    
-                    await _mediator.Publish(evento, cancellationToken);
-                }
+                var fileResult = await _fileUploadService.ProcessFileAsync(request.Arquivo);
+                var evento = new Domain.Events.ImagemUploadSolicitadaEvent(
+                    novaAvaliacao.Id,
+                    Convert.ToBase64String(fileResult.Bytes), // Converter para base64 para o evento
+                    request.DescricaoImagem ?? fileResult.Description ?? "Imagem da úlcera",
+                    request.DataCapturaImagem ?? fileResult.CaptureDate
+                );
+                
+                await _mediator.Publish(evento, cancellationToken);
             }
             
             return novaAvaliacao.Id;
@@ -110,7 +113,7 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
             await AtualizarExsudatos(avaliacao, request.Exsudatos, cancellationToken);
 
             // Atualizar imagens
-            await AtualizarImagens(avaliacao, request.Imagens, cancellationToken);
+            await AtualizarImagens(avaliacao, request.Arquivo, request.DescricaoImagem, request.DataCapturaImagem, cancellationToken);
 
             await _avaliacaoUlceraRepository.UpdateAsync(avaliacao);
             await _avaliacaoUlceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
@@ -137,29 +140,40 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
         }
     }
 
-    private async Task AtualizarImagens(Domain.Entities.AvaliacaoUlcera avaliacao, List<ImagemInput>? novasImagens, CancellationToken cancellationToken)
+    private async Task AtualizarImagens(Domain.Entities.AvaliacaoUlcera avaliacao, IFile? novoArquivo, string? descricaoImagem, DateTime? dataCapturaImagem, CancellationToken cancellationToken)
     {
-        // Limpar imagens existentes
-        avaliacao.Imagens.Clear();
-
-        // Adicionar novas imagens se fornecidas
-        if (novasImagens?.Any() == true)
+        // Só apagar imagens existentes se uma nova imagem for fornecida
+        if (novoArquivo != null)
         {
-            foreach (var imagemInput in novasImagens)
+            // Limpar imagens existentes (comportamento de replace)
+            avaliacao.Imagens.Clear();
+
+            // Processar o arquivo para obter bytes e metadados
+            var fileResult = await _fileUploadService.ProcessFileAsync(novoArquivo);
+            
+            // Criar imagem temporária (sem URL ainda)
+            var imagem = new Domain.Entities.Imagem(
+                string.Empty, // URL será preenchida pelo evento de domínio
+                descricaoImagem ?? fileResult.Description ?? "Imagem da úlcera",
+                dataCapturaImagem ?? fileResult.CaptureDate
+            );
+            
+            avaliacao.Imagens.Add(new ImagemAvaliacaoUlcera
             {
-                // Criar imagem temporária (sem URL ainda)
-                var imagem = new Domain.Entities.Imagem(
-                    string.Empty, // URL será preenchida pelo evento de domínio
-                    imagemInput.Descricao,
-                    imagemInput.DataCaptura
-                );
-                
-                avaliacao.Imagens.Add(new ImagemAvaliacaoUlcera
-                {
-                    AvaliacaoUlceraId = avaliacao.Id,
-                    Imagem = imagem
-                });
-            }
+                AvaliacaoUlceraId = avaliacao.Id,
+                Imagem = imagem
+            });
+
+            // Disparar evento para upload da nova imagem
+            var evento = new Domain.Events.ImagemUploadSolicitadaEvent(
+                avaliacao.Id,
+                Convert.ToBase64String(fileResult.Bytes), // Converter para base64 para o evento
+                descricaoImagem ?? fileResult.Description ?? "Imagem da úlcera",
+                dataCapturaImagem ?? fileResult.CaptureDate
+            );
+            
+            await _mediator.Publish(evento, cancellationToken);
         }
+        // Se não houver novo arquivo, manter as imagens existentes (não fazer nada)
     }
 }

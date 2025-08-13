@@ -24,6 +24,7 @@ public static class ServiceCollectionExtensions
             .WithScopedLifetime());
         // Registro explícito do repositório genérico
         services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+        
         return services;
     }
 } 

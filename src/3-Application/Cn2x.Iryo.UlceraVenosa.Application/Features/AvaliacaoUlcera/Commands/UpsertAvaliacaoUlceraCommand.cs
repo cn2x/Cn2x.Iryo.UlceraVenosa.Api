@@ -3,6 +3,7 @@ using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.Inputs;
+using HotChocolate.Types;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Commands;
 
@@ -16,6 +17,13 @@ public class UpsertAvaliacaoUlceraCommand : IRequest<Guid>
     public Caracteristicas Caracteristicas { get; set; } = new();
     public SinaisInflamatorios SinaisInflamatorios { get; set; } = new();
     public Domain.ValueObjects.Medida? Medida { get; set; }
-    public List<ImagemInput>? Imagens { get; set; }
+    
+    // Upload de arquivo real (mais eficiente)
+    public IFile? Arquivo { get; set; }
+    
+    // Metadados da imagem
+    public string? DescricaoImagem { get; set; }
+    public DateTime? DataCapturaImagem { get; set; }
+    
     public List<Guid>? Exsudatos { get; set; }
 }

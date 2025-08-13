@@ -4,7 +4,15 @@ namespace Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.In
 
 public class ImagemInput
 {
-    public string ArquivoBase64 { get; set; } = string.Empty; // Arquivo em base64
-    public string? Descricao { get; set; }
+    // Base64 opcional (para compatibilidade)
+    public string? ArquivoBase64 { get; set; }
+    
+    // Metadados obrigatórios
+    public string Descricao { get; set; } = string.Empty;
     public DateTime DataCaptura { get; set; }
+    
+    // Metadados opcionais
+    public string? NomeArquivo { get; set; }
+    public string? TipoConteudo { get; set; }
+    public long? TamanhoBytes { get; set; }
 }
