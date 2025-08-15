@@ -16,8 +16,8 @@ public class UpsertAvaliacaoUlceraInput
     public SinaisInflamatorios SinaisInflamatorios { get; set; } = new();
     public Domain.ValueObjects.Medida? Medida { get; set; }
     
-    // Upload de arquivo real (mais eficiente)
-    public IFile? Arquivo { get; set; }
+    // Upload de arquivo como base64 (mais compatível)
+    public string? Arquivo { get; set; }
     
     // Metadados da imagem
     public string? DescricaoImagem { get; set; }

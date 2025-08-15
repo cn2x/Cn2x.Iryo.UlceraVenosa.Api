@@ -1,4 +1,3 @@
-using HotChocolate.Types;
 using Microsoft.Extensions.Logging;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Services;
@@ -15,7 +14,7 @@ public class FileUploadService : IFileUploadService
         _logger = logger;
     }
 
-    public async Task<FileUploadResult> ProcessBase64Async(string base64String)
+    public Task<FileUploadResult> ProcessBase64Async(string base64String)
     {
         try
         {
@@ -32,7 +31,7 @@ public class FileUploadService : IFileUploadService
             var contentType = DetectContentType(bytes);
             var fileName = $"image_{DateTime.UtcNow:yyyyMMddHHmmss}.{GetFileExtension(contentType)}";
 
-            return new FileUploadResult
+            var result = new FileUploadResult
             {
                 Bytes = bytes,
                 ContentType = contentType,
@@ -41,6 +40,8 @@ public class FileUploadService : IFileUploadService
                 Description = "Imagem da úlcera",
                 CaptureDate = DateTime.UtcNow
             };
+            
+            return Task.FromResult(result);
         }
         catch (Exception ex)
         {
@@ -49,34 +50,7 @@ public class FileUploadService : IFileUploadService
         }
     }
 
-    public async Task<FileUploadResult> ProcessFileAsync(IFile file)
-    {
-        try
-        {
-            using var stream = file.OpenReadStream();
-            using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream);
-            
-            var bytes = memoryStream.ToArray();
-            var contentType = file.ContentType ?? DetectContentType(bytes);
-            var fileName = file.Name ?? $"image_{DateTime.UtcNow:yyyyMMddHHmmss}.{GetFileExtension(contentType)}";
 
-            return new FileUploadResult
-            {
-                Bytes = bytes,
-                ContentType = contentType,
-                FileName = fileName,
-                SizeBytes = bytes.Length,
-                Description = "Imagem da úlcera",
-                CaptureDate = DateTime.UtcNow
-            };
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro ao processar arquivo {FileName}", file.Name);
-            throw new ArgumentException($"Erro ao processar arquivo {file.Name}", ex);
-        }
-    }
 
     public bool IsValidImage(byte[] bytes, string contentType)
     {
@@ -113,8 +87,7 @@ public class FileUploadService : IFileUploadService
                     return true;
             }
             
-            // Se chegou até aqui, considerar válido (pode ser um formato não reconhecido)
-            return true;
+            return false;
         }
         catch
         {
@@ -124,31 +97,36 @@ public class FileUploadService : IFileUploadService
 
     private string DetectContentType(byte[] bytes)
     {
-        // Detectar tipo de conteúdo baseado nos bytes mágicos
-        if (bytes.Length >= 2)
-        {
-            if (bytes[0] == 0xFF && bytes[1] == 0xD8)
-                return "image/jpeg";
-            if (bytes.Length >= 8 && bytes[0] == 0x89 && bytes[1] == 0x50 && bytes[2] == 0x4E && bytes[3] == 0x47)
-                return "image/png";
-            if (bytes.Length >= 6 && bytes[0] == 0x47 && bytes[1] == 0x49 && bytes[2] == 0x46)
-                return "image/gif";
-            if (bytes.Length >= 2 && bytes[0] == 0x42 && bytes[1] == 0x4D)
-                return "image/bmp";
-        }
+        if (bytes.Length < 2) return "application/octet-stream";
         
-        return "image/jpeg"; // Padrão
+        // JPEG
+        if (bytes[0] == 0xFF && bytes[1] == 0xD8)
+            return "image/jpeg";
+        
+        // PNG
+        if (bytes.Length >= 8 && bytes[0] == 0x89 && bytes[1] == 0x50 && bytes[2] == 0x4E && bytes[3] == 0x47)
+            return "image/png";
+        
+        // GIF
+        if (bytes.Length >= 6 && bytes[0] == 0x47 && bytes[1] == 0x49 && bytes[2] == 0x46)
+            return "image/gif";
+        
+        // BMP
+        if (bytes.Length >= 2 && bytes[0] == 0x42 && bytes[1] == 0x4D)
+            return "image/bmp";
+        
+        return "application/octet-stream";
     }
 
     private string GetFileExtension(string contentType)
     {
-        return contentType switch
+        return contentType.ToLower() switch
         {
-            "image/jpeg" => "jpg",
+            "image/jpeg" or "image/jpg" => "jpg",
             "image/png" => "png",
             "image/gif" => "gif",
             "image/bmp" => "bmp",
-            _ => "jpg"
+            _ => "bin"
         };
     }
 }

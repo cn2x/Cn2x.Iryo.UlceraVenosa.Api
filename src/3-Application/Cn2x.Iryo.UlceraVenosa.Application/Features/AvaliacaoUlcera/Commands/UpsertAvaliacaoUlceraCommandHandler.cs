@@ -62,8 +62,8 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
             // Processar arquivo se fornecido
             if (request.Arquivo != null)
             {
-                // Processar o arquivo para obter bytes e metadados
-                var fileResult = await _fileUploadService.ProcessFileAsync(request.Arquivo);
+                // Processar o arquivo base64 para obter bytes e metadados
+                var fileResult = await _fileUploadService.ProcessBase64Async(request.Arquivo);
                 
                 // Criar imagem temporária (sem URL ainda)
                 var imagem = new Domain.Entities.Imagem(
@@ -85,10 +85,10 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
             // Disparar evento para upload da imagem
             if (request.Arquivo != null)
             {
-                var fileResult = await _fileUploadService.ProcessFileAsync(request.Arquivo);
+                var fileResult = await _fileUploadService.ProcessBase64Async(request.Arquivo);
                 var evento = new Domain.Events.ImagemUploadSolicitadaEvent(
                     novaAvaliacao.Id,
-                    Convert.ToBase64String(fileResult.Bytes), // Converter para base64 para o evento
+                    request.Arquivo, // Já está em base64
                     request.DescricaoImagem ?? fileResult.Description ?? "Imagem da úlcera",
                     request.DataCapturaImagem ?? fileResult.CaptureDate
                 );
@@ -140,7 +140,7 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
         }
     }
 
-    private async Task AtualizarImagens(Domain.Entities.AvaliacaoUlcera avaliacao, IFile? novoArquivo, string? descricaoImagem, DateTime? dataCapturaImagem, CancellationToken cancellationToken)
+    private async Task AtualizarImagens(Domain.Entities.AvaliacaoUlcera avaliacao, string? novoArquivo, string? descricaoImagem, DateTime? dataCapturaImagem, CancellationToken cancellationToken)
     {
         // Só apagar imagens existentes se uma nova imagem for fornecida
         if (novoArquivo != null)
@@ -148,8 +148,8 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
             // Limpar imagens existentes (comportamento de replace)
             avaliacao.Imagens.Clear();
 
-            // Processar o arquivo para obter bytes e metadados
-            var fileResult = await _fileUploadService.ProcessFileAsync(novoArquivo);
+            // Processar o arquivo base64 para obter bytes e metadados
+            var fileResult = await _fileUploadService.ProcessBase64Async(novoArquivo);
             
             // Criar imagem temporária (sem URL ainda)
             var imagem = new Domain.Entities.Imagem(
@@ -167,7 +167,7 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
             // Disparar evento para upload da nova imagem
             var evento = new Domain.Events.ImagemUploadSolicitadaEvent(
                 avaliacao.Id,
-                Convert.ToBase64String(fileResult.Bytes), // Converter para base64 para o evento
+                novoArquivo, // Já está em base64
                 descricaoImagem ?? fileResult.Description ?? "Imagem da úlcera",
                 dataCapturaImagem ?? fileResult.CaptureDate
             );

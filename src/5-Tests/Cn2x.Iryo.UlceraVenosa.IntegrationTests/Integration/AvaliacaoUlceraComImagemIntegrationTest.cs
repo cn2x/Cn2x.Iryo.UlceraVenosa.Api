@@ -262,8 +262,8 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
             var request = new
             {
                 query = @"
-                    mutation ($input: UpsertAvaliacaoUlceraInput!, $arquivo: Upload!) {
-                        upsertAvaliacaoUlceraAsync(input: $input, arquivo: $arquivo) {
+                    mutation ($input: UpsertAvaliacaoUlceraInput!) {
+                        upsertAvaliacaoUlceraAsync(input: $input) {
                             id
                             ulceraId
                             profissionalId
@@ -299,6 +299,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                         profissionalId = profissionalId,
                         dataAvaliacao = DateTime.UtcNow,
                         mesesDuracao = 2,
+                        arquivo = Convert.ToBase64String(imagemBytes),
                         descricaoImagem = "Imagem de teste da úlcera",
                         dataCapturaImagem = DateTime.UtcNow,
                         caracteristicas = new

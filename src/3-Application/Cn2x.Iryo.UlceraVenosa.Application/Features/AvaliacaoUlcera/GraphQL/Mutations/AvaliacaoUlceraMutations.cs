@@ -29,6 +29,7 @@ public class AvaliacaoUlceraMutations
             DataCapturaImagem = input.DataCapturaImagem,
             Exsudatos = input.Exsudatos
         };
+
         var avaliacaoId = await mediator.Send(command);        
         return null; // ou retorne a consulta se implementada
     }

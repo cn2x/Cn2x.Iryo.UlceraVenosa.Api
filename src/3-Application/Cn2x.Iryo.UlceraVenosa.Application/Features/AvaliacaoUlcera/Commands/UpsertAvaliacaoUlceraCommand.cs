@@ -1,9 +1,5 @@
 using MediatR;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
-using Cn2x.Iryo.UlceraVenosa.Domain.Enumeracoes;
-using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
-using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.Inputs;
-using HotChocolate.Types;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Commands;
 
@@ -18,8 +14,8 @@ public class UpsertAvaliacaoUlceraCommand : IRequest<Guid>
     public SinaisInflamatorios SinaisInflamatorios { get; set; } = new();
     public Domain.ValueObjects.Medida? Medida { get; set; }
     
-    // Upload de arquivo real (mais eficiente)
-    public IFile? Arquivo { get; set; }
+    // Upload de arquivo como base64 (mais compatível)
+    public string? Arquivo { get; set; }
     
     // Metadados da imagem
     public string? DescricaoImagem { get; set; }
