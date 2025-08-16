@@ -15,6 +15,6 @@ public class RegiaoAnatomicaQueries
     [GraphQLName("regioesAnatomicasPerna")]
     public async Task<List<RegiaoAnatomica>> GetRegioesAnatomicasPernaAsync([Service] ApplicationDbContext ctx)
     {
-        return await ctx.GetRegioesAnatomicasAtivasAsync();
+        throw new NotImplementedException();
     }
 } 

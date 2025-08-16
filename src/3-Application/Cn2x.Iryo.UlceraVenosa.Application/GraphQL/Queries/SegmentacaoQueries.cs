@@ -15,6 +15,6 @@ public class SegmentacaoQueries
     [GraphQLName("segmentacoes")]
     public async Task<List<Segmentacao>> GetSegmentacoesAsync([Service] ApplicationDbContext ctx)
     {
-        return await ctx.GetSegmentacoesAtivasAsync();
+        throw new NotImplementedException();
     }
 } 

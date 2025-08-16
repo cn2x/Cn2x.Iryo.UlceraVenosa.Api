@@ -10,6 +10,6 @@ public class LateralidadeQueries
     [GraphQLName("lateralidades")]
     public async Task<List<Lateralidade>> GetLateralidadesAsync([Service] ApplicationDbContext ctx)
     {
-        return await ctx.GetLateralidadesAtivasAsync();
+        throw new NotImplementedException();
     }
 } 

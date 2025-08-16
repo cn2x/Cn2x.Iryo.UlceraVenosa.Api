@@ -39,12 +39,12 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Core {
         public DateTime CriadoEm { get; set; } = DateTime.UtcNow;
         public DateTime? AtualizadoEm { get; set; }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null || !(obj is Entity<TIdentity>))
                 return false;
 
-            if (Object.ReferenceEquals(this, obj))
+            if (ReferenceEquals(this, obj))
                 return true;
 
             if (this.GetType() != obj.GetType())
@@ -71,7 +71,7 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Core {
                 return base.GetHashCode();
 
         }
-        public static bool operator ==(Entity<TIdentity> left, Entity<TIdentity> right)
+        public static bool operator ==(Entity<TIdentity>? left, Entity<TIdentity>? right)
         {
             if (Object.Equals(left, null))
                 return (Object.Equals(right, null)) ? true : false;

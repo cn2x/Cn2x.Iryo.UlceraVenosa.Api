@@ -1,6 +1,3 @@
 @Cn2x.Iryo.UlceraVenosa.Api_HostAddress = http://localhost:5283
 
-GET {{Cn2x.Iryo.UlceraVenosa.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
 ###

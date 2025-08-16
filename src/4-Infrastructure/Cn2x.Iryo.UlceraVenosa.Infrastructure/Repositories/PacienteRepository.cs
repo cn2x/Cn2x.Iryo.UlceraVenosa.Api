@@ -25,4 +25,20 @@ public class PacienteRepository : BaseRepository<Paciente>, IPacienteRepository
         return await _context.Pacientes
             .FirstOrDefaultAsync(p => p.Id == id);
     }
+
+    public async Task<Paciente?> GetWithCpfAsync(string cpf)
+    {
+        return await _context.Pacientes.FirstOrDefaultAsync(p => p.Cpf == cpf);
+    }
+
+    public async Task SaveAsync(Paciente paciente)
+    {
+        await _context.Pacientes.AddAsync(paciente);
+    }
+
+    public Task Update(Paciente paciente)
+    {
+        _context.Pacientes.Update(paciente);
+        return Task.CompletedTask;
+    }
 } 
