@@ -57,9 +57,13 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
 
             // Act
             var response = await _client.PostAsync("/graphql", content);
-            response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"Resposta GraphQL: {json}");
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Erro na criação da avaliação: {response.StatusCode}\n{json}");
+            }
             
             var dict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json, _jsonOptions);
             var data = dict["data"].GetProperty("upsertAvaliacaoUlcera");
@@ -184,7 +188,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                             id
                             ulceraId
                             profissionalId
-                            dataAvaliacao
+                                                        dataAvaliacao
                             mesesDuracao
                             caracteristicas {
                                 bordasDefinidas
@@ -196,8 +200,6 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                                 calor
                                 rubor
                                 edema
-                                dor
-                                perdaDeFuncao
                                 eritema
                             }
                             medida {
@@ -228,9 +230,8 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                             calor = true,
                             rubor = false,
                             edema = true,
-                            dor = 2, // Agora é integer
-                            perdaDeFuncao = false,
-                            eritema = true
+                            eritema = true,
+                            perdadeFuncao = false
                         },
                         medida = new
                         {
@@ -283,23 +284,22 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                             id
                             pacienteId
                             topografia {
-                                lateralidadeId
-                                segmentacaoId
-                                regiaoAnatomicaId
+                                id
+                                ... on TopografiaPerna {
+                                    lateralidadeId
+                                    segmentacaoId
+                                    regiaoAnatomicaId
+                                }
+                                ... on TopografiaPe {
+                                    lateralidadeId
+                                    regiaoTopograficaPeId
+                                }
                             }
                             ceap {
-                                classeClinica {
-                                    id
-                                }
-                                etiologia {
-                                    id
-                                }
-                                anatomia {
-                                    id
-                                }
-                                patofisiologia {
-                                    id
-                                }
+                                classeClinica { id name }
+                                etiologia { id name }
+                                anatomia { id name }
+                                patofisiologia { id name }
                             }
                         }
                     }",
