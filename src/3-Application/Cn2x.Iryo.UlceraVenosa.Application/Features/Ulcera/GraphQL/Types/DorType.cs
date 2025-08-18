@@ -13,13 +13,12 @@ public class DorType : ObjectType<Dor>
     }
 }
 
-public class DorInputType : InputObjectType<Dor>
+public class DorInputType : InputObjectType
 {
-    protected override void Configure(IInputObjectTypeDescriptor<Dor> descriptor)
+    protected override void Configure(IInputObjectTypeDescriptor descriptor)
     {
         descriptor.Name("DorInput");
         descriptor.Description("Input para dor");
-        descriptor.BindFieldsExplicitly();
         descriptor.Field("intensidade").Type<NonNullType<IntensidadeType>>();
     }
 }

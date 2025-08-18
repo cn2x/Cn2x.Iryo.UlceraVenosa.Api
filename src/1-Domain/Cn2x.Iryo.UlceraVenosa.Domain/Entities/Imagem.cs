@@ -15,10 +15,7 @@ public class Imagem : Entity<Guid>, IAggregateRoot
     // Construtor para criação
     public Imagem(string url, string? descricao, DateTime dataCaptura)
     {
-        if (string.IsNullOrWhiteSpace(url))
-            throw new ArgumentException("URL é obrigatória", nameof(url));
-            
-        Url = url;
+        Url = url ?? string.Empty;
         Descricao = descricao;
         DataCaptura = dataCaptura;
     }

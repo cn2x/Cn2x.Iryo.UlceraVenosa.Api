@@ -193,10 +193,17 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
             var imagemBytes = CriarImagemJPEGTeste();
             var contentInicial = CriarUpsertAvaliacaoUlceraComImagemRequest(null, ulceraId, profissionalId, imagemBytes);
             var responseInicial = await _client.PostAsync("/graphql", contentInicial);
-            responseInicial.EnsureSuccessStatusCode();
+            
+            if (!responseInicial.IsSuccessStatusCode)
+            {
+                var errorContent = await responseInicial.Content.ReadAsStringAsync();
+                Console.WriteLine($"Erro na criação inicial: {responseInicial.StatusCode} - {errorContent}");
+                throw new Exception($"GraphQL request failed with status {responseInicial.StatusCode}: {errorContent}");
+            }
+            
             var jsonInicial = await responseInicial.Content.ReadAsStringAsync();
             var dictInicial = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(jsonInicial, _jsonOptions);
-            var avaliacaoId = Guid.Parse(dictInicial["data"].GetProperty("upsertAvaliacaoUlceraAsync").GetProperty("id").GetString());
+            var avaliacaoId = Guid.Parse(dictInicial["data"].GetProperty("upsertAvaliacaoUlcera").GetProperty("id").GetString());
 
             // Agora atualizar a avaliação sem arquivo (deve manter a imagem existente)
             var content = CriarUpsertAvaliacaoUlceraSemImagemRequest(avaliacaoId, ulceraId, profissionalId);
@@ -208,7 +215,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
             Console.WriteLine($"Resposta GraphQL Mantendo Imagem Existente: {json}");
             
             var dict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json, _jsonOptions);
-            var data = dict["data"].GetProperty("upsertAvaliacaoUlceraAsync");
+            var data = dict["data"].GetProperty("upsertAvaliacaoUlcera");
             
             // Assert
             var idStr = data.GetProperty("id").GetString();
@@ -303,8 +310,10 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                                 calor
                                 rubor
                                 edema
-                                dor
-                                perdaDeFuncao
+                                dor {
+                                    intensidade
+                                }
+                                perdadeFuncao
                                 eritema
                             }
                             medida {
@@ -323,7 +332,6 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                         profissionalId = profissionalId,
                         dataAvaliacao = DateTime.UtcNow,
                         mesesDuracao = 2,
-                        arquivo = Convert.ToBase64String(imagemBytes),
                         descricaoImagem = "Imagem de teste da úlcera",
                         dataCapturaImagem = DateTime.UtcNow,
                         caracteristicas = new
@@ -338,8 +346,8 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                             calor = true,
                             rubor = false,
                             edema = true,
-                            dor = 2,
-                            perdaDeFuncao = false,
+                            dor = "DOIS",
+                            perdadeFuncao = false,
                             eritema = true
                         },
                         medida = new
@@ -347,7 +355,8 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                             comprimento = 5.5m,
                             largura = 3.2m,
                             profundidade = 1.0m
-                        }
+                        },
+                        arquivo = Convert.ToBase64String(imagemBytes)
                     }
                 }
             };
@@ -366,6 +375,27 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                             profissionalId
                             dataAvaliacao
                             mesesDuracao
+                            caracteristicas {
+                                bordasDefinidas
+                                tecidoGranulacao
+                                necrose
+                                odorFetido
+                            }
+                            sinaisInflamatorios {
+                                calor
+                                rubor
+                                edema
+                                dor {
+                                    intensidade
+                                }
+                                perdadeFuncao
+                                eritema
+                            }
+                            medida {
+                                comprimento
+                                largura
+                                profundidade
+                            }
                         }
                     }",
                 variables = new
@@ -376,7 +406,29 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                         ulceraId = ulceraId,
                         profissionalId = profissionalId,
                         dataAvaliacao = DateTime.UtcNow,
-                        mesesDuracao = 2
+                        mesesDuracao = 2,
+                        caracteristicas = new
+                        {
+                            bordasDefinidas = true,
+                            tecidoGranulacao = false,
+                            necrose = true,
+                            odorFetido = false
+                        },
+                        sinaisInflamatorios = new
+                        {
+                            calor = true,
+                            rubor = false,
+                            edema = true,
+                            dor = "DOIS",
+                            perdadeFuncao = false,
+                            eritema = true
+                        },
+                        medida = new
+                        {
+                            comprimento = 5.5m,
+                            largura = 3.2m,
+                            profundidade = 1.0m
+                        }
                     }
                 }
             };

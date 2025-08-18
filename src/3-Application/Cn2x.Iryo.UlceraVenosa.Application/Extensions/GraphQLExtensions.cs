@@ -20,6 +20,7 @@ using Cn2x.Iryo.UlceraVenosa.Application.Features.Medida.GraphQL.Types;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Referencia.GraphQL.Types;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.Types;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Exsudato.GraphQL.Types;
+using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Extensions;
 
@@ -54,9 +55,12 @@ public static class GraphQLExtensions
             .AddType<UlceraType>()
             .AddType<CaracteristicasType>()
             .AddType<SinaisInflamatoriosType>()
+            .AddType<SinaisInflamatoriosInputType>()
             .AddType<DorType>()
             .AddType<DorInputType>()
             .AddType<IntensidadeType>()
+            .AddTypeConverter<Intensidade, Dor>(i => new Dor(i))
+            .AddTypeConverter<int, Dor>(i => (Dor)i)
             .AddType<CeapType>()
             .AddType<ClinicaType>()
             .AddType<EtiologicaType>()
@@ -115,9 +119,12 @@ public static class GraphQLExtensions
             .AddType<UlceraType>()
             .AddType<CaracteristicasType>()
             .AddType<SinaisInflamatoriosType>()
+            .AddType<SinaisInflamatoriosInputType>()
             .AddType<DorType>()
             .AddType<DorInputType>()
             .AddType<IntensidadeType>()
+            .AddTypeConverter<Intensidade, Dor>(i => new Dor(i))
+            .AddTypeConverter<int, Dor>(i => (Dor)i)
             .AddType<CeapType>()
             .AddType<ClinicaType>()
             .AddType<EtiologicaType>()
