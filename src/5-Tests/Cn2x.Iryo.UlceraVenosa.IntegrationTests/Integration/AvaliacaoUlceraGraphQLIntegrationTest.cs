@@ -12,13 +12,13 @@ using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
 {
-    public class AvaliacaoUlceraGraphQLIntegrationTest : IClassFixture<DatabaseFixture>
-    {
-        private readonly CustomWebApplicationFactory _factory;
-        private readonly HttpClient _client;
-        private readonly JsonSerializerOptions _jsonOptions;
+    public class AvaliacaoUlceraGraphQLIntegrationTest : IClassFixture<TestContainerFixture>
+{
+    private readonly CustomWebApplicationFactory _factory;
+    private readonly HttpClient _client;
+    private readonly JsonSerializerOptions _jsonOptions;
 
-        public AvaliacaoUlceraGraphQLIntegrationTest(DatabaseFixture dbFixture)
+    public AvaliacaoUlceraGraphQLIntegrationTest(TestContainerFixture dbFixture)
         {
             _factory = new CustomWebApplicationFactory(dbFixture.ConnectionString);
             _client = _factory.CreateClient();

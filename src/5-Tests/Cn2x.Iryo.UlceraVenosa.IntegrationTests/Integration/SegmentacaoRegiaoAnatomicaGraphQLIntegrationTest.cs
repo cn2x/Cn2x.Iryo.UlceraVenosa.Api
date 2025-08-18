@@ -10,13 +10,13 @@ using System.Linq;
 
 namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration;
 
-public class SegmentacaoRegiaoAnatomicaGraphQLIntegrationTest : IClassFixture<DatabaseFixture>
+public class SegmentacaoRegiaoAnatomicaGraphQLIntegrationTest : IClassFixture<TestContainerFixture>
 {
     private readonly HttpClient _client;
     private readonly CustomWebApplicationFactory _factory;
     private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
-    public SegmentacaoRegiaoAnatomicaGraphQLIntegrationTest(DatabaseFixture dbFixture)
+    public SegmentacaoRegiaoAnatomicaGraphQLIntegrationTest(TestContainerFixture dbFixture)
     {
         _factory = new CustomWebApplicationFactory(dbFixture.ConnectionString);
         _client = _factory.CreateClient();

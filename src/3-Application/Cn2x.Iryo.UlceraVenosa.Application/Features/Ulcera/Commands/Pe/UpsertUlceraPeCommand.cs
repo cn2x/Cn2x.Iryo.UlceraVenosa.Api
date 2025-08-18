@@ -3,7 +3,7 @@ using System;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands.Pe;
 
-public class UpsertUlceraPeCommand : IRequest<Guid>
+public class UpsertUlceraPeCommand : IRequest<Cn2x.Iryo.UlceraVenosa.Domain.Entities.Ulcera>
 {
     public Guid? Id { get; set; }
     public Guid PacienteId { get; set; }

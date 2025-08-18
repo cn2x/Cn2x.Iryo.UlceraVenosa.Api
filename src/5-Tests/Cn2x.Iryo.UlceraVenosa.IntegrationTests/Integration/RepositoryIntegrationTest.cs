@@ -12,11 +12,11 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
 {
     [Collection("Ordered")]
     [TestCaseOrderer("Xunit.Priority.Orderers.PriorityOrderer", "Xunit.Priority")]
-    public class RepositoryIntegrationTest : IClassFixture<DatabaseFixture>
+    public class RepositoryIntegrationTest : IClassFixture<TestContainerFixture>
     {
         private readonly CustomWebApplicationFactory _factory;
 
-        public RepositoryIntegrationTest(DatabaseFixture dbFixture)
+        public RepositoryIntegrationTest(TestContainerFixture dbFixture)
         {
             _factory = new CustomWebApplicationFactory(dbFixture.ConnectionString);
         }

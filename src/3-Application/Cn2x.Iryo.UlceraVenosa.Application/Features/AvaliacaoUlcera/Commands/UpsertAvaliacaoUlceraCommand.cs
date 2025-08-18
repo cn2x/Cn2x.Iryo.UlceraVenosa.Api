@@ -3,7 +3,7 @@ using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Commands;
 
-public class UpsertAvaliacaoUlceraCommand : IRequest<Guid>
+public class UpsertAvaliacaoUlceraCommand : IRequest<Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera>
 {
     public Guid? Id { get; set; } // Se null ou Guid.Empty, cria; senão, atualiza
     public Guid UlceraId { get; set; }

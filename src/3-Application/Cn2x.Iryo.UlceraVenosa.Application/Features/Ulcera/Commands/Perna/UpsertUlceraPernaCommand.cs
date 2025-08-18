@@ -5,7 +5,7 @@ using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.GraphQL.Inputs;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands.Perna;
 
-public class UpsertUlceraPernaCommand : IRequest<Guid>
+public class UpsertUlceraPernaCommand : IRequest<Domain.Entities.Ulcera>
 {
     public Guid? Id { get; set; }
     public Guid PacienteId { get; set; }

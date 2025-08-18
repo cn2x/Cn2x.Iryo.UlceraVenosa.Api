@@ -21,8 +21,6 @@ public class UlceraPernaMutations
             ClassificacaoCeap = input.ClassificacaoCeap
         };
 
-        var ulceraId = await mediator.Send(command);
-        
-        return null; 
+        return await mediator.Send(command);
     }
 } 

@@ -1,5 +1,3 @@
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands.Pe;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
@@ -24,8 +22,6 @@ public class UlceraPeMutations
             ClassificacaoCeap = input.ClassificacaoCeap
         };
 
-        var ulceraId = await mediator.Send(command);
-        
-        return null; 
+        return await mediator.Send(command);
     }
 } 

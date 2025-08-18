@@ -8,7 +8,7 @@ using HotChocolate.Types;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Commands;
 
-public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliacaoUlceraCommand, Guid>
+public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliacaoUlceraCommand, Domain.Entities.AvaliacaoUlcera>
 {
     private readonly IAvaliacaoUlceraRepository _avaliacaoUlceraRepository;
     private readonly IMediator _mediator;
@@ -24,7 +24,7 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
         _fileUploadService = fileUploadService;
     }
 
-    public async Task<Guid> Handle(UpsertAvaliacaoUlceraCommand request, CancellationToken cancellationToken)
+    public async Task<Domain.Entities.AvaliacaoUlcera> Handle(UpsertAvaliacaoUlceraCommand request, CancellationToken cancellationToken)
     {
         Cn2x.Iryo.UlceraVenosa.Domain.Entities.AvaliacaoUlcera? avaliacao = null;
         if (request.Id != null && request.Id != Guid.Empty)
@@ -96,7 +96,8 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
                 await _mediator.Publish(evento, cancellationToken);
             }
             
-            return novaAvaliacao.Id;
+            // Retorna a entidade completa com as propriedades de navegação carregadas
+            return await _avaliacaoUlceraRepository.GetByIdAsync(novaAvaliacao.Id);
         }
         else
         {
@@ -117,7 +118,9 @@ public class UpsertAvaliacaoUlceraCommandHandler : IRequestHandler<UpsertAvaliac
 
             await _avaliacaoUlceraRepository.UpdateAsync(avaliacao);
             await _avaliacaoUlceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-            return avaliacao.Id;
+            
+            // Retorna a entidade completa com as propriedades de navegação carregadas
+            return await _avaliacaoUlceraRepository.GetByIdAsync(avaliacao.Id);
         }
     }
 

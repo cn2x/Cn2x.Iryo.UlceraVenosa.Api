@@ -12,13 +12,13 @@ using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
 {
-    public class AvaliacaoUlceraComImagemIntegrationTest : IClassFixture<DatabaseFixture>
-    {
-        private readonly CustomWebApplicationFactory _factory;
-        private readonly HttpClient _client;
-        private readonly JsonSerializerOptions _jsonOptions;
+    public class AvaliacaoUlceraComImagemIntegrationTest : IClassFixture<TestContainerFixture>
+{
+    private readonly CustomWebApplicationFactory _factory;
+    private readonly HttpClient _client;
+    private readonly JsonSerializerOptions _jsonOptions;
 
-        public AvaliacaoUlceraComImagemIntegrationTest(DatabaseFixture dbFixture)
+    public AvaliacaoUlceraComImagemIntegrationTest(TestContainerFixture dbFixture)
         {
             _factory = new CustomWebApplicationFactory(dbFixture.ConnectionString);
             _client = _factory.CreateClient();
@@ -47,6 +47,18 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
             // Primeiro criar uma úlcera
             var ulceraContent = CriarUpsertUlceraPernaRequest(null, pacienteId, lateralidadeId, segmentacaoId, regiaoAnatomicaId);
             var ulceraResponse = await _client.PostAsync("/graphql", ulceraContent);
+            
+            // Captura a resposta para debug da criação da úlcera
+            var ulceraResponseContent = await ulceraResponse.Content.ReadAsStringAsync();
+            Console.WriteLine($"Ulcera Response Status: {ulceraResponse.StatusCode}");
+            Console.WriteLine($"Ulcera Response Content: {ulceraResponseContent}");
+            
+            if (!ulceraResponse.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Ulcera Error Response: {ulceraResponseContent}");
+                throw new Exception($"GraphQL ulcera request failed with status {ulceraResponse.StatusCode}: {ulceraResponseContent}");
+            }
+            
             ulceraResponse.EnsureSuccessStatusCode();
             var ulceraJson = await ulceraResponse.Content.ReadAsStringAsync();
             var ulceraDict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(ulceraJson, _jsonOptions);
@@ -60,12 +72,24 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
 
             // Act
             var response = await _client.PostAsync("/graphql", content);
+            
+            // Captura a resposta para debug
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Response Status: {response.StatusCode}");
+            Console.WriteLine($"Response Content: {responseContent}");
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Error Response: {responseContent}");
+                throw new Exception($"GraphQL request failed with status {response.StatusCode}: {responseContent}");
+            }
+            
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             Console.WriteLine($"Resposta GraphQL com Imagem: {json}");
             
             var dict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json, _jsonOptions);
-            var data = dict["data"].GetProperty("upsertAvaliacaoUlceraAsync");
+            var data = dict["data"].GetProperty("upsertAvaliacaoUlcera");
             
             // Assert
             var idStr = data.GetProperty("id").GetString();
@@ -112,7 +136,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
             responseInicial.EnsureSuccessStatusCode();
             var jsonInicial = await responseInicial.Content.ReadAsStringAsync();
             var dictInicial = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(jsonInicial, _jsonOptions);
-            var avaliacaoId = Guid.Parse(dictInicial["data"].GetProperty("upsertAvaliacaoUlceraAsync").GetProperty("id").GetString());
+            var avaliacaoId = Guid.Parse(dictInicial["data"].GetProperty("upsertAvaliacaoUlcera").GetProperty("id").GetString());
 
             // Agora atualizar a avaliação com uma nova imagem (deve substituir a anterior)
             var imagem2Bytes = CriarImagemJPEGTeste(); // Nova imagem
@@ -125,7 +149,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
             Console.WriteLine($"Resposta GraphQL Atualização com Nova Imagem: {json}");
             
             var dict = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json, _jsonOptions);
-            var data = dict["data"].GetProperty("upsertAvaliacaoUlceraAsync");
+            var data = dict["data"].GetProperty("upsertAvaliacaoUlcera");
             
             // Assert
             var idStr = data.GetProperty("id").GetString();
@@ -263,7 +287,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
             {
                 query = @"
                     mutation ($input: UpsertAvaliacaoUlceraInput!) {
-                        upsertAvaliacaoUlceraAsync(input: $input) {
+                        upsertAvaliacaoUlcera(input: $input) {
                             id
                             ulceraId
                             profissionalId
@@ -336,7 +360,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
             {
                 query = @"
                     mutation ($input: UpsertAvaliacaoUlceraInput!) {
-                        upsertAvaliacaoUlceraAsync(input: $input) {
+                        upsertAvaliacaoUlcera(input: $input) {
                             id
                             ulceraId
                             profissionalId
@@ -369,9 +393,7 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration
                             id
                             pacienteId
                             topografia {
-                                lateralidadeId
-                                segmentacaoId
-                                regiaoAnatomicaId
+                                id
                             }
                             ceap {
                                 classeClinica {

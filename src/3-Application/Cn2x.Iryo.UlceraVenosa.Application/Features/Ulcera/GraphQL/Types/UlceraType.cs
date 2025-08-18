@@ -19,7 +19,12 @@ public class UlceraType : ObjectType<Domain.Entities.Ulcera>
         descriptor.Field(x => x.Paciente).Type<PacienteType>().Description("Paciente relacionado");
         descriptor.Field(x => x.Avaliacoes).Type<ListType<AvaliacaoUlceraType>>().Description("Avaliações da úlcera");
         descriptor.Field(x => x.Ceap).Type<CeapType>().Description("Classificação CEAP da úlcera");
+        
+        // Campo topografia usando interface para permitir tipos específicos
         descriptor.Field(x => x.Topografia).Type<TopografiaInterfaceType>().Description("Topografia da úlcera");
+        
         descriptor.Ignore(x => x.DomainEvents);
     }
-} 
+}
+
+ 

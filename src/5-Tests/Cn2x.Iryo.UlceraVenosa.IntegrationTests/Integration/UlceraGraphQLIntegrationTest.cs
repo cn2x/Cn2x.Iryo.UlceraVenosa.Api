@@ -8,13 +8,13 @@ using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 using Cn2x.Iryo.UlceraVenosa.Domain.ValueObjects;
 
 namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration {
-    public class UlceraGraphQLIntegrationTest : IClassFixture<DatabaseFixture>
+    public class UlceraGraphQLIntegrationTest : IClassFixture<TestContainerFixture>
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory _factory;
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
-        public UlceraGraphQLIntegrationTest(DatabaseFixture dbFixture)
+        public UlceraGraphQLIntegrationTest(TestContainerFixture dbFixture)
         {
             _factory = new CustomWebApplicationFactory(dbFixture.ConnectionString);
             _client = _factory.CreateClient();
@@ -259,12 +259,14 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration {
             var segmentacaoId = Guid.Parse("44444444-4444-4444-4444-444444444444");
             var regiaoAnatomicaId = Guid.Parse("55555555-5555-5555-5555-555555555555");
             Console.WriteLine($"[DEBUG] IDs usados na mutation perna: pacienteId={pacienteId}, lateralidadeId={lateralidadeId}, segmentacaoId={segmentacaoId}, regiaoAnatomicaId={regiaoAnatomicaId}");
+
             var ceap = new {
-                classeClinica = "SemSinais",
-                etiologia = "Primaria",
-                anatomia = "Profundo",
-                patofisiologia = "Refluxo"
+                classeClinica = "SEM_SINAIS",
+                etiologia = "PRIMARIA",
+                anatomia = "PROFUNDO",
+                patofisiologia = "REFLUXO"
             };
+
             var content = CriarUpsertUlceraPernaRequest(null, pacienteId, lateralidadeId, segmentacaoId, regiaoAnatomicaId);
 
             // Act
@@ -497,22 +499,23 @@ namespace Cn2x.Iryo.UlceraVenosa.IntegrationTests.Integration {
             var segmentacaoId = Guid.Parse("44444444-4444-4444-4444-444444444444");
             var regiaoAnatomicaId = Guid.Parse("55555555-5555-5555-5555-555555555555");
 
-            // Criar primeira úlcera
+            // Criar primeira úlcera (Perna)
             var content1 = CriarUpsertUlceraPernaRequest(null, pacienteId, lateralidadeId, segmentacaoId, regiaoAnatomicaId);
             var response1 = await _client.PostAsync("/graphql", content1);
             var json1 = await response1.Content.ReadAsStringAsync();
-            Console.WriteLine($"[DEBUG] Resposta GraphQL Mutation 1: {json1}");
+            Console.WriteLine($"[DEBUG] Resposta GraphQL Mutation 1 (Perna): {json1}");
             
             if (!response1.IsSuccessStatusCode)
             {
                 throw new Exception($"Erro na mutation 1: {response1.StatusCode}\n{json1}");
             }
 
-            // Criar segunda úlcera
-            var content2 = CriarUpsertUlceraPernaRequest(null, pacienteId, lateralidadeId, segmentacaoId, regiaoAnatomicaId);
+            // Criar segunda úlcera (Pé)
+            var regiaoTopograficaPeId = Utils.TestSeedData.RegiaoTopograficaPeId;
+            var content2 = CriarUpsertUlceraPeRequest(null, pacienteId, lateralidadeId, regiaoTopograficaPeId, regiaoAnatomicaId);
             var response2 = await _client.PostAsync("/graphql", content2);
             var json2 = await response2.Content.ReadAsStringAsync();
-            Console.WriteLine($"[DEBUG] Resposta GraphQL Mutation 2: {json2}");
+            Console.WriteLine($"[DEBUG] Resposta GraphQL Mutation 2 (Pé): {json2}");
             
             if (!response2.IsSuccessStatusCode)
             {

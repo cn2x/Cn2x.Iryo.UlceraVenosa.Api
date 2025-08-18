@@ -1,5 +1,3 @@
-using HotChocolate;
-using HotChocolate.Types;
 using MediatR;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.Commands;
 using Cn2x.Iryo.UlceraVenosa.Domain.Entities;
@@ -24,13 +22,12 @@ public class AvaliacaoUlceraMutations
             Caracteristicas = input.Caracteristicas,
             SinaisInflamatorios = input.SinaisInflamatorios,
             Medida = input.Medida,
+            Exsudatos = input.Exsudatos,
             Arquivo = input.Arquivo,
             DescricaoImagem = input.DescricaoImagem,
-            DataCapturaImagem = input.DataCapturaImagem,
-            Exsudatos = input.Exsudatos
+            DataCapturaImagem = input.DataCapturaImagem
         };
 
-        var avaliacaoId = await mediator.Send(command);        
-        return null; // ou retorne a consulta se implementada
+        return await mediator.Send(command);
     }
 } 

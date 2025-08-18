@@ -7,7 +7,7 @@ using Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands.Perna;
 
 namespace Cn2x.Iryo.UlceraVenosa.Application.Features.Ulcera.Commands;
 
-public class UpsertUlceraPernaCommandHandler : IRequestHandler<UpsertUlceraPernaCommand, Guid>
+public class UpsertUlceraPernaCommandHandler : IRequestHandler<UpsertUlceraPernaCommand, Domain.Entities.Ulcera>
 {
     private readonly IUlceraRepository _ulceraRepository;
     private readonly ApplicationDbContext _context;
@@ -18,7 +18,7 @@ public class UpsertUlceraPernaCommandHandler : IRequestHandler<UpsertUlceraPerna
         _context = context;
     }
 
-    public async Task<Guid> Handle(UpsertUlceraPernaCommand request, CancellationToken cancellationToken)
+    public async Task<Domain.Entities.Ulcera> Handle(UpsertUlceraPernaCommand request, CancellationToken cancellationToken)
     {
         // Busca entidades relacionadas
         var lateralidade = await _context.Lateralidades.FindAsync(new object[] { request.LateralidadeId }, cancellationToken);
@@ -62,7 +62,10 @@ public class UpsertUlceraPernaCommandHandler : IRequestHandler<UpsertUlceraPerna
             ulcera.Ceap = ceap;
             await _ulceraRepository.UpdateAsync(ulcera);
         }
-        var xReturn = await _ulceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-        return ulcera.Id;
+        
+        await _ulceraRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        
+        // Retorna a entidade completa com as propriedades de navegação carregadas
+        return await _ulceraRepository.GetByIdAsync(ulcera.Id);
     }
 }

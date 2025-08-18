@@ -1,10 +1,6 @@
-using System.Threading.Tasks;
 using Xunit;
-using System;
 using Npgsql;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Cn2x.Iryo.UlceraVenosa.Infrastructure.Data;
 using MediatR;
 using Moq;
