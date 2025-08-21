@@ -348,7 +348,6 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
 
             entity.OwnsOne(e => e.Caracteristicas, caracteristicas =>
             {
-                caracteristicas.WithOwner().HasForeignKey("avaliacao_ferida_id");
                 caracteristicas.Property(c => c.BordasDefinidas).HasColumnName("bordas_definidas").IsRequired();
                 caracteristicas.Property(c => c.TecidoGranulacao).HasColumnName("tecido_granulacao").IsRequired();
                 caracteristicas.Property(c => c.Necrose).HasColumnName("necrose").IsRequired();
@@ -357,7 +356,6 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
 
             entity.OwnsOne(e => e.SinaisInflamatorios, sinais =>
             {
-                sinais.WithOwner().HasForeignKey("avaliacao_ferida_id");
                 sinais.Property(s => s.Eritema).HasColumnName("eritema");
                 sinais.Property(s => s.Calor).HasColumnName("calor");
                 sinais.Property(s => s.Rubor).HasColumnName("rubor");
@@ -370,7 +368,6 @@ public partial class ApplicationDbContext : DbContext, IUnitOfWork
 
             entity.OwnsOne(e => e.Medida, medida =>
             {
-                medida.WithOwner().HasForeignKey("avaliacao_ferida_id");
                 medida.Property(m => m.Comprimento).HasColumnName("comprimento").HasColumnType("decimal(10,2)");
                 medida.Property(m => m.Largura).HasColumnName("largura").HasColumnType("decimal(10,2)");
                 medida.Property(m => m.Profundidade).HasColumnName("profundidade").HasColumnType("decimal(10,2)");
