@@ -10,6 +10,7 @@ public class ExsudatoType : ObjectType<Domain.Entities.Exsudato>
         descriptor.Name("Exsudato");
         descriptor.Description("Tipo de exsudato");
         descriptor.Field(x => x.Id).Description("Id do exsudato");
+        descriptor.Field(x => x.Nome).Description("Nome do exsudato");
         descriptor.Field(x => x.Descricao).Description("Descrição do exsudato");
     }
 } 

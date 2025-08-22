@@ -48,15 +48,18 @@ public class TesteExsudatosQueryUnit
         
         // Verifica se tem as propriedades esperadas
         var idProperty = exsudatoType.GetProperty("Id");
+        var nomeProperty = exsudatoType.GetProperty("Nome");
         var descricaoProperty = exsudatoType.GetProperty("Descricao");
         var desativadaProperty = exsudatoType.GetProperty("Desativada");
         
         idProperty.Should().NotBeNull();
+        nomeProperty.Should().NotBeNull();
         descricaoProperty.Should().NotBeNull();
         desativadaProperty.Should().NotBeNull();
         
         Console.WriteLine($"✅ Entidade Exsudato está corretamente implementada:");
         Console.WriteLine($"   - Id: {idProperty?.PropertyType}");
+        Console.WriteLine($"   - Nome: {nomeProperty?.PropertyType}");
         Console.WriteLine($"   - Descricao: {descricaoProperty?.PropertyType}");
         Console.WriteLine($"   - Desativada: {desativadaProperty?.PropertyType}");
     }

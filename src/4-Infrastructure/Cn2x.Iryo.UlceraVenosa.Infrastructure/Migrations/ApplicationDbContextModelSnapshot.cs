@@ -90,9 +90,15 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("descricao");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("nome");
 
                     b.HasKey("Id")
                         .HasName("pk_exsudato_tipos");
@@ -105,70 +111,80 @@ namespace Cn2x.Iryo.UlceraVenosa.Infrastructure.Data.Migrations
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Seroso - Transparente ou levemente amarelo, aquoso, fluido. Indicação: Fase inflamatória leve ou cicatrização. Conduta: Monitorar, manter hidratação da ferida."
+                            Descricao = "Transparente ou levemente amarelo, aquoso, fluido. Indicação: Fase inflamatória leve ou cicatrização. Conduta: Monitorar, manter hidratação da ferida.",
+                            Nome = "Seroso"
                         },
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Serossanguinolento - Rosa claro, diluído com sangue, levemente viscoso. Indicação: Trauma leve ou início de granulação. Conduta: Avaliar trauma, proteger bordas."
+                            Descricao = "Rosa claro, diluído com sangue, levemente viscoso. Indicação: Trauma leve ou início de granulação. Conduta: Avaliar trauma, proteger bordas.",
+                            Nome = "Serossanguinolento"
                         },
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Sanguinolento - Vermelho vivo, líquido a viscoso. Indicação: Sangramento ativo ou lesão capilar. Conduta: Estancar, avaliar necessidade de sutura."
+                            Descricao = "Vermelho vivo, líquido a viscoso. Indicação: Sangramento ativo ou lesão capilar. Conduta: Estancar, avaliar necessidade de sutura.",
+                            Nome = "Sanguinolento"
                         },
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Hemorrágico - Vermelho escuro ou vivo, espesso, com coágulos. Indicação: Hemorragia arterial ou venosa local. Conduta: Urgência médica, hemostasia."
+                            Descricao = "Vermelho escuro ou vivo, espesso, com coágulos. Indicação: Hemorragia arterial ou venosa local. Conduta: Urgência médica, hemostasia.",
+                            Nome = "Hemorrágico"
                         },
                         new
                         {
                             Id = new Guid("55555555-5555-5555-5555-555555555555"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Purulento - Amarelo, esverdeado ou acastanhado, espesso, fétido. Indicação: Infecção bacteriana ativa. Conduta: Cultura, antibioticoterapia, limpeza."
+                            Descricao = "Amarelo, esverdeado ou acastanhado, espesso, fétido. Indicação: Infecção bacteriana ativa. Conduta: Cultura, antibioticoterapia, limpeza.",
+                            Nome = "Purulento"
                         },
                         new
                         {
                             Id = new Guid("66666666-6666-6666-6666-666666666666"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Fibrinoso - Esbranquiçado ou amarelado, gelatinoso, filamentoso. Indicação: Presença de fibrina, biofilme. Conduta: Desbridamento, controle da umidade."
+                            Descricao = "Esbranquiçado ou amarelado, gelatinoso, filamentoso. Indicação: Presença de fibrina, biofilme. Conduta: Desbridamento, controle da umidade.",
+                            Nome = "Fibrinoso"
                         },
                         new
                         {
                             Id = new Guid("77777777-7777-7777-7777-777777777777"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Catarral - Esbranquiçado e mucoide, viscoso. Indicação: Presente em áreas mucosas ou com inflamação leve. Conduta: Raro em úlceras venosas, observar."
+                            Descricao = "Esbranquiçado e mucoide, viscoso. Indicação: Presente em áreas mucosas ou com inflamação leve. Conduta: Raro em úlceras venosas, observar.",
+                            Nome = "Catarral"
                         },
                         new
                         {
                             Id = new Guid("88888888-8888-8888-8888-888888888888"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Necrótico - Marrom, cinza ou preto, espesso, seco ou úmido. Indicação: Presença de necrose tecidual. Conduta: Desbridamento enzimático ou cirúrgico."
+                            Descricao = "Marrom, cinza ou preto, espesso, seco ou úmido. Indicação: Presença de necrose tecidual. Conduta: Desbridamento enzimático ou cirúrgico.",
+                            Nome = "Necrótico"
                         },
                         new
                         {
                             Id = new Guid("99999999-9999-9999-9999-999999999999"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Putrilaginoso - Cinza-esverdeado, muito espesso, pegajoso, fétido. Indicação: Infecção crítica, tecido desvitalizado. Conduta: Ação rápida: desbridamento + antibiótico."
+                            Descricao = "Cinza-esverdeado, muito espesso, pegajoso, fétido. Indicação: Infecção crítica, tecido desvitalizado. Conduta: Ação rápida: desbridamento + antibiótico.",
+                            Nome = "Putrilaginoso"
                         },
                         new
                         {
                             Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                             CriadoEm = new DateTime(2025, 6, 28, 17, 32, 53, 0, DateTimeKind.Utc),
                             Desativada = false,
-                            Descricao = "Hiperexsudativo - Variável, muito abundante. Indicação: Descompensação venosa, linforreia, infecção. Conduta: Curativos superabsorventes, compressão."
+                            Descricao = "Variável, muito abundante. Indicação: Descompensação venosa, linforreia, infecção. Conduta: Curativos superabsorventes, compressão.",
+                            Nome = "Hiperexsudativo"
                         });
                 });
 

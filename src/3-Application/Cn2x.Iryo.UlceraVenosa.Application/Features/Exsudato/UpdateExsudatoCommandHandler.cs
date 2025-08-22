@@ -16,6 +16,7 @@ public class UpdateExsudatoCommandHandler : IRequestHandler<UpdateExsudatoComman
     {
         var exsudato = await _repository.GetByIdAsync(request.Id);
         if (exsudato == null) return false;
+        exsudato.Nome = request.Nome;
         exsudato.Descricao = request.Descricao;
         await _repository.UpdateAsync(exsudato);
         return true;

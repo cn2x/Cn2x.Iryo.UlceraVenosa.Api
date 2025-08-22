@@ -17,6 +17,7 @@ public class CreateExsudatoCommandHandler : IRequestHandler<CreateExsudatoComman
     {
         var entity = new Domain.Entities.Exsudato
         {
+            Nome = request.Nome,
             Descricao = request.Descricao,
             Desativada = false
         };

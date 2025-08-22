@@ -7,5 +7,6 @@ namespace Cn2x.Iryo.UlceraVenosa.Domain.Entities;
 /// </summary>
 public class Exsudato : Entity<Guid>, IAggregateRoot
 {
+    public string Nome { get; set; } = string.Empty;
     public string Descricao { get; set; } = string.Empty;
 }

@@ -32,6 +32,7 @@ public class TesteExsudatosQuery : IClassFixture<TestContainerFixture>
             query {
                 exsudatos {
                     id
+                    nome
                     descricao
                     desativada
                 }
@@ -69,11 +70,13 @@ public class TesteExsudatosQuery : IClassFixture<TestContainerFixture>
         foreach (var exsudato in exsudatosArray)
         {
             exsudato.TryGetProperty("id", out var id).Should().BeTrue();
+            exsudato.TryGetProperty("nome", out var nome).Should().BeTrue();
             exsudato.TryGetProperty("descricao", out var descricao).Should().BeTrue();
             exsudato.TryGetProperty("desativada", out var desativada).Should().BeTrue();
             
             // Verifica se os campos não são nulos
             id.ValueKind.Should().NotBe(JsonValueKind.Null);
+            nome.ValueKind.Should().NotBe(JsonValueKind.Null);
             descricao.ValueKind.Should().NotBe(JsonValueKind.Null);
             desativada.ValueKind.Should().NotBe(JsonValueKind.Null);
         }

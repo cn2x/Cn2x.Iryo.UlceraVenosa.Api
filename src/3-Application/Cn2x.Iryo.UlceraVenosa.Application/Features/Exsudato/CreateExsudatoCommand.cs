@@ -6,5 +6,6 @@ public class CreateExsudatoCommand : IRequest<Guid>
 {
     public Guid UlceraId { get; set; }
     public Guid ExsudatoId { get; set; }
+    public string Nome { get; set; } = string.Empty;
     public string Descricao { get; set; } = string.Empty;
 } 
