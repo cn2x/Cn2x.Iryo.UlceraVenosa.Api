@@ -62,7 +62,7 @@ public partial class ApplicationDbContext
         };
     }
 
-    public async Task<IEnumerable<Domain.Entities.Ulcera>> GetUlcerasByPacienteAsync(Guid pacienteId)
+    public async Task<IEnumerable<UlceraWithTotalAvaliacoes>> GetUlcerasByPacienteAsync(Guid pacienteId)
     {
         return await Ulceras
             .AsNoTracking()
@@ -79,6 +79,17 @@ public partial class ApplicationDbContext
             .Include(u => u.Topografia)
             .ThenInclude(t => (t as TopografiaPe)!.RegiaoTopograficaPe)
             .Where(u => u.PacienteId == pacienteId && !u.Desativada)
+            .Select(u => new UlceraWithTotalAvaliacoes
+            {
+                Ulcera = u,
+                TotalAvaliacoes = u.Avaliacoes.Count
+            })
             .ToListAsync();
     }
+}
+
+public class UlceraWithTotalAvaliacoes
+{
+    public Domain.Entities.Ulcera Ulcera { get; set; } = null!;
+    public int TotalAvaliacoes { get; set; }
 }

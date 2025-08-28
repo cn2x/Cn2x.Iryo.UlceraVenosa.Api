@@ -27,7 +27,7 @@ public class UlceraQueries
     }
 
     [GraphQLName("ulcerasByPaciente")]
-    public async Task<IEnumerable<Domain.Entities.Ulcera>> GetUlcerasByPacienteAsync(
+    public async Task<IEnumerable<UlceraWithTotalAvaliacoes>> GetUlcerasByPacienteAsync(
         Guid pacienteId,
         [Service] ApplicationDbContext context)
     {
