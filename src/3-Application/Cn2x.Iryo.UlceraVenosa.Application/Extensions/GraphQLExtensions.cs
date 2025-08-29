@@ -46,6 +46,7 @@ public static class GraphQLExtensions
             .AddTypeExtension<RegiaoAnatomicaQueries>()
             .AddTypeExtension<LateralidadeQueries>()
             .AddTypeExtension<ExsudatoQueries>()
+            .AddTypeExtension<AvaliacaoUlceraQueries>()
             .AddMutationType(d => d.Name("Mutation"))
             .AddTypeExtension<UlceraMutations>()
             .AddTypeExtension<UlceraPernaMutations>()
