@@ -9,6 +9,7 @@ using Cn2x.Iryo.UlceraVenosa.Application.Features.Paciente.GraphQL.Queries;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Exsudato.GraphQL.Queries;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Referencia.GraphQL.Queries;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.Mutations;
+using Cn2x.Iryo.UlceraVenosa.Application.Features.AvaliacaoUlcera.GraphQL.Queries;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Medida.GraphQL.Mutations;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Profissional.GraphQL.Queries;
 using Cn2x.Iryo.UlceraVenosa.Application.Features.Profissional.GraphQL.Mutations;
@@ -110,6 +111,7 @@ public static class GraphQLExtensions
             .AddTypeExtension<RegiaoAnatomicaQueries>()
             .AddTypeExtension<LateralidadeQueries>()
             .AddTypeExtension<ExsudatoQueries>()
+            .AddTypeExtension<AvaliacaoUlceraQueries>()
             .AddMutationType(d => d.Name("Mutation"))
             .AddTypeExtension<UlceraMutations>()
             .AddTypeExtension<UlceraPernaMutations>()
